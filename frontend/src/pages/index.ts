@@ -1,3 +1,4 @@
 import NotFoundPage from "./NotFoundPage";
-
-export { NotFoundPage };
+import ChatPage from "./ChatPage";
+import AuthenticationPage from "./AuthenticationPage";
+export { NotFoundPage, ChatPage, AuthenticationPage };

@@ -8,11 +8,19 @@ const ChangeLangBtn = () => {
 
   return (
     <div>
-      <button type="button" onClick={() => i18n.changeLanguage("no")}>
-        🇳🇴
+      <button
+        className="btn"
+        type="button"
+        onClick={() => i18n.changeLanguage("no")}
+      >
+        🇳🇴 NO
       </button>
-      <button type="button" onClick={() => i18n.changeLanguage("en")}>
-        🇬🇧
+      <button
+        className="btn"
+        type="button"
+        onClick={() => i18n.changeLanguage("en")}
+      >
+        🇬🇧 GB
       </button>
     </div>
   );
