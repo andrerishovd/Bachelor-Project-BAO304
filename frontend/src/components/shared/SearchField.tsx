@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-const SearchInputComponent = () => {
+const SearchField = () => {
   const { t, i18n } = useTranslation("common");
   return (
     <label className="input">
@@ -25,4 +25,4 @@ const SearchInputComponent = () => {
   );
 };
 
-export default SearchInputComponent;
+export default SearchField;

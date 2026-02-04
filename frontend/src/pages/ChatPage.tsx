@@ -1,9 +1,9 @@
-import SideBarComponent from "../components/shared/SidebarComponent";
+import Sidebar from "../components/shared/Sidebar";
 
 const ChatPage = () => {
   return (
     <>
-      <SideBarComponent />
+      <Sidebar />
     </>
   );
 };

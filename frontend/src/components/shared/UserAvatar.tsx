@@ -1,4 +1,4 @@
-const AvatarComponent = () => {
+const UserAvatar = () => {
   return (
     <div className="avatar">
       <div className="w-6 rounded">
@@ -8,4 +8,4 @@ const AvatarComponent = () => {
   );
 };
 
-export default AvatarComponent;
+export default UserAvatar;

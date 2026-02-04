@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import canvasLogo from "../../assets/canvas-logo.svg";
 
-const AuthenticationFormComponent = () => {
+const AuthenticationForm = () => {
   const { t, i18n } = useTranslation("auth");
   return (
     <div className="hero bg-base-200 min-h-screen">
@@ -44,4 +44,4 @@ const AuthenticationFormComponent = () => {
   );
 };
 
-export default AuthenticationFormComponent;
+export default AuthenticationForm;

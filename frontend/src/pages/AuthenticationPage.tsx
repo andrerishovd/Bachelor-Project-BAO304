@@ -1,4 +1,4 @@
-import AuthenticationFormComponent from "../components/authentication/AuthenticationFormComponent";
+import AuthenticationFormComponent from "../components/authentication/AuthenticationForm";
 
 const AuthenticationPage = () => {
   return <AuthenticationFormComponent />;
