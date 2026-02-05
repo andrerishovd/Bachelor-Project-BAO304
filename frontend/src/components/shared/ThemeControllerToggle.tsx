@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../../hooks/useTheme";
 
 const ThemeControllerToggle = () => {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <label className="flex cursor-pointer gap-2">
@@ -24,6 +26,7 @@ const ThemeControllerToggle = () => {
         className="toggle theme-controller"
         checked={theme === "dark"}
         onChange={toggleTheme}
+        aria-label={t("toggleDarkMode")}
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

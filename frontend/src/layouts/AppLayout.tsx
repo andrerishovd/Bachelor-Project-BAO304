@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+import Navbar from "../components/shared/Navbar";
 import Sidebar from "../components/shared/Sidebar";
 import { useSidebarExtended } from "../hooks/useSidebarExtended";
 
@@ -6,6 +8,7 @@ interface AppLayoutProps {
 }
 
 const AppLayout = ({ children }: AppLayoutProps) => {
+  console.log("🎨 AppLayout rendres!", { children });
   const { isExtended, toggleSidebar } = useSidebarExtended();
 
   return (

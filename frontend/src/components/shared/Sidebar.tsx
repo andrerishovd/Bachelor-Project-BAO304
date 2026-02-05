@@ -3,12 +3,21 @@
 import { useTranslation } from "react-i18next";
 import UserAvatar from "./UserAvatar";
 import SearchField from "./SearchField";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const { t, i18n } = useTranslation("common");
+  const navigate = useNavigate();
+
+  const handleHomeClick = () => {
+    navigate("/");
+  };
+
   return (
     <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+      {/* Top items */}
       <ul className="menu w-full grow">
+        {/* Search */}
         <li>
           <button>
             <svg
@@ -34,6 +43,7 @@ const Sidebar = () => {
           <button
             className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
             data-tip={t("homepage")}
+            onClick={handleHomeClick}
           >
             {/* Home icon */}
             <svg
@@ -54,8 +64,7 @@ const Sidebar = () => {
         </li>
       </ul>
 
-      {/* Bottom */}
-
+      {/* Bottom items */}
       <ul className="menu w-full">
         <li>
           <button
@@ -80,6 +89,7 @@ const Sidebar = () => {
             <span className="is-drawer-close:hidden">{t("settings")}</span>
           </button>
         </li>
+
         <li>
           <button>
             <UserAvatar />
