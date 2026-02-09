@@ -1,5 +1,4 @@
 #TODO
-#Fix paths
 #Add consul for health checks
 #Implement gateway
 #Make db passwords .env variables
@@ -21,33 +20,36 @@ services:
 
   gateway:
     image: gateway:0.0.1-SNAPSHOT
-    build: ./Gateway
-    container_name: gateway
+    build:
+      context: ./backend/gateway
+    container_name: gateway-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     ports:
       - "8010:8010"
-    depends_on:
+    #depends_on:
     networks:
       - study-buddy
 
   chat-service:
     image: chat:0.0.1-SNAPSHOT
-    build: ./Chat
+    build:
+      context: ./backend/chat
     container_name: chat-service
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
 
     ports:
       - "8020:8020"
-    depends_on:
+    #depends_on:
 
     networks:
       - study-buddy
 
   settings-service:
     image: settings:0.0.1-SNAPSHOT
-    build: ./Settings
+    build:
+      context: ./backend/settings
     container_name: settings-service
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
@@ -57,15 +59,16 @@ services:
 
     ports:
       - "8030:8030"
-    depends_on:
-      - user-db
+    #depends_on:
+    #  - user-db
 
     networks:
       - study-buddy
 
   user-service:
     image: user:0.0.1-SNAPSHOT
-    build: ./User
+    build:
+      context: ./backend/user
     container_name: user-service
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
@@ -75,8 +78,8 @@ services:
 
     ports:
       - "8040:8040"
-    depends_on:
-      - user-db
+    #depends_on:
+    #  - user-db
 
     networks:
       - study-buddy
@@ -86,5 +89,5 @@ networks:
   study-buddy:
     driver: bridge
 
-volumes:
-  user_data:
+#volumes:
+  #user_data:
