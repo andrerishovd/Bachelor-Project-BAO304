@@ -1,8 +1,16 @@
 {
   "search": "Søk",
   "settings": "Innstillinger",
+  "settingsDescription": {
+    "helpText": "Her kan du gjøre endringer",
+    "": "",
+    "": ""
+  },
   "homepage": "Hjem",
   "back": "Tilbake",
+  "close": "Lukk",
   "pageNotFound": "Fant ikke siden",
-  "returnToHome": "Gå til hjemsiden"
+  "returnToHome": "Gå til hjemsiden",
+  "Profile": "Profil",
+  "selectedLocale": "no"
 }

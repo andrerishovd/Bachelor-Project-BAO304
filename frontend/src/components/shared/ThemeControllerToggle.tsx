@@ -3,7 +3,7 @@ import { useTheme } from "../../hooks/useTheme";
 
 const ThemeControllerToggle = () => {
   const { theme, toggleTheme } = useTheme();
-  const { t } = useTranslation();
+  const { t } = useTranslation("accessibility");
 
   return (
     <label className="flex cursor-pointer gap-2">

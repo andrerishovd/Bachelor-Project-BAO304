@@ -1,3 +1,4 @@
+//Placeholder - bytt ut med podcaster.
 const PodcastDetailList = () => {
   return (
     <ul className="list bg-base-100 rounded-box shadow-md w-fit">

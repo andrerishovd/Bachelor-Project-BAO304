@@ -11,22 +11,37 @@ export const useSidebarExtended = () => {
     const savedState = localStorage.getItem("sidebar-extended");
     const extended = savedState === null ? true : savedState === "true";
     setIsExtended(extended);
+    updateDrawerState(extended);
+  }, []);
+
+  const updateDrawerState = (extended: boolean) => {
     document.documentElement.setAttribute(
       "data-sidebar-extended",
       String(extended),
     );
-  }, []);
+
+    // ✅ Synkroniser checkbox
+    const checkbox = document.getElementById("my-drawer-4") as HTMLInputElement;
+    if (checkbox) {
+      checkbox.checked = extended;
+    }
+  };
 
   // Toggle sidebar state
   const toggleSidebar = () => {
     const newState = !isExtended;
     setIsExtended(newState);
     localStorage.setItem("sidebar-extended", String(newState));
-    document.documentElement.setAttribute(
-      "data-sidebar-extended",
-      String(newState),
-    );
+    updateDrawerState(newState);
   };
 
-  return { isExtended, toggleSidebar };
+  const expandSidebar = () => {
+    if (!isExtended) {
+      setIsExtended(true);
+      localStorage.setItem("sidebar-extended", "true");
+      updateDrawerState(true);
+    }
+  };
+
+  return { isExtended, toggleSidebar, expandSidebar };
 };

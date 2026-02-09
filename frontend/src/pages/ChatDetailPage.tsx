@@ -1,6 +1,12 @@
+import ChatInputField from "../components/chat/ChatInputField";
+
 const ChatDetailPage = () => {
   console.log("ChatDetailPage rendered");
-  return <></>;
+  return (
+    <>
+      <ChatInputField />
+    </>
+  );
 };
 
 export default ChatDetailPage;

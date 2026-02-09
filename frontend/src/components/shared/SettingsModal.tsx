@@ -1,22 +1,37 @@
-const SettingsModal = () => {
+import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+
+interface SettingsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
+  const { t, i18n } = useTranslation("common");
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [isOpen]);
+
   return (
     <>
-      <button
-        className="btn"
-        onClick={() => document.getElementById("my_modal_1").showModal()}
+      <dialog
+        ref={dialogRef}
+        onClose={onClose}
+        id="settings_modal"
+        className="modal"
       >
-        open modal
-      </button>
-      <dialog id="my_modal_1" className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">
-            Press ESC key or click the button below to close
-          </p>
+          <h3 className="font-bold text-lg">{t("settings")}</h3>
+          <p className="py-4">{t("settingsDescription.helpText")}</p>
           <div className="modal-action">
             <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
+              <button className="btn">{t("close")}</button>
             </form>
           </div>
         </div>
@@ -24,3 +39,5 @@ const SettingsModal = () => {
     </>
   );
 };
+
+export default SettingsModal;

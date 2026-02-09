@@ -1,8 +1,16 @@
 {
   "search": "Search",
   "settings": "Settings",
-  "homepage": "Home page",
+  "settingsDescription": {
+    "helpText": "You can edit settings here",
+    "": "",
+    "": ""
+  },
+  "homepage": "Home",
   "back": "Back",
+  "close": "Close",
   "pageNotFound": "Could not find the requested page",
-  "returnToHome": "Return to homepage"
+  "returnToHome": "Return to homepage",
+  "Profile": "Profile",
+  "selectedLocale": "enUS"
 }
