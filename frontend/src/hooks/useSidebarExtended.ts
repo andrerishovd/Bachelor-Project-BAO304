@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 // Hook for å toggle sidebar extended/collapsed state
 // Lagrer brukerens preferanse i localStorage
+// Oppdaterer checkbox fra daisyUI
 
 export const useSidebarExtended = () => {
   const [isExtended, setIsExtended] = useState<boolean>(true);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+/* import { useState, useEffect } from "react";
 
 // hook for å endre fargen/tema som er lagret i nettleserens localStorage.
 // Dette tar vare på brukerens farge-preferanse
@@ -21,5 +21,12 @@ export const useTheme = () => {
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
-  return { theme, toggleTheme };
+  const setCustomTheme = (newTheme: string) => {
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+  };
+
+  return { theme, toggleTheme, setCustomTheme };
 };
+ */

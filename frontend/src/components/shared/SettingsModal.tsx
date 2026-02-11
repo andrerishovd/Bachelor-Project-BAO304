@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useKeyboard } from "../../hooks/useKeyboard";
+import ThemeDropdown from "./ThemeDropdown";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -18,6 +20,10 @@ const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
     }
   }, [isOpen]);
 
+  const { handleKeyDown } = useKeyboard({
+    onEscape: onClose,
+  });
+
   return (
     <>
       <dialog
@@ -25,10 +31,12 @@ const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
         onClose={onClose}
         id="settings_modal"
         className="modal"
+        onKeyDown={handleKeyDown}
       >
         <div className="modal-box">
           <h3 className="font-bold text-lg">{t("settings")}</h3>
           <p className="py-4">{t("settingsDescription.helpText")}</p>
+          <ThemeDropdown />
           <div className="modal-action">
             <form method="dialog">
               <button className="btn">{t("close")}</button>

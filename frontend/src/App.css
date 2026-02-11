@@ -1,50 +1,133 @@
 @import "tailwindcss";
 @plugin "daisyui" {
   themes:
-    light --default,
-    dark --prefersdark;
+    kristiania-light --default,
+    kristiania-dark --prefersdark,
+    retro,
+    cyberpunk,
+    synthwave,
+    valentine,
+    aqua;
 }
 
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@plugin "daisyui/theme" {
+  name: "kristiania-light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  /* Base colors - HK hvit og sort */
+  --color-base-100: oklch(100% 0 0); /* #ffffff - HK hvit */
+  --color-base-200: oklch(96% 0.003 0); /* Lys grå */
+  --color-base-300: oklch(92% 0.005 0); /* Litt mørkere grå */
+  --color-base-content: oklch(0% 0 0); /* #000000 - HK sort */
+
+  /* Primary - Hovedrød */
+  --color-primary: oklch(43% 0.22 21); /* #C61932 - Hovedrød */
+  --color-primary-content: oklch(100% 0 0); /* Hvit tekst på rød */
+
+  /* Secondary - HK Blå */
+  --color-secondary: oklch(35% 0.07 264); /* #434B63 - HK blå mørk */
+  --color-secondary-content: oklch(100% 0 0);
+
+  /* Accent - HK Turkis */
+  --color-accent: oklch(70% 0.08 196); /* #24AEBC - HK turkis */
+  --color-accent-content: oklch(100% 0 0);
+
+  /* Neutral - HK sort 75% */
+  --color-neutral: oklch(25% 0 0);
+  --color-neutral-content: oklch(100% 0 0);
+
+  /* Info - HK blå lys */
+  --color-info: oklch(75% 0.05 264); /* #CAC5DD - HK blå lys */
+  --color-info-content: oklch(20% 0 0);
+
+  /* Success - HK Turkis lys */
+  --color-success: oklch(91% 0.04 196); /* #D5EEF6 */
+  --color-success-content: oklch(20% 0 0);
+
+  /* Warning - HK Gul */
+  --color-warning: oklch(90% 0.14 95); /* #FFCB05 - HK gul */
+  --color-warning-content: oklch(20% 0 0);
+
+  /* Error - Mørk rød */
+  --color-error: oklch(28% 0.15 21); /* #4E0000 - Mørk rød */
+  --color-error-content: oklch(100% 0 0);
+
+  /* Border radius */
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  /* Base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* Border size */
+  --border: 1px;
+
+  /* Effects */
+  --depth: 1;
+  --noise: 0;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+@plugin "daisyui/theme" {
+  name: "kristiania-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+  /* Base colors - Mørke bakgrunner basert på HK sort */
+  --color-base-100: oklch(18% 0.02 264); /* Mørk blåsvart */
+  --color-base-200: oklch(14% 0.02 264); /* Mørkere */
+  --color-base-300: oklch(10% 0.02 264); /* Mørkest */
+  --color-base-content: oklch(95% 0 0); /* Nesten hvit tekst */
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
+  /* Primary - Litt lysere rød for dark mode */
+  --color-primary: oklch(55% 0.22 21); /* Lysere #C61932 */
+  --color-primary-content: oklch(100% 0 0);
 
-.card {
-  padding: 2em;
-}
+  /* Secondary - HK Blå lys */
+  --color-secondary: oklch(60% 0.06 264); /* #7D7DAA - HK blå medium */
+  --color-secondary-content: oklch(100% 0 0);
 
-.read-the-docs {
-  color: #888;
+  /* Accent - HK Turkis */
+  --color-accent: oklch(70% 0.08 196); /* #24AEBC - HK turkis */
+  --color-accent-content: oklch(15% 0 0);
+
+  /* Neutral */
+  --color-neutral: oklch(30% 0.03 264);
+  --color-neutral-content: oklch(90% 0 0);
+
+  /* Info - HK blå lys */
+  --color-info: oklch(60% 0.06 264); /* #7D7DAA */
+  --color-info-content: oklch(100% 0 0);
+
+  /* Success - HK Turkis lys */
+  --color-success: oklch(55% 0.07 196);
+  --color-success-content: oklch(100% 0 0);
+
+  /* Warning - HK Gul */
+  --color-warning: oklch(90% 0.14 95); /* #FFCB05 - beholder gul */
+  --color-warning-content: oklch(20% 0 0);
+
+  /* Error - Hovedrød */
+  --color-error: oklch(50% 0.2 21);
+  --color-error-content: oklch(100% 0 0);
+
+  /* Border radius */
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  /* Base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* Border size */
+  --border: 1px;
+
+  /* Effects */
+  --depth: 1;
+  --noise: 0;
 }
- */

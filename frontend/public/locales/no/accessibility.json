@@ -1,7 +1,11 @@
 {
   "theme": "Tema",
   "language": "Språk",
+  "changeLangAriaEN": "Endre språk til engelsk",
+  "changeLangAriaNO": "Endre språk til norsk bokmål",
   "accessibilitySettings": "Tilgjengelighets-innstillinger",
   "toggleDarkMode": "Bytt mellom lys og mørk modus",
-  "openSidebar": "Åpne sidemeny"
+  "toggleSidebar": " sidemeny",
+  "expandSidebarAndSearch": "Utvid sidepanel og søk",
+  "searchLabel": "Søk i innhold"
 }

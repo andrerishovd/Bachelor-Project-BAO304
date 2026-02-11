@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 
 const ChatInputField = () => {
   const { isLoading, setIsLoading } = useState<Boolean>(false);
@@ -17,7 +18,7 @@ const ChatInputField = () => {
         <span className="loading loading-spinner loading-xs btn"></span>
       ) : (
         <button type="button" className="btn">
-          Send
+          <PaperAirplaneIcon/>
         </button>
       )}
     </div>

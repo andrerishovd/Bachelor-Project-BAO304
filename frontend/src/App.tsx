@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg' */
 import "./App.css";
 import AppRouting from "./routing/AppRouting";
 import { SidebarProvider } from "./contexts/SidebarContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 /* App onion layer
 In order to show some accessibility features on the authentication page, Sideprovider is the outer most layer
@@ -13,9 +14,11 @@ In order to show some accessibility features on the authentication page, Sidepro
 function App() {
   return (
     <>
-      <SidebarProvider>
-        <AppRouting />
-      </SidebarProvider>
+      <ThemeProvider>
+        <SidebarProvider>
+          <AppRouting />
+        </SidebarProvider>
+      </ThemeProvider>
     </>
   );
 }

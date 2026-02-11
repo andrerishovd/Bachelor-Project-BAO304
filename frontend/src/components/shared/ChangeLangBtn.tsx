@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-
+import "flag-icons/css/flag-icons.min.css";
 // https://react.i18next.com/guides/quick-start
 // https://github.com/i18next/react-i18next/blob/master/example/react/src/App.js
 
@@ -12,15 +12,17 @@ const ChangeLangBtn = () => {
         className="btn"
         type="button"
         onClick={() => i18n.changeLanguage("no")}
+        aria-label={t("accessibility:changeLangAriaNO")}
       >
-        🇳🇴 NO
+        <span className="fi fi-no"></span>
       </button>
       <button
         className="btn"
         type="button"
         onClick={() => i18n.changeLanguage("en")}
+        aria-label={t("accessibility:changeLangAriaEN")}
       >
-        🇬🇧 GB
+        <span className="fi fi-gb"></span>
       </button>
     </div>
   );
