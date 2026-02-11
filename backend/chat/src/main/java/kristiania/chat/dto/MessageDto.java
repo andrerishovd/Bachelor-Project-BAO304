@@ -1,4 +1,4 @@
 package kristiania.chat.dto;
 
-public class MessageDto {
+public record MessageDto(String id, String body) {
 }

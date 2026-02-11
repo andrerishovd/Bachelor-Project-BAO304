@@ -18,6 +18,23 @@ services:
   #  networks:
   #    - study-buddy
 
+  chat-db:
+    container_name: "chat-db"
+    image: postgres:alpine
+    ports:
+      - '5430:5432'
+    environment:
+      - "POSTGRES_USER=chatserviceusername"
+      - "POSTGRES_PASSWORD=chatservicepassword"
+      - "POSTGRES_DB=chat"
+      - POSTGRES_DB=chat
+      - POSTGRES_USER=chatserviceusername
+      - POSTGRES_PASSWORD=chatservicepassword
+    volumes:
+      - chat_data:/var/lib/postgresql/data
+    #networks:
+    #  - study-buddy
+
   gateway:
     image: gateway:0.0.1-SNAPSHOT
     build:
@@ -28,8 +45,8 @@ services:
     ports:
       - "8010:8010"
     #depends_on:
-    networks:
-      - study-buddy
+    #networks:
+    #  - study-buddy
 
   chat-service:
     image: chat:0.0.1-SNAPSHOT
@@ -37,14 +54,14 @@ services:
       context: ./backend/chat
     container_name: chat-service
     environment:
-      SPRING_PROFILES_ACTIVE: "docker"
+      SPRING_PROFILES_ACTIVE: "env"
 
     ports:
-      - "8020:8020"
-    #depends_on:
-
-    networks:
-      - study-buddy
+      - "8080:8080"
+    depends_on:
+      - chat-db
+    #networks:
+    #  - study-buddy
 
   settings-service:
     image: settings:0.0.1-SNAPSHOT
@@ -62,8 +79,8 @@ services:
     #depends_on:
     #  - user-db
 
-    networks:
-      - study-buddy
+    #networks:
+    #  - study-buddy
 
   user-service:
     image: user:0.0.1-SNAPSHOT
@@ -81,13 +98,14 @@ services:
     #depends_on:
     #  - user-db
 
-    networks:
-      - study-buddy
+    #networks:
+    #  - study-buddy
 
 
-networks:
-  study-buddy:
-    driver: bridge
+#networks:
+#  study-buddy:
+#    driver: bridge
 
-#volumes:
+volumes:
+  chat_data:
   #user_data:

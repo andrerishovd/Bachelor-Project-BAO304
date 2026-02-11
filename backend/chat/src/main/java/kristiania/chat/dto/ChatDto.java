@@ -1,4 +1,4 @@
 package kristiania.chat.dto;
 
-public class ChatDto {
+public record ChatDto() {
 }

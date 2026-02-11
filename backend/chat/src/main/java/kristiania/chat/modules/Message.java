@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,11 +19,14 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
+    @Column(name = "body")
     private String body;
-    private Date date;
-    private Time time;
+    @Column(name = "local_date_time")
+    private LocalDateTime localDateTime;
 
+    @Column(name = "sender_type")
     private SenderType senderType;
+    @Column(name = "sender_id")
     private String senderId;
 
     @ManyToOne

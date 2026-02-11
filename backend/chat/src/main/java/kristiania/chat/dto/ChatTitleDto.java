@@ -1,4 +1,4 @@
 package kristiania.chat.dto;
 
-public class ChatTitleDto {
+public record ChatTitleDto(String id, String title) {
 }

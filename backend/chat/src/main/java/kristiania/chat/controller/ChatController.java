@@ -3,6 +3,8 @@ package kristiania.chat.controller;
 import kristiania.chat.dto.ChatDto;
 import kristiania.chat.dto.ChatTitleDto;
 import kristiania.chat.dto.MessageDto;
+import kristiania.chat.modules.ChatRequest;
+import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +59,11 @@ public class ChatController {
 
     // Post new chat without user (for testing)
     @PostMapping()
-    public ResponseEntity<ChatDto> postNewChat(@RequestBody MessageDto messageDto) {
-        return ResponseEntity.ok(chatService.createNewChat(messageDto));
+    public ChatResponse postNewChat(@RequestBody ChatRequest request) {
+        if (request == null || request.getMessage() == null || request.getMessage().isBlank()) {
+            return new ChatResponse("Please send a non-empty message.");
+        }
+        return chatService.createNewChat(request);
     }
 
     // Post new chat with user id
@@ -68,15 +73,15 @@ public class ChatController {
     }
 
     // Post message to existing chat without user (for testing)
-    @PostMapping()
+    @PostMapping("/new")
     public ResponseEntity<MessageDto> postMessage(@RequestBody MessageDto messageDto) {
         return ResponseEntity.ok(chatService.createNewMessage(messageDto));
     }
 
     // Post message to existing chat with user id
-    @PostMapping("/user/{userId}")
-    public ResponseEntity<MessageDto> postMessageFromUserId(@RequestBody MessageDto messageDto, @PathVariable String userId) {
-        return ResponseEntity.ok(chatService.createNewMessageFromUserId(messageDto, userId));
+    @PostMapping("/user/{userId}/chat/{chatId}")
+    public ResponseEntity<MessageDto> postMessageFromUserId(@RequestBody MessageDto messageDto, @PathVariable String userId, @PathVariable String chatId) {
+        return ResponseEntity.ok(chatService.createNewMessageFromUserId(messageDto, userId, chatId));
     }
 
 
