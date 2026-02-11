@@ -11,5 +11,5 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-alpine
 WORKDIR /app
 COPY --from=build /build/target/gateway-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8020
+EXPOSE 8010
 ENTRYPOINT ["java",  "-jar", "app.jar"]
