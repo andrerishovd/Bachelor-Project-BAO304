@@ -2,14 +2,21 @@ package kristiania.chat.service;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import kristiania.chat.dto.*;
+import kristiania.chat.enums.SenderType;
+import kristiania.chat.modules.Chat;
 import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
+import kristiania.chat.modules.Message;
+import kristiania.chat.repository.ChatRepository;
+import kristiania.chat.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +24,9 @@ import java.util.Map;
 
 @Service
 public class ChatService {
+
+    private ChatRepository chatRepository;
+    private MessageRepository messageRepository;
 
     private final RestClient restClient;
     private final String model;
@@ -95,6 +105,40 @@ public class ChatService {
         return sb.toString();
     }
 
+    // make own service?
+    public void saveMessage(MessageDto messageDto) {
+        // create new chat
+        Long newChatId = createChat();
+
+        // save message to that chat
+        Message message = Message.builder()
+                        .body(messageDto.body())
+                        .localDateTime(LocalDateTime.now())
+                        .senderType(SenderType.USER)
+                        .senderId("22")
+                        .chat(chatRepository.getReferenceById(newChatId))
+                        .build();
+
+        messageRepository.save(message);
+    }
+
+    // make own service?
+    public void saveMessage(MessageDto messageDto, Chat chat) {
+        // save message to parameter chat
+    }
+
+    public Long createChat() {
+        // save chat
+        ArrayList<Message> messageList = new ArrayList<>();
+        Chat chat = Chat.builder()
+            .title("title1")
+            .userId("11")
+            .messageList(messageList)
+            .build();
+
+        Chat savedChat = chatRepository.save(chat);
+        return savedChat.getId();
+    }
 
     public List<ChatTitleDto> getAllChats() {
         return new ArrayList<>();
