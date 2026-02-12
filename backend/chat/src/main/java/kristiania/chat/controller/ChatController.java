@@ -80,8 +80,8 @@ public class ChatController {
 
     // Post message to existing chat without user (for testing)
     @PostMapping("/chat/{chatId}")
-    public ResponseEntity<MessageDto> postMessage(@RequestBody ChatRequest chatRequest, Long chatId) {
-        return ResponseEntity.ok(chatService.createNewMessage(chatRequest, chatId));
+    public ResponseEntity<ChatResponse> postMessage(@RequestBody ChatRequest chatRequest, @PathVariable String chatId) {
+        return ResponseEntity.ok(chatService.createNewMessageToExistingChat(chatRequest, chatId));
     }
 
     // Post message to existing chat with user id

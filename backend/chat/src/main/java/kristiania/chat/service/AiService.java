@@ -3,6 +3,7 @@ package kristiania.chat.service;
 import kristiania.chat.dto.ContentItemDto;
 import kristiania.chat.dto.OpenAiResponseDto;
 import kristiania.chat.dto.OutputItemDto;
+import kristiania.chat.modules.Chat;
 import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.modules.Message;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,8 +53,20 @@ public class AiService {
     }
 
     public ChatResponse sendChat(String userMessage) {
-        //for (Message message : messageList) {}
-        Map<String, Object> body = buildRequestBody(userMessage);
+        Map<String, Object> body = buildRequestBodyWithoutChat(userMessage);
+
+        OpenAiResponseDto resp = restClient.post()
+                .uri("/v1/responses")
+                .body(body)
+                .retrieve()
+                .body(OpenAiResponseDto.class);
+
+        String reply = extractOutputText(resp);
+        return new ChatResponse(reply);
+    }
+
+    public ChatResponse sendToExistingChat(String userMessage, Chat chat) {
+        Map<String, Object> body = buildRequestBodyWithChat(userMessage, chat);
 
         OpenAiResponseDto resp = restClient.post()
                 .uri("/v1/responses")
@@ -81,14 +94,45 @@ public class AiService {
     ],
 
      */
-    private Map<String, Object> buildRequestBody(String userMessage) {
+    private Map<String, Object> buildRequestBodyWithoutChat(String userMessage) {
         Map<String, Object> body = new HashMap<>();
 
         // model
         body.put("model", model);
 
-        //reasoning ( not supported for 4.0 mini )
         /*
+        reasoning ( not supported for 4.0 mini )
+
+        Map<String, Object> reasoning = new HashMap<>();
+            reasoning.put("effort", "low");
+
+            body.put("reasoning", reasoning);
+        */
+
+        //input
+        List<Map<String, Object>> input = new ArrayList<>();
+
+        // Ai role and personality
+        input.add(Map.of("role", "system", "content", personality));
+
+        // User message
+        input.add(Map.of("role", "user", "content", userMessage));
+
+
+        body.put("input", input);
+
+        body.put("text", Map.of("format", Map.of("type", "text")));
+
+        return body;
+    }
+    private Map<String, Object> buildRequestBodyWithChat(String userMessage, Chat chat) {
+        Map<String, Object> body = new HashMap<>();
+
+        // model
+        body.put("model", model);
+
+        /*
+        reasoning ( not supported for 4.0 mini )
 
         Map<String, Object> reasoning = new HashMap<>();
             reasoning.put("effort", "low");
@@ -102,11 +146,32 @@ public class AiService {
             // Ai role and personality
             input.add(Map.of("role", "system", "content", personality));
 
-            // User message/history
+            // Message history
+            for (Message message : chat.getMessageList()) {
+
+                String role;
+                switch (message.getSenderType()) {
+                    case USER:
+                        role = "user";
+                        break;
+                    case AI:
+                        role = "assistant";
+                        break;
+                    default:
+                        continue;
+                }
+
+                input.add(Map.of(
+                        "role", role,
+                        "content", message.getLocalDateTime().toString()+message.getBody()
+                ));
+            }
+
+            // User message
             input.add(Map.of("role", "user", "content", userMessage));
 
 
-            body.put("input", input);
+        body.put("input", input);
 
         body.put("text", Map.of("format", Map.of("type", "text")));
 

@@ -110,12 +110,20 @@ public class ChatService {
         return null;
     }
 
-    public MessageDto createNewMessage(ChatRequest chatRequest, Long chatId) {
-        MessageDto messageDto = new MessageDto();
+    public ChatResponse createNewMessageToExistingChat(ChatRequest chatRequest, String chatIdString) {
+        Long chatId = Long.valueOf(chatIdString);
 
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found with id = " + chatId));
 
+        MessageDto messageDto = new MessageDto(null, chatRequest.getMessage(), null, SenderType.USER.toString());
 
-        return messageDto;
+        messageService.saveMessageDto(messageDto, chat);
+
+        ChatResponse chatResponse= aiService.sendToExistingChat(messageDto.body(), chat);
+        MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
+
+        messageService.saveMessageDto(responseMessageDto, chat);
+        return chatResponse;
     }
 
     public MessageDto createNewMessageFromUserId(MessageDto messageDto, String userId, String chatId) {
