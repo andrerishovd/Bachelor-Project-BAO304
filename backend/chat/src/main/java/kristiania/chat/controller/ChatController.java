@@ -41,7 +41,7 @@ public class ChatController {
     }
 
     // Get all chat id's + titles from user id
-    @GetMapping("/user/{userId}")
+    @GetMapping("/userId/{userId}")
     public ResponseEntity<List<ChatTitleDto>> getAllChatsFromUser(@PathVariable String userId) {
         return ResponseEntity.ok(chatService.getAllChatsFromUser(userId));
     }
@@ -53,7 +53,7 @@ public class ChatController {
     }
 
     // Get message from id
-    @GetMapping("/message/{messageId}")
+    @GetMapping("/messageId/{messageId}")
     public ResponseEntity<MessageDto> getMessageFromId(@PathVariable String messageId) {
         return ResponseEntity.ok(chatService.getMessageFromId(messageId));
     }
@@ -73,19 +73,19 @@ public class ChatController {
     }
 
     // Post new chat with user id
-    @PostMapping("/user/{userId}")
+    @PostMapping("/userId/{userId}")
     public ResponseEntity<ChatDto> postNewChatFromUserId(@RequestBody MessageDto messageDto, @PathVariable String userId) {
         return ResponseEntity.ok(chatService.createNewChatFromUserId(messageDto, userId));
     }
 
     // Post message to existing chat without user (for testing)
-    @PostMapping("/chat/{chatId}")
+    @PostMapping("/chatId/{chatId}")
     public ResponseEntity<ChatResponse> postMessage(@RequestBody ChatRequest chatRequest, @PathVariable String chatId) {
         return ResponseEntity.ok(chatService.createNewMessageToExistingChat(chatRequest, chatId));
     }
 
     // Post message to existing chat with user id
-    @PostMapping("/user/{userId}/chat/{chatId}")
+    @PostMapping("/userId/{userId}/chatId/{chatId}")
     public ResponseEntity<MessageDto> postMessageFromUserId(@RequestBody MessageDto messageDto, @PathVariable String userId, @PathVariable String chatId) {
         return ResponseEntity.ok(chatService.createNewMessageFromUserId(messageDto, userId, chatId));
     }
@@ -96,7 +96,7 @@ public class ChatController {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Put/update message from id
-    @PutMapping("/message/{messageId}")
+    @PutMapping("/messageId/{messageId}")
     public ResponseEntity<MessageDto> putMessageFromId(@PathVariable String messageId) {
         return ResponseEntity.ok(chatService.putMessageFromId(messageId));
     }
@@ -119,7 +119,7 @@ public class ChatController {
     }
 
     // Delete all chats from user id - also deletes messages in each chat
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/userId/{userId}")
     public ResponseEntity<Void> deleteAllChatsFromUserId(@PathVariable String userId) {
         return ResponseEntity.ok(chatService.deleteAllChatsFromUserId(userId));
     }

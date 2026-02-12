@@ -25,7 +25,7 @@ public class ChatService {
         // save chat
         ArrayList<Message> messageList = new ArrayList<>();
         Chat chat = Chat.builder()
-            .title("title1")
+            .title(title)
             .userId("11")
             .messageList(messageList)
             .build();
@@ -97,12 +97,20 @@ public class ChatService {
         Chat newChat = chatRepository.getReferenceById(newChatId);
         MessageDto messageDto = new MessageDto(null, chatRequest.getMessage(), null, SenderType.USER.toString());
 
-        messageService.saveMessageDto(messageDto, newChat);
 
-        ChatResponse chatResponse= aiService.sendChat(messageDto.body());
-        MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
+        ChatResponse chatResponse;
 
-        messageService.saveMessageDto(responseMessageDto, chatRepository.getReferenceById(newChatId));
+        try {
+            chatResponse = aiService.sendChat(messageDto.body());
+
+            MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
+
+
+            messageService.saveMessageDto(messageDto, newChat);
+            messageService.saveMessageDto(responseMessageDto, chatRepository.getReferenceById(newChatId));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return chatResponse;
     }
 
