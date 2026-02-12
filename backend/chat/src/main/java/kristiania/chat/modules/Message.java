@@ -17,7 +17,7 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
-    @Column(name = "body", length = 2000)
+    @Column(name = "body", length = 4000)
 
     private String body;
     @Column(name = "local_date_time")

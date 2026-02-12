@@ -1,7 +1,9 @@
 package kristiania.chat.service;
 
 import kristiania.chat.dto.*;
+import kristiania.chat.enums.SenderType;
 import kristiania.chat.modules.Chat;
+import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.modules.Message;
 import kristiania.chat.repository.ChatRepository;
@@ -36,7 +38,7 @@ public class ChatService {
         List<MessageDto> messageDtoList = new ArrayList<>();
 
         for(Message message : chat.getMessageList()) {
-            MessageDto messageDto = new MessageDto(message.getId().toString(), message.getBody());
+            MessageDto messageDto = new MessageDto(message.getId().toString(), message.getBody(), message.getLocalDateTime().toString(), message.getSenderType().toString());
             messageDtoList.add(messageDto);
         }
 
@@ -90,14 +92,15 @@ public class ChatService {
         return null;
     }
 
-    public ChatResponse createNewChatFromMessageDto(MessageDto messageDto) {
+    public ChatResponse createNewChatFromChatRequest(ChatRequest chatRequest) {
         Long newChatId = createChat();
         Chat newChat = chatRepository.getReferenceById(newChatId);
+        MessageDto messageDto = new MessageDto(null, chatRequest.getMessage(), null, SenderType.USER.toString());
 
         messageService.saveMessageDto(messageDto, newChat);
 
         ChatResponse chatResponse= aiService.sendChat(messageDto.body());
-        MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse());
+        MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
 
         messageService.saveMessageDto(responseMessageDto, chatRepository.getReferenceById(newChatId));
         return chatResponse;

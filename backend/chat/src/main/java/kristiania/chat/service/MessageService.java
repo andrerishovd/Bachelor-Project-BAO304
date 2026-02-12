@@ -22,7 +22,7 @@ public class MessageService {
         Message message = Message.builder()
                 .body(messageDto.body())
                 .localDateTime(LocalDateTime.now())
-                .senderType(SenderType.USER)
+                .senderType(SenderType.valueOf(messageDto.senderType()))
                 .senderId("22")
                 .chat(chat)
                 .build();

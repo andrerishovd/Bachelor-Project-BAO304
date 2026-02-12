@@ -3,6 +3,7 @@ package kristiania.chat.controller;
 import kristiania.chat.dto.ChatDto;
 import kristiania.chat.dto.ChatTitleDto;
 import kristiania.chat.dto.MessageDto;
+import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,11 +65,11 @@ public class ChatController {
 
     // Post new chat without user (for testing)
     @PostMapping()
-    public ChatResponse postMessageAndCreateNewChat(@RequestBody MessageDto message) {
-        if (message == null || message.body() == null || message.body().isBlank()) {
+    public ChatResponse postMessageAndCreateNewChat(@RequestBody ChatRequest request) {
+        if (request == null || request.getMessage() == null || request.getMessage().isBlank()) {
             return new ChatResponse("Please send a non-empty message.");
         }
-        return chatService.createNewChatFromMessageDto(message);
+        return chatService.createNewChatFromChatRequest(request);
     }
 
     // Post new chat with user id
