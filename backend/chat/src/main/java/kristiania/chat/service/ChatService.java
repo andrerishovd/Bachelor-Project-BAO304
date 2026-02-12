@@ -21,7 +21,7 @@ public class ChatService {
     private final  MessageService messageService;
     private final AiService aiService;
 
-    public Long createChat() {
+    public Long createChat(String title) {
         // save chat
         ArrayList<Message> messageList = new ArrayList<>();
         Chat chat = Chat.builder()
@@ -93,7 +93,7 @@ public class ChatService {
     }
 
     public ChatResponse createNewChatFromChatRequest(ChatRequest chatRequest) {
-        Long newChatId = createChat();
+        Long newChatId = createChat(chatRequest.getMessage());
         Chat newChat = chatRepository.getReferenceById(newChatId);
         MessageDto messageDto = new MessageDto(null, chatRequest.getMessage(), null, SenderType.USER.toString());
 
@@ -110,8 +110,12 @@ public class ChatService {
         return null;
     }
 
-    public MessageDto createNewMessage(MessageDto messageDto) {
-        return null;
+    public MessageDto createNewMessage(ChatRequest chatRequest, Long chatId) {
+        MessageDto messageDto = new MessageDto();
+
+
+
+        return messageDto;
     }
 
     public MessageDto createNewMessageFromUserId(MessageDto messageDto, String userId, String chatId) {

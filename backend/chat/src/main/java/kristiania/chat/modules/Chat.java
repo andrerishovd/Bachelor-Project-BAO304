@@ -17,7 +17,7 @@ public class Chat {
     @Column(name = "chat_id")
     private Long id;
 
-    @Column(name = "title", length = 100)
+    @Column(name = "title", length = 1000)
     private String title;
 
     @Column(name = "user_id", length = 100)
