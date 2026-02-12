@@ -3,7 +3,6 @@ package kristiania.chat.controller;
 import kristiania.chat.dto.ChatDto;
 import kristiania.chat.dto.ChatTitleDto;
 import kristiania.chat.dto.MessageDto;
-import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,14 @@ public class ChatController {
 
     //Get all chats
     @GetMapping("/all")
-    public ResponseEntity<List<ChatTitleDto>> getAllChats() {
+    public ResponseEntity<List<ChatDto>> getAllChats() {
         return ResponseEntity.ok(chatService.getAllChats());
+    }
+
+    //Get all chats
+    @GetMapping("/all/title")
+    public ResponseEntity<List<ChatTitleDto>> getAllChatTitles() {
+        return ResponseEntity.ok(chatService.getAllChatTitlesAndId());
     }
 
     // Get all chat id's + titles from user id
@@ -59,11 +64,11 @@ public class ChatController {
 
     // Post new chat without user (for testing)
     @PostMapping()
-    public ChatResponse postNewChat(@RequestBody ChatRequest request) {
-        if (request == null || request.getMessage() == null || request.getMessage().isBlank()) {
+    public ChatResponse postMessageAndCreateNewChat(@RequestBody MessageDto message) {
+        if (message == null || message.body() == null || message.body().isBlank()) {
             return new ChatResponse("Please send a non-empty message.");
         }
-        return chatService.createNewChat(request);
+        return chatService.createNewChatFromMessageDto(message);
     }
 
     // Post new chat with user id

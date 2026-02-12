@@ -1,4 +1,6 @@
 package kristiania.chat.dto;
 
-public record ChatDto() {
+import java.util.List;
+
+public record ChatDto(String id, String title, String userId, List<MessageDto> messageDtoList) {
 }

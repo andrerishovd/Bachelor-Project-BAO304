@@ -1,131 +1,23 @@
 package kristiania.chat.service;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import kristiania.chat.dto.*;
-import kristiania.chat.enums.SenderType;
 import kristiania.chat.modules.Chat;
-import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.modules.Message;
 import kristiania.chat.repository.ChatRepository;
-import kristiania.chat.repository.MessageRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ChatService {
 
-    private ChatRepository chatRepository;
-    private MessageRepository messageRepository;
-
-    private final RestClient restClient;
-    private final String model;
-
-
-    public ChatService(
-            @Value("${OPEN_AI_API_KEY}") String apiKey,
-            @Value("${BASE_URL}") String baseUrl,
-            @Value("${MODEL}") String model
-    ) {
-
-        if (apiKey == null || apiKey.isBlank()) {
-            throw new IllegalStateException("OPEN_AI_API_KEY is not set.");
-        }
-        if (baseUrl == null || baseUrl.isBlank()) {
-            throw new IllegalStateException("BASE_URL is not set.");
-        }
-        if (model == null || model.isBlank()) {
-            throw new IllegalStateException("MODEL is not set.");
-        }
-
-        this.model = model;
-
-        this.restClient = RestClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-    }
-
-    public ChatResponse chat(String userMessage) {
-        Map<String, Object> body = buildRequestBody(userMessage);
-
-        OpenAiResponseDto resp = restClient.post()
-                .uri("/v1/responses")
-                .body(body)
-                .retrieve()
-                .body(OpenAiResponseDto.class);
-
-        String reply = extractOutputText(resp);
-        return new ChatResponse(reply);
-    }
-
-    private Map<String, Object> buildRequestBody(String userMessage) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("model", model);
-
-        List<Map<String, Object>> input = new ArrayList<>();
-        input.add(Map.of("role", "system", "content", "You are a helpful demo assistant."));
-        input.add(Map.of("role", "user", "content", userMessage));
-        body.put("input", input);
-
-        body.put("text", Map.of("format", Map.of("type", "text")));
-
-        return body;
-    }
-
-    private String extractOutputText(OpenAiResponseDto resp) {
-        if (resp == null || resp.output() == null) return "";
-
-        StringBuilder sb = new StringBuilder();
-
-        for (OutputItemDto item : resp.output()) {
-            if (item == null || item.content() == null) continue;
-
-            for (ContentItemDto c : item.content()) {
-                if (c == null) continue;
-
-                if ("output_text".equals(c.type()) && c.text() != null) {
-                    if (!sb.isEmpty()) sb.append("\n");
-                    sb.append(c.text());
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-
-    // make own service?
-    public void saveMessage(MessageDto messageDto) {
-        // create new chat
-        Long newChatId = createChat();
-
-        // save message to that chat
-        Message message = Message.builder()
-                        .body(messageDto.body())
-                        .localDateTime(LocalDateTime.now())
-                        .senderType(SenderType.USER)
-                        .senderId("22")
-                        .chat(chatRepository.getReferenceById(newChatId))
-                        .build();
-
-        messageRepository.save(message);
-    }
-
-    // make own service?
-    public void saveMessage(MessageDto messageDto, Chat chat) {
-        // save message to parameter chat
-    }
+    private final ChatRepository chatRepository;
+    private final  MessageService messageService;
+    private final AiService aiService;
 
     public Long createChat() {
         // save chat
@@ -140,7 +32,39 @@ public class ChatService {
         return savedChat.getId();
     }
 
-    public List<ChatTitleDto> getAllChats() {
+    public ChatDto convertChatToChatDto(Chat chat) {
+        List<MessageDto> messageDtoList = new ArrayList<>();
+
+        for(Message message : chat.getMessageList()) {
+            MessageDto messageDto = new MessageDto(message.getId().toString(), message.getBody());
+            messageDtoList.add(messageDto);
+        }
+
+        ChatDto chatDto = new ChatDto(
+                chat.getId().toString(),
+                chat.getTitle(),
+                chat.getUserId(),
+                messageDtoList
+        );
+
+        return chatDto;
+    }
+
+    public List<ChatDto> convertChatListToChatDtoList(List<Chat> chatList) {
+        List<ChatDto> chatDtoList = new ArrayList<>();
+        for(Chat chat : chatList) {
+            chatDtoList.add(convertChatToChatDto(chat));
+        }
+        return chatDtoList;
+    }
+
+    public List<ChatDto> getAllChats() {
+        List<Chat> chatList = chatRepository.findAll();
+
+        return convertChatListToChatDtoList(chatList);
+    }
+
+    public List<ChatTitleDto> getAllChatTitlesAndId() {
         return new ArrayList<>();
     }
 
@@ -148,16 +72,35 @@ public class ChatService {
         return null;
     }
 
-    public ChatDto getChatWithId(String id) {
+    /*
+    public ChatDto getChatDtoWithId(String id) {
+        //chatRepository.getReferenceById(String id);
         return null;
+    }
+     */
+
+    public ChatDto getChatWithId(String stringId) {
+        Long id = Long.valueOf(stringId);
+        Chat chat= chatRepository.getReferenceById(id);
+
+        return convertChatToChatDto(chat);
     }
 
     public MessageDto getMessageFromId(String messageId) {
         return null;
     }
 
-    public ChatResponse createNewChat(ChatRequest request) {
-        return chat(request.getMessage());
+    public ChatResponse createNewChatFromMessageDto(MessageDto messageDto) {
+        Long newChatId = createChat();
+        Chat newChat = chatRepository.getReferenceById(newChatId);
+
+        messageService.saveMessageDto(messageDto, newChat);
+
+        ChatResponse chatResponse= aiService.sendChat(messageDto.body());
+        MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse());
+
+        messageService.saveMessageDto(responseMessageDto, chatRepository.getReferenceById(newChatId));
+        return chatResponse;
     }
 
     public ChatDto createNewChatFromUserId(MessageDto messageDto, String userId) {
