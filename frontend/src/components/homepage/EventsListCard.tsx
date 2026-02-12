@@ -76,9 +76,9 @@ const EventsListCard = () => {
   ).length;
 
   return (
-    <div className="card w-96 bg-base-100 shadow-sm">
+    <div className="card card-border w-96 bg-base-100 shadow-sm">
       <div className="card-body">
-        {/* ✅ Badge med antall hendelser som haster */}
+        {/* Badge showing urgent tasks. */}
         {urgentCount > 0 && (
           <span className="badge badge-xs badge-warning">
             {urgentCount} hendelse{urgentCount > 1 ? "r" : ""} snart
@@ -119,7 +119,7 @@ const EventsListCard = () => {
                   <span className="font-medium">{event.title}</span>
                 </div>
 
-                {/* ✅ Dato, tid og dager til */}
+                {/* Date and time */}
                 <div className="flex flex-col items-end gap-0.5 shrink-0">
                   <span className="text-base-content/70">
                     {formatDate(event.date)} {formatTime(event.date)}

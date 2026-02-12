@@ -11,7 +11,7 @@ const CalendarCard = () => {
   const calendarLocale = i18n.language === "no" ? nb : enGB;
 
   return (
-    <div className="card bg-base-100 w-fit shadow-sm">
+    <div className="card card-border bg-base-100 w-fit shadow-sm">
       <div className="card-body">
         <DayPicker
           className="react-day-picker"

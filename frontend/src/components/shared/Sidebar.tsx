@@ -12,6 +12,7 @@ import {
   HomeIcon,
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
+import GeneratePodcastCard from "../podcast/GeneratePodcastCard";
 
 const Sidebar = () => {
   const { t } = useTranslation("common");

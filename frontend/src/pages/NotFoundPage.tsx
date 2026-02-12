@@ -10,7 +10,7 @@ const NotFoundPage = () => {
         <div className="col">
           <h1 className="montserrat-title m-4">{t("pageNotFound")}</h1>
           <h2 className="text-muted">404</h2>
-          <Link className="btn btn-secondary btn-lg " to="/">
+          <Link className="btn btn-primary btn-lg " to="/">
             {t("returnToHome")}
           </Link>
         </div>

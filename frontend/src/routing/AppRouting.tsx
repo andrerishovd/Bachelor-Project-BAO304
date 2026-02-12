@@ -35,10 +35,8 @@ const AppRouting = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/authentication" element={<AuthenticationPage />} />
-
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
-          {/* <Route path="/settings" element={<SettingsPage />} /> */}
           <Route path="/chat/:id" element={<ChatDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
