@@ -2,14 +2,12 @@ package kristiania.chat.modules;
 
 import jakarta.persistence.*;
 import kristiania.chat.enums.SenderType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,7 +17,8 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
-    @Column(name = "body")
+    @Column(name = "body", length = 4000)
+
     private String body;
     @Column(name = "local_date_time")
     private LocalDateTime localDateTime;

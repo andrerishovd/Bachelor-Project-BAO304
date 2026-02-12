@@ -1,102 +1,72 @@
 package kristiania.chat.service;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import kristiania.chat.dto.*;
+import kristiania.chat.enums.SenderType;
+import kristiania.chat.modules.Chat;
 import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import kristiania.chat.modules.Message;
+import kristiania.chat.repository.ChatRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ChatService {
 
-    private final RestClient restClient;
-    private final String model;
+    private final ChatRepository chatRepository;
+    private final  MessageService messageService;
+    private final AiService aiService;
 
+    public Long createChat(String title) {
+        // save chat
+        ArrayList<Message> messageList = new ArrayList<>();
+        Chat chat = Chat.builder()
+            .title(title)
+            .userId("11")
+            .messageList(messageList)
+            .build();
 
-    public ChatService(
-            @Value("${OPEN_AI_API_KEY}") String apiKey,
-            @Value("${BASE_URL}") String baseUrl,
-            @Value("${MODEL}") String model
-    ) {
-
-        if (apiKey == null || apiKey.isBlank()) {
-            throw new IllegalStateException("OPEN_AI_API_KEY is not set.");
-        }
-        if (baseUrl == null || baseUrl.isBlank()) {
-            throw new IllegalStateException("BASE_URL is not set.");
-        }
-        if (model == null || model.isBlank()) {
-            throw new IllegalStateException("MODEL is not set.");
-        }
-
-        this.model = model;
-
-        this.restClient = RestClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
+        Chat savedChat = chatRepository.save(chat);
+        return savedChat.getId();
     }
 
-    public ChatResponse chat(String userMessage) {
-        Map<String, Object> body = buildRequestBody(userMessage);
+    public ChatDto convertChatToChatDto(Chat chat) {
+        List<MessageDto> messageDtoList = new ArrayList<>();
 
-        OpenAiResponseDto resp = restClient.post()
-                .uri("/v1/responses")
-                .body(body)
-                .retrieve()
-                .body(OpenAiResponseDto.class);
-
-        String reply = extractOutputText(resp);
-        return new ChatResponse(reply);
-    }
-
-    private Map<String, Object> buildRequestBody(String userMessage) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("model", model);
-
-        List<Map<String, Object>> input = new ArrayList<>();
-        input.add(Map.of("role", "system", "content", "You are a helpful demo assistant."));
-        input.add(Map.of("role", "user", "content", userMessage));
-        body.put("input", input);
-
-        body.put("text", Map.of("format", Map.of("type", "text")));
-
-        return body;
-    }
-
-    private String extractOutputText(OpenAiResponseDto resp) {
-        if (resp == null || resp.output() == null) return "";
-
-        StringBuilder sb = new StringBuilder();
-
-        for (OutputItemDto item : resp.output()) {
-            if (item == null || item.content() == null) continue;
-
-            for (ContentItemDto c : item.content()) {
-                if (c == null) continue;
-
-                if ("output_text".equals(c.type()) && c.text() != null) {
-                    if (!sb.isEmpty()) sb.append("\n");
-                    sb.append(c.text());
-                }
-            }
+        for(Message message : chat.getMessageList()) {
+            MessageDto messageDto = new MessageDto(message.getId().toString(), message.getBody(), message.getLocalDateTime().toString(), message.getSenderType().toString());
+            messageDtoList.add(messageDto);
         }
 
-        return sb.toString();
+        ChatDto chatDto = new ChatDto(
+                chat.getId().toString(),
+                chat.getTitle(),
+                chat.getUserId(),
+                messageDtoList
+        );
+
+        return chatDto;
     }
 
+    public List<ChatDto> convertChatListToChatDtoList(List<Chat> chatList) {
+        List<ChatDto> chatDtoList = new ArrayList<>();
+        for(Chat chat : chatList) {
+            chatDtoList.add(convertChatToChatDto(chat));
+        }
+        return chatDtoList;
+    }
 
-    public List<ChatTitleDto> getAllChats() {
+    public List<ChatDto> getAllChats() {
+        List<Chat> chatList = chatRepository.findAll();
+
+        return convertChatListToChatDtoList(chatList);
+    }
+
+    public List<ChatTitleDto> getAllChatTitlesAndId() {
         return new ArrayList<>();
     }
 
@@ -104,24 +74,64 @@ public class ChatService {
         return null;
     }
 
-    public ChatDto getChatWithId(String id) {
+    /*
+    public ChatDto getChatDtoWithId(String id) {
+        //chatRepository.getReferenceById(String id);
         return null;
+    }
+     */
+
+    public ChatDto getChatWithId(String stringId) {
+        Long id = Long.valueOf(stringId);
+        Chat chat= chatRepository.getReferenceById(id);
+
+        return convertChatToChatDto(chat);
     }
 
     public MessageDto getMessageFromId(String messageId) {
         return null;
     }
 
-    public ChatResponse createNewChat(ChatRequest request) {
-        return chat(request.getMessage());
+    public ChatResponse createNewChatFromChatRequest(ChatRequest chatRequest) {
+        Long newChatId = createChat(chatRequest.getMessage());
+        Chat newChat = chatRepository.getReferenceById(newChatId);
+        MessageDto messageDto = new MessageDto(null, chatRequest.getMessage(), null, SenderType.USER.toString());
+
+
+        ChatResponse chatResponse;
+
+        try {
+            chatResponse = aiService.sendChat(messageDto.body());
+
+            MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
+
+
+            messageService.saveMessageDto(messageDto, newChat);
+            messageService.saveMessageDto(responseMessageDto, chatRepository.getReferenceById(newChatId));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return chatResponse;
     }
 
     public ChatDto createNewChatFromUserId(MessageDto messageDto, String userId) {
         return null;
     }
 
-    public MessageDto createNewMessage(MessageDto messageDto) {
-        return null;
+    public ChatResponse createNewMessageToExistingChat(ChatRequest chatRequest, String chatIdString) {
+        Long chatId = Long.valueOf(chatIdString);
+
+        Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found with id = " + chatId));
+
+        MessageDto messageDto = new MessageDto(null, chatRequest.getMessage(), null, SenderType.USER.toString());
+
+        messageService.saveMessageDto(messageDto, chat);
+
+        ChatResponse chatResponse= aiService.sendToExistingChat(messageDto.body(), chat);
+        MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
+
+        messageService.saveMessageDto(responseMessageDto, chat);
+        return chatResponse;
     }
 
     public MessageDto createNewMessageFromUserId(MessageDto messageDto, String userId, String chatId) {
