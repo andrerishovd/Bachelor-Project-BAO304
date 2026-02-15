@@ -1,0 +1,111 @@
+#TODO
+#Add consul for health checks
+#Implement gateway
+#Make db passwords .env variables
+
+services:
+  #user-db:
+  #  image: postgres:15
+  #  container_name: user-db
+  #  environment:
+  #    - "POSTGRES_USER=serviceuser"
+  #    - "POSTGRES_PASSWORD=servicepwd"
+  #    - "POSTGRES_DB=userdb"
+  #  ports:
+  #    - "5431:5432"
+  #  volumes:
+  #    - user_data:/var/lib/postgresql/data
+  #  networks:
+  #    - study-buddy
+
+  chat-db:
+    container_name: "chat-db"
+    image: postgres:alpine
+    ports:
+      - '5430:5432'
+    environment:
+      - "POSTGRES_USER=chatserviceusername"
+      - "POSTGRES_PASSWORD=chatservicepassword"
+      - "POSTGRES_DB=chat"
+      - POSTGRES_DB=chat
+      - POSTGRES_USER=chatserviceusername
+      - POSTGRES_PASSWORD=chatservicepassword
+    volumes:
+      - chat_data:/var/lib/postgresql/data
+    #networks:
+    #  - study-buddy
+
+  gateway:
+    image: gateway:0.0.1-SNAPSHOT
+    build:
+      context: ./backend/gateway
+    container_name: gateway-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8010:8010"
+    #depends_on:
+    #networks:
+    #  - study-buddy
+
+  chat-service:
+    image: chat:0.0.1-SNAPSHOT
+    build:
+      context: ./backend/chat
+    container_name: chat-service
+    environment:
+      SPRING_PROFILES_ACTIVE: "env"
+
+    ports:
+      - "8080:8080"
+    depends_on:
+      - chat-db
+    #networks:
+    #  - study-buddy
+
+  settings-service:
+    image: settings:0.0.1-SNAPSHOT
+    build:
+      context: ./backend/settings
+    container_name: settings-service
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      #SPRING_DATASOURCE_URL: jdbc:postgresql://settings-db:5432/settingsdb
+      #SPRING_DATASOURCE_USERNAME: serviceuser
+      #SPRING_DATASOURCE_PASSWORD: servicepwd
+
+    ports:
+      - "8030:8030"
+    #depends_on:
+    #  - user-db
+
+    #networks:
+    #  - study-buddy
+
+  user-service:
+    image: user:0.0.1-SNAPSHOT
+    build:
+      context: ./backend/user
+    container_name: user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+      #SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/userdb
+      #SPRING_DATASOURCE_USERNAME: serviceuser
+      #SPRING_DATASOURCE_PASSWORD: servicepwd
+
+    ports:
+      - "8040:8040"
+    #depends_on:
+    #  - user-db
+
+    #networks:
+    #  - study-buddy
+
+
+#networks:
+#  study-buddy:
+#    driver: bridge
+
+volumes:
+  chat_data:
+  #user_data:
