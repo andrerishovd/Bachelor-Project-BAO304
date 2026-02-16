@@ -1,0 +1,12 @@
+{
+  "theme": "Theme",
+  "language": "Language",
+  "changeLangAriaEN": "Change language to English",
+  "changeLangAriaNO": "Change language to Norwegian",
+  "accessibilitySettings": "Accesibility settings",
+  "toggleDarkMode": "Toggle Light and Dark Mode",
+  "toggleSidebar": "Toggle sidebar",
+  "expandSidebarAndSearch": "Expand sidebar and search",
+  "searchLabel": "search chats",
+  "sendMessage": "Send Message"
+}

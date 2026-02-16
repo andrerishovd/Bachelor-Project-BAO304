@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes:
+    kristiania-light --default,
+    kristiania-dark --prefersdark,
+    retro,
+    cyberpunk,
+    synthwave,
+    valentine,
+    aqua;
+}
+@plugin "daisyui/theme" {
+  name: "kristiania";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  /* ✅ Test med HEX direkte */
+  --color-base-100: #ffffff; /* HK hvit */
+  --color-base-200: #f2f2f2; /* HK sort 5% */
+  --color-base-300: #e6e6e6; /* HK sort 10% */
+  --color-base-content: #000000; /* HK sort */
+
+  --color-primary: #c61932; /* Hovedrød */
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #434b63; /* HK blå mørk */
+  --color-secondary-content: #ffffff;
+
+  --color-accent: #24aebc; /* HK turkis mørk */
+  --color-accent-content: #ffffff;
+
+  --color-neutral: #404040; /* HK sort 75% */
+  --color-neutral-content: #ffffff;
+
+  --color-info: #cac5dd; /* HK blå lys */
+  --color-info-content: #000000;
+
+  --color-success: #434b63; /* HK blå mørk (god kontrast) */
+  --color-success-content: #ffffff;
+
+  --color-warning: #9e182f; /* Hovedrød mørk (god kontrast) */
+  --color-warning-content: #ffffff;
+
+  --color-error: #4e0000; /* Hovedrød ekstra mørk */
+  --color-error-content: #ffffff;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "kristiania-dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #1c2130; /* Mørk blåsvart */
+  --color-base-200: #161a26; /* Mørkere */
+  --color-base-300: #0f1219; /* Mørkest */
+  --color-base-content: #f2f2f2; /* Nesten hvit */
+
+  --color-primary: #c61932; /* Hovedrød */
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #7d7daa; /* HK blå standard */
+  --color-secondary-content: #ffffff;
+
+  --color-accent: #24aebc; /* HK turkis */
+  --color-accent-content: #ffffff;
+
+  --color-neutral: #434b63;
+  --color-neutral-content: #f2f2f2;
+
+  --color-info: #7d7daa; /* HK blå standard */
+  --color-info-content: #ffffff;
+
+  --color-success: #94d6da; /* HK turkis lys */
+  --color-success-content: #000000;
+
+  --color-warning: #ffed78; /* HK gul lys */
+  --color-warning-content: #000000;
+
+  --color-error: #ff8989; /* Lysere rød - for å oppnå AAA i WCAG */
+  --color-error-content: #ffffff;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
