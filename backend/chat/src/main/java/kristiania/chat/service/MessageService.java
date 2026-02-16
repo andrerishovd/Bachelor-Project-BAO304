@@ -36,4 +36,8 @@ public class MessageService {
     }
 
 
+    public Void putMessageFromId(String messageId) {
+
+        return null;
+    }
 }

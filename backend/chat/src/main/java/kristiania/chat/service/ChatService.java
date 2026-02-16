@@ -66,7 +66,7 @@ public class ChatService {
         return convertChatListToChatDtoList(chatList);
     }
 
-    public List<ChatTitleDto> getAllChatTitlesAndId() {
+    public List<ChatTitleDto> getAllChatTitles() {
         return new ArrayList<>();
     }
 
@@ -138,11 +138,7 @@ public class ChatService {
         return null;
     }
 
-    public MessageDto putMessageFromId(String messageId) {
-        return null;
-    }
-
-    public MessageDto putChatFromId(String chatId) {
+    public Void putChatTitleFromId(String chatId, String newTitle) {
         return null;
     }
 
@@ -159,6 +155,10 @@ public class ChatService {
     }
 
     public Void deleteMessageFromId(String messageId) {
+        return null;
+    }
+
+    public List<ChatTitleDto> getAllChatTitlesFromUser(String userId) {
         return null;
     }
 }
