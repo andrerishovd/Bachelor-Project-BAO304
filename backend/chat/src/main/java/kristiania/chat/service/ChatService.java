@@ -157,4 +157,8 @@ public class ChatService {
     public Void deleteMessageFromId(String messageId) {
         return null;
     }
+
+    public List<ChatTitleDto> getAllChatTitlesFromUser(String userId) {
+        return null;
+    }
 }
