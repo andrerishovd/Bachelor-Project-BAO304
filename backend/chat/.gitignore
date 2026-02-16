@@ -32,3 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 /src/main/resources/application-env.properties
+
+### Properties, hvorfor var ikke denne i gitignore?
+application-env.properties

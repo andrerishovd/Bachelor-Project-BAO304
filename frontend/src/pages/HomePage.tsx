@@ -13,6 +13,19 @@ import PodcastList from "../components/homepage/PodcastList";
 import PodcastDetailList from "../components/podcast/PodcastDetailList";
 import GeneratePodcastCard from "../components/podcast/GeneratePodcastCard";
 
+/**
+ * SortableCard Component
+ *
+ * Wrapper component that makes any child component draggable and sortable.
+ * Uses @dnd-kit/sortable for drag-and-drop functionality.
+ *
+ * @param id - Unique identifier for the card (used for sorting)
+ * @param children - The card content to be rendered
+ *
+ * @library @dnd-kit/sortable
+ * @see {@link https://docs.dndkit.com/presets/sortable DnD Kit Sortable Documentation}
+ */
+
 const SortableCard = ({
   id,
   children,
@@ -35,6 +48,37 @@ const SortableCard = ({
   );
 };
 
+/**
+ * HomePage Component
+ *
+ * Dashboard with draggable and sortable cards.
+ * Users can rearrange cards by dragging them to customize their layout.
+ *
+ * @features
+ * - Drag-and-drop card reordering
+ * - Responsive grid layout (1/2/3 columns based on screen size)
+ * - Persistent card order (could be saved to localStorage)
+ *
+ * @cards Available dashboard cards:
+ * - calendar: Shows upcoming events in a calendar view
+ * - events: List of upcoming events with time indicators
+ * - podcast: List of podcast episodes
+ * - generatePodcastCard: AI podcast generation tool
+ *
+ * @library @dnd-kit
+ * Drag-and-drop library for React with accessibility support.
+ * - DndContext: Provides drag-and-drop context
+ * - SortableContext: Enables sorting behavior
+ * - closestCenter: Collision detection algorithm
+ * - arrayMove: Utility for reordering arrays
+ *
+ * @example
+ * // To add a new card:
+ * 1. Add component to imports
+ * 2. Add ID to items array: "myNewCard"
+ * 3. Add mapping to components object: myNewCard: <MyNewCard />
+ */
+
 const HomePage = () => {
   const [items, setItems] = useState([
     "calendar",
@@ -44,7 +88,10 @@ const HomePage = () => {
     "generatePodcastCard",
   ]);
 
-  //
+  /**
+   * Handles the end of a drag operation.
+   * Reorders the items array based on where the card was dropped.
+   */
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
