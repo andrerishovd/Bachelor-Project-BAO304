@@ -13,6 +13,7 @@ import {
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import GeneratePodcastCard from "../podcast/GeneratePodcastCard";
+import CreateChatButton from "../chat/CreateChatButton";
 
 const Sidebar = () => {
   const { t } = useTranslation("common");
@@ -56,6 +57,10 @@ const Sidebar = () => {
               <HomeIcon className="my-1.5 inline-block size-4 shrink-0" />
               <span className="is-drawer-close:hidden">{t("homepage")}</span>
             </button>
+          </li>
+
+          <li>
+            <CreateChatButton />
           </li>
 
           <li>

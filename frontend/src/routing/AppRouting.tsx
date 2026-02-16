@@ -14,9 +14,30 @@ import {
 import AppLayout from "../layouts/AppLayout";
 import { useAuth } from "../hooks/useAuth";
 
+/**
+ * AppRouting Component
+ *
+ * Main routing configuration for the application.
+ *
+ * @routes
+ * Public routes:
+ * - /authentication - Login/signup page
+ *
+ * Protected routes (require login):
+ * - / - Homepage with dashboard
+ * - /chat/:id - Chat detail page with dynamic ID
+ * - * - 404 Not Found page (catch-all)
+ *
+ * @pattern Nested Routes
+ * Protected routes are nested under <ProtectedRoute> which:
+ * 1. Checks authentication
+ * 2. Wraps authenticated pages in AppLayout
+ * 3. Redirects to login if not authenticated
+ */
+
 const ProtectedRoute = () => {
   const { isAuthenticated, login } = useAuth();
-  console.log("🔒 ProtectedRoute:", { isAuthenticated });
+  console.log("ProtectedRoute:", { isAuthenticated });
 
   if (!isAuthenticated) {
     return <Navigate to="/authentication" replace />;
@@ -30,7 +51,7 @@ const ProtectedRoute = () => {
 };
 
 const AppRouting = () => {
-  console.log("🛣️ AppRouting rendres");
+  console.log("AppRouting is rendering");
   return (
     <BrowserRouter>
       <Routes>

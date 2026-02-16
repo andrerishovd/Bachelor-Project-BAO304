@@ -1,3 +1,9 @@
+/** Index
+ * available pages are imported and exported here to simplify importing to AppRouting.
+ * New pages is imported as shown below and thereafter exported.
+ * See routing/Approuting.tsx for further implementation with the router
+ *  */
+
 import NotFoundPage from "./NotFoundPage";
 import HomePage from "./HomePage";
 import AuthenticationPage from "./AuthenticationPage";

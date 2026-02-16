@@ -1,8 +1,6 @@
-// TODO This has to reflect the messages in backend.
 export interface IChatMessage {
   id: string;
-  content: string;
-  sender: "user" | "ai";
-  timestamp: Date;
-  attachments?: File[];
+  body: string;
+  localDateTime: string; // ISO 8601 format: "2026-02-12T14:21:44.966631"
+  senderType: "USER" | "AI";
 }

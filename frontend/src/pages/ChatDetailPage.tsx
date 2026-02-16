@@ -3,6 +3,15 @@ import ChatInputField from "../components/chat/ChatInputField";
 import ChatThreadContainer from "../components/chat/ChatThreadContainer";
 /* import { ChatProvider } from "../contexts/ChatContext"; */
 
+/**
+ * ChatDetailPage
+ *
+ * Displays a single chat conversation.
+ *
+ * @route /chat/:chatId
+ * @layout Header → Messages → Input field
+ */
+
 const ChatDetailPage = () => {
   const { chatId } = useParams<{ chatId: string }>();
 
