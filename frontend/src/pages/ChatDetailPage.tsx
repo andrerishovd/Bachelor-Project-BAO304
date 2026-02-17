@@ -1,36 +1,61 @@
 import { useParams } from "react-router-dom";
 import ChatInputField from "../components/chat/ChatInputField";
 import ChatThreadContainer from "../components/chat/ChatThreadContainer";
-/* import { ChatProvider } from "../contexts/ChatContext"; */
+import { useTranslation } from "react-i18next";
+import { useChatContext } from "../contexts/ChatContext";
 
 /**
  * ChatDetailPage
  *
  * Displays a single chat conversation.
+ * Supports both existing chats (/chat/:chatId) and new chats (/chat/new).
  *
- * @route /chat/:chatId
- * @layout Header → Messages → Input field
+ * @route /chat/:chatId - Existing chat
+ * @route /chat/new - New empty chat (creates on first message send)
  */
 
-const ChatDetailPage = () => {
-  const { chatId } = useParams<{ chatId: string }>();
+interface ChatDetailPageProps {
+  isNew?: boolean;
+}
 
-  console.log("ChatDetailPage rendered");
+const ChatDetailPage = ({ isNew = false }: ChatDetailPageProps) => {
+  const { chatId } = useParams<{ chatId: string }>();
+  const { getChatById, refetch } = useChatContext();
+  const isNewChat = isNew;
+  const chat = chatId ? getChatById(chatId) : null;
+
+  const { t } = useTranslation("chat");
+
   return (
     <>
       <div className="flex flex-col h-full items-center">
         <div className="flex flex-col h-full w-full max-w-4xl">
           {/* Chat header */}
           <div className="border-b border-base-300 p-4">
-            <h1 className="text-2xl font-bold">Chat {chatId}</h1>
+            <h1 className="text-2xl font-bold">
+              {isNewChat ? (
+                t("newChat")
+              ) : chat?.title ? (
+                chat.title
+              ) : (
+                <span className="loading loading-dots loading-md"></span>
+              )}
+            </h1>
           </div>
 
           {/* Chat thread */}
-          <ChatThreadContainer chatId={chatId} />
+          <ChatThreadContainer
+            chatId={isNewChat ? undefined : chatId}
+            isNewChat={isNewChat}
+            messages={chat?.messageDtoList || []}
+          />
 
           {/* Input field */}
           <div className="border-t border-base-300 p-4">
-            <ChatInputField chatId={chatId} />
+            <ChatInputField
+              chatId={isNewChat ? undefined : chatId}
+              isNewChat={isNewChat}
+            />
           </div>
         </div>
       </div>

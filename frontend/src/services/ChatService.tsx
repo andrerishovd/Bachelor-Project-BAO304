@@ -1,6 +1,7 @@
 // src/services/chatService.ts
 import { apiClient } from "../config/axiosConfig";
 import type { IChat } from "../interfaces/chat/IChat";
+import type { IChatCreateResponse } from "../interfaces/chat/IChatCreateResponse";
 
 /**
  * ChatService
@@ -26,13 +27,20 @@ export class ChatService {
    * @returns The newly created chat with a generated ID
    * @throws Error if API call fails
    */
-  static async createChat(message: string): Promise<IChat> {
+
+  /* TODO fix this - more could be done in backend. */
+  static async createChat(message: string): Promise<IChatCreateResponse> {
     try {
-      const response = await apiClient.post<IChat>("/chat", { message });
+      const response = await apiClient.post<IChatCreateResponse>("/chat/new", {
+        message,
+      });
+
       return response.data;
     } catch (error) {
       console.error("Error creating chat:", error);
-      throw new Error("Could not create chat. Check that the backend is running.");
+      throw new Error(
+        "Could not create chat. Check that the backend is running.",
+      );
     }
   }
 
@@ -47,8 +55,9 @@ export class ChatService {
       const response = await apiClient.get<IChat[]>("/chat/all");
       return response.data;
     } catch (error) {
-      console.error("Error fetching chats:", error);
-      throw new Error("Could not fetch chats. Check that the backend is running.");
+      throw new Error(
+        "Could not fetch chats. Check that the backend is running.",
+      );
     }
   }
 
@@ -67,7 +76,6 @@ export class ChatService {
       });
       return response.data;
     } catch (error) {
-      console.error("Error sending message:", error);
       throw new Error(`Could not send message to chat ${chatId}.`);
     }
   }
@@ -100,7 +108,6 @@ export class ChatService {
     try {
       await apiClient.delete(`/chat/${chatId}`);
     } catch (error) {
-      console.error("Error deleting chat:", error);
       throw new Error(`Could not delete chat ${chatId}.`);
     }
   }

@@ -4,6 +4,7 @@ import {
   Route,
   Outlet,
   Navigate,
+  useParams,
 } from "react-router-dom";
 import {
   AuthenticationPage,
@@ -37,7 +38,6 @@ import { useAuth } from "../hooks/useAuth";
 
 const ProtectedRoute = () => {
   const { isAuthenticated, login } = useAuth();
-  console.log("ProtectedRoute:", { isAuthenticated });
 
   if (!isAuthenticated) {
     return <Navigate to="/authentication" replace />;
@@ -51,14 +51,14 @@ const ProtectedRoute = () => {
 };
 
 const AppRouting = () => {
-  console.log("AppRouting is rendering");
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/authentication" element={<AuthenticationPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/chat/:id" element={<ChatDetailPage />} />
+          <Route path="/chat/new" element={<ChatDetailPage isNew={true} />} />
+          <Route path="/chat/:chatId" element={<ChatDetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

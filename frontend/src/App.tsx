@@ -5,6 +5,7 @@ import "./App.css";
 import AppRouting from "./routing/AppRouting";
 import { SidebarProvider } from "./contexts/SidebarContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { ChatProvider } from "./contexts/ChatContext";
 
 /**
  * App Component
@@ -33,7 +34,9 @@ function App() {
     <>
       <ThemeProvider>
         <SidebarProvider>
-          <AppRouting />
+          <ChatProvider>
+            <AppRouting />
+          </ChatProvider>
         </SidebarProvider>
       </ThemeProvider>
     </>

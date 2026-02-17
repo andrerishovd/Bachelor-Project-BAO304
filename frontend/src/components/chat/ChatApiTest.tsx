@@ -17,8 +17,7 @@ const ChatApiTest = () => {
       const newChat = await ChatService.createChat(
         "Why are we still here just to suffer?",
       );
-      console.log("✅ Chat created:", newChat);
-      alert(`Chat created with ID: ${newChat.id}`);
+
       await handleGetAllChats();
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -37,7 +36,6 @@ const ChatApiTest = () => {
     try {
       const allChats = await ChatService.getAllChats();
       setChats(allChats);
-      console.log("✅ Fetched chats:", allChats);
     } catch (err) {
       if (err instanceof AxiosError) {
         setError(`API Error: ${err.response?.status} - ${err.message}`);
@@ -62,7 +60,7 @@ const ChatApiTest = () => {
         selectedChatId,
         newMessage,
       );
-      console.log("✅ Message sent:", updatedChat);
+
       setNewMessage("");
       await handleGetAllChats();
     } catch (err) {

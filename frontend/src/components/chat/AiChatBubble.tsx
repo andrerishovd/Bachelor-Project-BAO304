@@ -1,7 +1,19 @@
-const AiChatBubble = () => {
+import type { IChatMessage } from "../../interfaces/chat/IChatMessage";
+
+interface AiChatBubbleProps {
+  message: IChatMessage;
+}
+
+const AiChatBubble = ({ message }: AiChatBubbleProps) => {
   return (
     <div className="chat chat-start">
-      <div className="chat-bubble chat-bubble-neutral">It's insulting!</div>
+      <div className="chat-bubble chat-bubble-neutral">{message.body}</div>
+      <div className="chat-footer opacity-50 text-xs">
+        {new Date(message.localDateTime).toLocaleTimeString("nb-NO", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </div>
     </div>
   );
 };
