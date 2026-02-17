@@ -80,17 +80,17 @@ public class ChatController {
 
     // Post new chat without user id (for testing)
     @CrossOrigin
-    @PostMapping()
+    @PostMapping("/new")
     public ChatResponse postMessageAndCreateNewChat(@RequestBody ChatRequest request) {
         if (request == null || request.getMessage() == null || request.getMessage().isBlank()) {
-            return new ChatResponse("Please send a non-empty message.");
+            return new ChatResponse(null, "Please send a non-empty message.");
         }
         return chatService.createNewChatFromChatRequest(request);
     }
 
     // Post new chat with user id
     @CrossOrigin
-    @PostMapping("/userId/{userId}")
+    @PostMapping("/new/userId/{userId}")
     public ResponseEntity<ChatDto> postNewChatFromUserId(@RequestBody MessageDto messageDto, @PathVariable String userId) {
         return ResponseEntity.ok(chatService.createNewChatFromUserId(messageDto, userId));
     }

@@ -101,7 +101,7 @@ public class ChatService {
         ChatResponse chatResponse;
 
         try {
-            chatResponse = aiService.sendChat(messageDto.body());
+            chatResponse = aiService.sendChat(newChatId, messageDto.body());
 
             MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
 

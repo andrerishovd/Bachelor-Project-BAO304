@@ -52,7 +52,7 @@ public class AiService {
             .build();
     }
 
-    public ChatResponse sendChat(String userMessage) {
+    public ChatResponse sendChat(Long chatId, String userMessage) {
         Map<String, Object> body = buildRequestBodyWithoutChat(userMessage);
 
         OpenAiResponseDto resp = restClient.post()
@@ -62,7 +62,7 @@ public class AiService {
                 .body(OpenAiResponseDto.class);
 
         String reply = extractOutputText(resp);
-        return new ChatResponse(reply);
+        return new ChatResponse(chatId, reply);
     }
 
     public ChatResponse sendToExistingChat(String userMessage, Chat chat) {
@@ -75,7 +75,7 @@ public class AiService {
                 .body(OpenAiResponseDto.class);
 
         String reply = extractOutputText(resp);
-        return new ChatResponse(reply);
+        return new ChatResponse(chat.getId(), reply);
     }
 
     /*
