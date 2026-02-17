@@ -12,9 +12,7 @@ const AuthenticationForm = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    console.log("🔐 Login knapp trykket");
     login();
-    console.log("✅ Login kalt, navigerer til /");
     navigate("/");
   };
 

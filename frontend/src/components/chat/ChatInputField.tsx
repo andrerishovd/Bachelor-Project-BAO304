@@ -5,13 +5,26 @@ import { Send, Paperclip } from "tabler-icons-react";
 import { useFileUpload } from "../../hooks/useFileUpload";
 import FilePreview from "./FilePreview";
 import type { IChatInputFieldProps } from "../../interfaces/chat/IChatInputFieldProps";
+import { ChatService } from "../../services/ChatService";
+import { useNavigate } from "react-router-dom";
+import { useChatContext } from "../../contexts/ChatContext";
 
-const ChatInputField = ({ chatId }: IChatInputFieldProps) => {
+interface ExtendedChatInputFieldProps extends IChatInputFieldProps {
+  isNewChat?: boolean;
+}
+
+const ChatInputField = ({
+  chatId,
+  onSend,
+  isNewChat,
+  onMessageSent,
+}: ExtendedChatInputFieldProps) => {
+  const { refetch } = useChatContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState("");
   const { t } = useTranslation("chat");
+  const navigate = useNavigate();
 
-  // ✅ Alle file upload logikk i custom hook
   const {
     uploadedFiles,
     removeFile,
@@ -22,20 +35,32 @@ const ChatInputField = ({ chatId }: IChatInputFieldProps) => {
     openFilePicker,
   } = useFileUpload();
 
-  const handleSend = () => {
+  // ChatInputField.tsx
+  const handleSend = async () => {
     if (!message.trim() && uploadedFiles.length === 0) return;
 
-    console.log("Sending message to chat:", chatId);
-    console.log("Message:", message);
-    console.log("Files:", uploadedFiles);
+    setIsLoading(true);
+    try {
+      if (isNewChat) {
+        const newChat = await ChatService.createChat(message);
+        await refetch();
+        navigate(`/chat/${newChat.chatId}`);
+      } else {
+        if (!chatId) {
+          throw new Error("chatId is undefined - cannot send message");
+        }
+        await ChatService.sendMessage(chatId, message);
+        await onMessageSent?.();
+      }
 
-    // TODO: Send til backend
-
-    // Reset
-    setMessage("");
-    clearFiles();
+      setMessage("");
+      clearFiles();
+    } catch (error) {
+      alert("Could not send message. Check that the backend is running.");
+    } finally {
+      setIsLoading(false);
+    }
   };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -45,7 +70,7 @@ const ChatInputField = ({ chatId }: IChatInputFieldProps) => {
 
   return (
     <div className="flex flex-col gap-2">
-      {/* ✅ Separat file preview komponent */}
+      {/* preview component */}
       <FilePreview files={uploadedFiles} onRemove={removeFile} />
 
       {/* Input container */}

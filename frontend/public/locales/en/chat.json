@@ -4,5 +4,8 @@
   "chatListHeader": "Your chats",
   "sendMessage": "Send message",
   "attachFile": "Attach file",
-  "newChat": "New chat"
+  "newChat": "New chat",
+  "newChatDescription": "Start a new conversation by sending a message",
+  "loading": "Loading",
+  "noChat": "No chats"
 }

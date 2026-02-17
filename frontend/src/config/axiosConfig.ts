@@ -5,11 +5,21 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
 
 /**
- * Axios instance med pre-konfigurerte settings
- * - Base URL satt til backend API
- * - Timeout på 10 sekunder
- * - Content-Type satt til JSON
+ * Pre-configured Axios instance for API communication.
+ *
+ * @baseURL Reads from VITE_API_BASE_URL env variable, falls back to localhost
+ * @timeout 10 seconds
+ * @headers Content-Type set to JSON
+ *
+ * @interceptors
+ * - Request: Ready for auth token injection (see TODO below)
+ * - Response: Centralized error logging for all API calls
+ *
+ * @usage
+ * import { apiClient } from "@/config/axiosConfig";
+ * const response = await apiClient.get("/chat/all");
  */
+
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
@@ -18,10 +28,10 @@ export const apiClient = axios.create({
   },
 });
 
-// Request interceptor (for å legge til auth token senere)
+// Request interceptor - runs before every outgoing request
 apiClient.interceptors.request.use(
   (config) => {
-    // TODO: Legg til auth token her senere
+    // TODO: Add auth token when authentication is implemented
     // const token = localStorage.getItem("token");
     // if (token) {
     //   config.headers.Authorization = `Bearer ${token}`;
@@ -33,18 +43,18 @@ apiClient.interceptors.request.use(
   },
 );
 
-// Response interceptor (for error handling)
+// Response interceptor (error handling) runs on every incoming response
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      // Server responded with error
+      // Server responded with a non-2xx status code
       console.error("API Error:", error.response.status, error.response.data);
     } else if (error.request) {
-      // Request made but no response
+      // Request was made but no response received (e.g. backend is down)
       console.error("Network Error:", error.message);
     } else {
-      // Something else happened
+      // Something went wrong setting up the request
       console.error("Error:", error.message);
     }
     return Promise.reject(error);

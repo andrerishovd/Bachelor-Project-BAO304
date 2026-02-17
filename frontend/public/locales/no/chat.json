@@ -4,5 +4,8 @@
   "chatListHeader": "Dine chatter",
   "sendMessage": "Send melding",
   "attachFile": "Legg til fil som vedlegg",
-  "newChat": "Ny chat"
+  "newChat": "Ny chat",
+  "newChatDescription": "Start en ny samtale ved å sende en melding",
+  "loading": "Laster",
+  "noChat": "Ingen chatter"
 }
