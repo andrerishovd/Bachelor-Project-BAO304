@@ -10,6 +10,7 @@ import kristiania.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,6 @@ public class ChatService {
     private final AiService aiService;
 
     public Long createChat(String title) {
-        // save chat
         ArrayList<Message> messageList = new ArrayList<>();
         Chat chat = Chat.builder()
             .title(title)
@@ -126,12 +126,18 @@ public class ChatService {
         MessageDto messageDto = new MessageDto(null, chatRequest.getMessage(), null, SenderType.USER.toString());
 
         messageService.saveMessageDto(messageDto, chat);
+        MessageDto responseMessageDto = sendMessageToAi(new ChatRequest(messageDto.body()), chat);
+        messageService.saveMessageDto(responseMessageDto, chat);
+        ChatResponse chatResponse = new ChatResponse(chatId, responseMessageDto.body());
 
-        ChatResponse chatResponse= aiService.sendToExistingChat(messageDto.body(), chat);
+        return chatResponse;
+    }
+
+    public MessageDto sendMessageToAi(ChatRequest chatRequest, Chat chat) {
+        ChatResponse chatResponse= aiService.sendToExistingChat(chatRequest.getMessage(), chat);
         MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
 
-        messageService.saveMessageDto(responseMessageDto, chat);
-        return chatResponse;
+        return responseMessageDto;
     }
 
     public MessageDto createNewMessageFromUserId(MessageDto messageDto, String userId, String chatId) {
@@ -155,10 +161,30 @@ public class ChatService {
     }
 
     public Void deleteMessageFromId(String messageId) {
+        messageService.deleteMessageFromId(messageId);
         return null;
     }
 
     public List<ChatTitleDto> getAllChatTitlesFromUser(String userId) {
         return null;
+    }
+
+    public ChatResponse putMessageFromId(String messageId, ChatRequest chatRequest) {
+        Message message = messageService.getMessageFromId(Long.valueOf(messageId));
+        ChatResponse chatResponse = null;
+
+        MessageDto responseMessageDto = sendMessageToAi(chatRequest, message.getChat());
+        if(responseMessageDto != null) {
+            messageService.deleteAllMessagesAfterDateTime(message.getChat(), message.getLocalDateTime());
+
+            message.setBody(chatRequest.getMessage());
+            message.setLocalDateTime(LocalDateTime.now());
+            messageService.putMessageFromId(message);
+
+            messageService.saveMessageDto(responseMessageDto, message.getChat());
+            chatResponse = new ChatResponse(message.getChat().getId(), responseMessageDto.body());
+        }
+
+        return chatResponse;
     }
 }

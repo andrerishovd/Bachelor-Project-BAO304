@@ -1,7 +1,7 @@
 #TODO
 #Add consul for health checks
 #Implement gateway
-#Make db passwords .env variables
+#Make db passwords ..env variables
 
 services:
   #user-db:
