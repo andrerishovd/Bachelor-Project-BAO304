@@ -6,7 +6,6 @@ import kristiania.chat.dto.MessageDto;
 import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.service.ChatService;
-import kristiania.chat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,46 +17,48 @@ import java.util.List;
 public class ChatController {
 
     private final ChatService chatService;
-    private final MessageService messageService;
+    //private final MessageService messageService;
 
     @Autowired
-    public ChatController(ChatService chatService, MessageService messageService) {
+    public ChatController(ChatService chatService) {
         this.chatService = chatService;
-        this.messageService = messageService;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // GET
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GET
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<ChatDto>> getAllChats() {
-        return ResponseEntity.ok(chatService.getAllChats());
+        return ResponseEntity.ok(chatService.getAllChatsDto());
     }
 
     @CrossOrigin
     @GetMapping("/all/title")
     public ResponseEntity<List<ChatTitleDto>> getAllChatTitles() {
-        return ResponseEntity.ok(chatService.getAllChatTitles());
+        return ResponseEntity.ok(chatService.getAllChatTitlesDto());
     }
 
+    /*
     @CrossOrigin
     @GetMapping("/all/title/userId/{userId}")
     public ResponseEntity<List<ChatTitleDto>> getAllChatTitlesFromUser(@PathVariable String userId) {
         return ResponseEntity.ok( chatService.getAllChatTitlesFromUser(userId) );
     }
 
+
     @CrossOrigin
     @GetMapping("/userId/{userId}")
     public ResponseEntity<List<ChatTitleDto>> getAllChatsFromUser(@PathVariable String userId) {
         return ResponseEntity.ok(chatService.getAllChatsFromUser(userId));
     }
+     */
 
     @CrossOrigin
     @GetMapping("/chatId/{chatId}")
     public ResponseEntity<ChatDto> getChatFromId(@PathVariable String chatId) {
-        return ResponseEntity.ok(chatService.getChatWithId(chatId));
+        return ResponseEntity.ok(chatService.getChatFromId(chatId));
     }
 
     @CrossOrigin
@@ -67,9 +68,9 @@ public class ChatController {
     }
 
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // POST
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// POST
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Post new chat without user id (for testing)
     @CrossOrigin
@@ -81,11 +82,13 @@ public class ChatController {
         return chatService.createNewChatFromChatRequest(request);
     }
 
+    /*
     @CrossOrigin
     @PostMapping("/new/userId/{userId}")
     public ResponseEntity<ChatDto> postNewChatFromUserId(@RequestBody MessageDto messageDto, @PathVariable String userId) {
         return ResponseEntity.ok(chatService.createNewChatFromUserId(messageDto, userId));
     }
+     */
 
     // Post message to existing chat without user id (for testing)
     @CrossOrigin
@@ -94,16 +97,18 @@ public class ChatController {
         return ResponseEntity.ok(chatService.createNewMessageToExistingChat(chatRequest, chatId));
     }
 
+    /*
     @CrossOrigin
     @PostMapping("/userId/{userId}/chatId/{chatId}")
     public ResponseEntity<MessageDto> postMessageFromUserId(@RequestBody MessageDto messageDto, @PathVariable String userId, @PathVariable String chatId) {
         return ResponseEntity.ok(chatService.createNewMessageFromUserId(messageDto, userId, chatId));
     }
+     */
 
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // PUT
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PUT
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @CrossOrigin
     @PutMapping("/edit/messageId/{messageId}")
@@ -113,26 +118,28 @@ public class ChatController {
 
     @CrossOrigin
     @PutMapping("/edit/chatId/{chatId}")
-    public ResponseEntity<Void> putChatFromId(@PathVariable String chatId, @RequestBody String newTitle) {
+    public ResponseEntity<ChatTitleDto> putChatFromId(@PathVariable String chatId, @RequestBody String newTitle) {
         return ResponseEntity.ok(chatService.putChatTitleFromId(chatId, newTitle));
     }
 
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // DELETE
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DELETE
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @CrossOrigin
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/all")
     public ResponseEntity<Void> deleteAllChats() {
         return ResponseEntity.ok(chatService.deleteAllChats());
     }
 
+    /*
     @CrossOrigin
     @DeleteMapping("/delete/userId/{userId}")
     public ResponseEntity<Void> deleteAllChatsFromUserId(@PathVariable String userId) {
         return ResponseEntity.ok(chatService.deleteAllChatsFromUserId(userId));
     }
+     */
 
     @CrossOrigin
     @DeleteMapping("/delete/chatId/{chatId}")

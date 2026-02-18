@@ -7,6 +7,7 @@ import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.modules.Message;
 import kristiania.chat.repository.ChatRepository;
+import kristiania.chat.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,13 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final  MessageService messageService;
     private final AiService aiService;
+    private final MessageRepository messageRepository;
 
-    public Long createChat(String title) {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// INTERNAL TOOLS
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private Long createChat(String title) {
         ArrayList<Message> messageList = new ArrayList<>();
         Chat chat = Chat.builder()
             .title(title)
@@ -34,7 +40,7 @@ public class ChatService {
         return savedChat.getId();
     }
 
-    public ChatDto convertChatToChatDto(Chat chat) {
+    private ChatDto convertChatToChatDto(Chat chat) {
         List<MessageDto> messageDtoList = new ArrayList<>();
 
         for(Message message : chat.getMessageList()) {
@@ -52,7 +58,12 @@ public class ChatService {
         return chatDto;
     }
 
-    public List<ChatDto> convertChatListToChatDtoList(List<Chat> chatList) {
+    private ChatTitleDto convertChatToChatTitleDto(Chat chat) {
+        ChatTitleDto chatTitleDto = new ChatTitleDto(chat.getId().toString(), chat.getTitle());
+        return chatTitleDto;
+    }
+
+    private List<ChatDto> convertChatListToChatDtoList(List<Chat> chatList) {
         List<ChatDto> chatDtoList = new ArrayList<>();
         for(Chat chat : chatList) {
             chatDtoList.add(convertChatToChatDto(chat));
@@ -60,28 +71,37 @@ public class ChatService {
         return chatDtoList;
     }
 
-    public List<ChatDto> getAllChats() {
-        List<Chat> chatList = chatRepository.findAll();
+    private List<ChatTitleDto> convertChatListToChatTitleDtoList(List<Chat> chatList) {
+        List<ChatTitleDto> chatTitleDtoList = new ArrayList<>();
+        for(Chat chat : chatList) {
+            chatTitleDtoList.add(new ChatTitleDto(chat.getId().toString(), chat.getTitle()));
+        }
+        return chatTitleDtoList;
+    }
 
+    private MessageDto sendMessageToAi(ChatRequest chatRequest, Chat chat) {
+        ChatResponse chatResponse= aiService.sendToExistingChat(chatRequest.getMessage(), chat);
+        MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
+
+        return responseMessageDto;
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GET
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public List<ChatDto> getAllChatsDto() {
+        List<Chat> chatList = chatRepository.findAll();
         return convertChatListToChatDtoList(chatList);
     }
 
-    public List<ChatTitleDto> getAllChatTitles() {
-        return new ArrayList<>();
+    public List<ChatTitleDto> getAllChatTitlesDto() {
+        List<Chat> chatList = chatRepository.findAll();
+        List<ChatTitleDto> chatTitleDtoList = convertChatListToChatTitleDtoList(chatList);
+        return chatTitleDtoList;
     }
 
-    public List<ChatTitleDto> getAllChatsFromUser(String userId) {
-        return null;
-    }
-
-    /*
-    public ChatDto getChatDtoWithId(String id) {
-        //chatRepository.getReferenceById(String id);
-        return null;
-    }
-     */
-
-    public ChatDto getChatWithId(String stringId) {
+    public ChatDto getChatFromId(String stringId) {
         Long id = Long.valueOf(stringId);
         Chat chat= chatRepository.getReferenceById(id);
 
@@ -89,14 +109,29 @@ public class ChatService {
     }
 
     public MessageDto getMessageFromId(String messageId) {
+        Message message = messageService.getMessageFromId(Long.valueOf(messageId));
+        MessageDto messageDto = new MessageDto(message.getId().toString(), message.getBody(), message.getLocalDateTime().toString(), message.getSenderType().toString());
+        return messageDto;
+    }
+
+    /*
+    public List<ChatTitleDto> getAllChatsFromUser(String userId) {
         return null;
     }
+
+    public List<ChatTitleDto> getAllChatTitlesFromUser(String userId) {
+        return null;
+    }
+     */
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// POST
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public ChatResponse createNewChatFromChatRequest(ChatRequest chatRequest) {
         Long newChatId = createChat(chatRequest.getMessage());
         Chat newChat = chatRepository.getReferenceById(newChatId);
         MessageDto messageDto = new MessageDto(null, chatRequest.getMessage(), null, SenderType.USER.toString());
-
 
         ChatResponse chatResponse;
 
@@ -105,17 +140,12 @@ public class ChatService {
 
             MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
 
-
             messageService.saveMessageDto(messageDto, newChat);
             messageService.saveMessageDto(responseMessageDto, chatRepository.getReferenceById(newChatId));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return chatResponse;
-    }
-
-    public ChatDto createNewChatFromUserId(MessageDto messageDto, String userId) {
-        return null;
     }
 
     public ChatResponse createNewMessageToExistingChat(ChatRequest chatRequest, String chatIdString) {
@@ -133,40 +163,26 @@ public class ChatService {
         return chatResponse;
     }
 
-    public MessageDto sendMessageToAi(ChatRequest chatRequest, Chat chat) {
-        ChatResponse chatResponse= aiService.sendToExistingChat(chatRequest.getMessage(), chat);
-        MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
-
-        return responseMessageDto;
+    /*
+    public ChatDto createNewChatFromUserId(MessageDto messageDto, String userId) {
+        return null;
     }
 
     public MessageDto createNewMessageFromUserId(MessageDto messageDto, String userId, String chatId) {
         return null;
     }
+     */
 
-    public Void putChatTitleFromId(String chatId, String newTitle) {
-        return null;
-    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PUT
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public Void deleteAllChats() {
-        return null;
-    }
-
-    public Void deleteAllChatsFromUserId(String userId) {
-        return null;
-    }
-
-    public Void deleteChatFromId(String chatId) {
-        return null;
-    }
-
-    public Void deleteMessageFromId(String messageId) {
-        messageService.deleteMessageFromId(messageId);
-        return null;
-    }
-
-    public List<ChatTitleDto> getAllChatTitlesFromUser(String userId) {
-        return null;
+    public ChatTitleDto putChatTitleFromId(String chatId, String newTitle) {
+        Chat chat = chatRepository.getReferenceById(Long.valueOf(chatId));
+        chat.setTitle(newTitle);
+        chatRepository.save(chat);
+        ChatTitleDto chatTitleDto = convertChatToChatTitleDto(chat);
+        return chatTitleDto;
     }
 
     public ChatResponse putMessageFromId(String messageId, ChatRequest chatRequest) {
@@ -186,5 +202,35 @@ public class ChatService {
         }
 
         return chatResponse;
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DELETE
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public Void deleteAllChats() {
+        messageService.deleteAllMessages();
+        chatRepository.deleteAll();
+        return null;
+    }
+
+    /*
+    public Void deleteAllChatsFromUserId(String userId) {
+        return null;
+    }
+     */
+
+    public Void deleteChatFromId(String chatId) {
+        Chat chat = chatRepository.getReferenceById(Long.valueOf(chatId));
+        for(Message message : chat.getMessageList()) {
+            messageRepository.deleteById(message.getId());
+        }
+        chatRepository.deleteById(chat.getId());
+        return null;
+    }
+
+    public Void deleteMessageFromId(String messageId) {
+        messageService.deleteMessageFromId(messageId);
+        return null;
     }
 }

@@ -81,4 +81,8 @@ public class MessageService {
             }
         }
     }
+
+    public void deleteAllMessages() {
+        messageRepository.deleteAll();
+    }
 }
