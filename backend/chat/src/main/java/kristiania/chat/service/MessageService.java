@@ -3,15 +3,12 @@ package kristiania.chat.service;
 import kristiania.chat.dto.MessageDto;
 import kristiania.chat.enums.SenderType;
 import kristiania.chat.modules.Chat;
-import kristiania.chat.modules.ChatRequest;
-import kristiania.chat.modules.ChatResponse;
 import kristiania.chat.modules.Message;
 import kristiania.chat.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
