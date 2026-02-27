@@ -58,13 +58,13 @@ public class ChatController {
     @CrossOrigin
     @GetMapping("/chatId/{chatId}")
     public ResponseEntity<ChatDto> getChatFromId(@PathVariable String chatId) {
-        return ResponseEntity.ok(chatService.getChatFromId(chatId));
+        return ResponseEntity.ok(chatService.getChatDtoFromId(chatId));
     }
 
     @CrossOrigin
     @GetMapping("/messageId/{messageId}")
     public ResponseEntity<MessageDto> getMessageFromId(@PathVariable String messageId) {
-        return ResponseEntity.ok(chatService.getMessageFromId(messageId));
+        return ResponseEntity.ok(chatService.getMessageDtoFromId(messageId));
     }
 
 

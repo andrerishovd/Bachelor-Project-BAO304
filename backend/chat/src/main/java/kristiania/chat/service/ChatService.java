@@ -101,14 +101,14 @@ public class ChatService {
         return chatTitleDtoList;
     }
 
-    public ChatDto getChatFromId(String stringId) {
+    public ChatDto getChatDtoFromId(String stringId) {
         Long id = Long.valueOf(stringId);
         Chat chat= chatRepository.getReferenceById(id);
 
         return convertChatToChatDto(chat);
     }
 
-    public MessageDto getMessageFromId(String messageId) {
+    public MessageDto getMessageDtoFromId(String messageId) {
         Message message = messageService.getMessageFromId(Long.valueOf(messageId));
         MessageDto messageDto = new MessageDto(message.getId().toString(), message.getBody(), message.getLocalDateTime().toString(), message.getSenderType().toString());
         return messageDto;
