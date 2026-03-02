@@ -66,7 +66,7 @@ public class ChatServiceTests {
 
         Assertions.assertThat(chatDtoList).isNotNull();
         Assertions.assertThat(chatDtoList).isNotEmpty();
-        Assertions.assertThat(chatDtoList).hasSameSizeAs(2);
+        Assertions.assertThat(chatDtoList.size()).isEqualTo(2);
         Assertions.assertThat(chatDtoList.get(0)).isNotEqualTo(chatDtoList.get(1));
         Assertions.assertThat(chatDtoList.get(0).id()).isNotEqualTo(chatDtoList.get(1).id());
     }
@@ -97,7 +97,7 @@ public class ChatServiceTests {
 
         Assertions.assertThat(chatTitleDtoList).isNotNull();
         Assertions.assertThat(chatTitleDtoList).isNotEmpty();
-        Assertions.assertThat(chatTitleDtoList).hasSameSizeAs(2);
+        Assertions.assertThat(chatTitleDtoList.size()).isEqualTo(2);
         Assertions.assertThat(chatTitleDtoList.get(0)).isNotEqualTo(chatTitleDtoList.get(1));
         Assertions.assertThat(chatTitleDtoList.get(0).id()).isNotEqualTo(chatTitleDtoList.get(1).id());
         Assertions.assertThat(chatTitleDtoList.get(0).id()).isNotNull();
