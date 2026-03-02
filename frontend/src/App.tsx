@@ -6,6 +6,7 @@ import AppRouting from "./routing/AppRouting";
 import { SidebarProvider } from "./contexts/SidebarContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ChatProvider } from "./contexts/ChatContext";
+import { AlertProvider } from "./contexts/AlertContext";
 
 /**
  * App Component
@@ -33,11 +34,13 @@ function App() {
   return (
     <>
       <ThemeProvider>
-        <SidebarProvider>
-          <ChatProvider>
-            <AppRouting />
-          </ChatProvider>
-        </SidebarProvider>
+        <AlertProvider>
+          <SidebarProvider>
+            <ChatProvider>
+              <AppRouting />
+            </ChatProvider>
+          </SidebarProvider>
+        </AlertProvider>
       </ThemeProvider>
     </>
   );

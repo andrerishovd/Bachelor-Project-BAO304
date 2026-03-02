@@ -35,7 +35,6 @@ const ChatInputField = ({
     openFilePicker,
   } = useFileUpload();
 
-  // ChatInputField.tsx
   const handleSend = async () => {
     if (!message.trim() && uploadedFiles.length === 0) return;
 
