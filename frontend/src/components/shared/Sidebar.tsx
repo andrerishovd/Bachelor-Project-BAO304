@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import UserAvatar from "./UserAvatar";
 import SearchField from "./SearchField";
 import { useNavigate } from "react-router-dom";
-import SettingsModal from "./SettingsModal";
+import SettingsModal from "../settings/SettingsModal";
 import { useRef, useState } from "react";
 import { useSidebar } from "../../contexts/SidebarContext";
 import ChatList from "../chat/ChatList";
@@ -14,12 +14,14 @@ import {
 } from "@heroicons/react/24/outline";
 import GeneratePodcastCard from "../podcast/GeneratePodcastCard";
 import CreateChatButton from "../chat/CreateChatButton";
+import ProfileModal from "../profile/ProfileModal";
 
 const Sidebar = () => {
   const { t } = useTranslation("common");
   const navigate = useNavigate();
   /* const { isExtended, expandSidebar } = useSidebar(); */
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const handleHomeClick = () => {
@@ -30,11 +32,20 @@ const Sidebar = () => {
     setIsSettingsOpen(true);
   };
 
+  const handleProfileClick = () => {
+    setIsProfileOpen(true);
+  };
+
   return (
     <>
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
+      />
+
+      <ProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
       />
 
       <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
@@ -82,7 +93,11 @@ const Sidebar = () => {
           </li>
 
           <li>
-            <button>
+            <button
+              className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+              data-tip={t("profile")}
+              onClick={handleProfileClick}
+            >
               <UserAvatar />
               <span className="is-drawer-close:hidden">{t("Profile")}</span>
             </button>

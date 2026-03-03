@@ -58,7 +58,6 @@ const CodeBlock = ({ language, children }: CodeBlockProps) => {
         </div>
       </div>
 
-      {/* borderRadius: 0 removes SyntaxHighlighter's own rounded corners */}
       <SyntaxHighlighter
         style={oneDark}
         language={language}

@@ -69,7 +69,7 @@ const Navbar = () => {
         >
           <li role="menuitem">
             <div className="flex items-center justify-between">
-              <span>{t("accessibility:language")}</span>
+              <span>{t("accessibility:toggleLanguage")}</span>
               <ChangeLangBtn />
             </div>
           </li>
