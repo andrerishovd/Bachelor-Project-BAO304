@@ -1,11 +1,7 @@
 {
   "search": "Search",
   "settings": "Settings",
-  "settingsDescription": {
-    "helpText": "You can edit settings here",
-    "": "",
-    "": ""
-  },
+  
   "homepage": "Home",
   "back": "Back",
   "close": "Close",

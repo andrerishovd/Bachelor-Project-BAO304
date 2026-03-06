@@ -6,6 +6,8 @@ import AppRouting from "./routing/AppRouting";
 import { SidebarProvider } from "./contexts/SidebarContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ChatProvider } from "./contexts/ChatContext";
+import { AlertProvider } from "./contexts/AlertContext";
+import { FontSizeProvider } from "./contexts/FontSizeContext";
 
 /**
  * App Component
@@ -33,11 +35,15 @@ function App() {
   return (
     <>
       <ThemeProvider>
-        <SidebarProvider>
-          <ChatProvider>
-            <AppRouting />
-          </ChatProvider>
-        </SidebarProvider>
+        <FontSizeProvider>
+          <AlertProvider>
+            <SidebarProvider>
+              <ChatProvider>
+                <AppRouting />
+              </ChatProvider>
+            </SidebarProvider>
+          </AlertProvider>
+        </FontSizeProvider>
       </ThemeProvider>
     </>
   );

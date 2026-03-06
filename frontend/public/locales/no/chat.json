@@ -7,5 +7,9 @@
   "newChat": "Ny chat",
   "newChatDescription": "Start en ny samtale ved å sende en melding",
   "loading": "Laster",
-  "noChat": "Ingen chatter"
+  "noChat": "Ingen chatter",
+  "copyResponse": "Kopier svar",
+  "copied": "Kopiert!",
+  "codeCopied": "Kopiert!",
+  "copyCode": "Kopier kode"
 }

@@ -1,11 +1,6 @@
 {
   "search": "Søk",
   "settings": "Innstillinger",
-  "settingsDescription": {
-    "helpText": "Her kan du gjøre endringer",
-    "": "",
-    "": ""
-  },
   "homepage": "Hjem",
   "back": "Tilbake",
   "close": "Lukk",

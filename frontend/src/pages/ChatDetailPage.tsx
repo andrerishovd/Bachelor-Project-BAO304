@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import ChatInputField from "../components/chat/ChatInputField";
-import ChatThreadContainer from "../components/chat/ChatThreadContainer";
+import ChatThreadContainer from "../components/chat/MessageThreadContainer";
 import { useTranslation } from "react-i18next";
 import { useChatContext } from "../contexts/ChatContext";
 
