@@ -32,5 +32,5 @@ to run frontend:
 from root use the following command
 
 ```bash
-cd frontend && npm run dev
+cd frontend && npm i && npm run dev
 ```
