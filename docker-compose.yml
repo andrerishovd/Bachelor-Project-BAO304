@@ -40,8 +40,8 @@ services:
     build:
       context: ./backend/gateway
     container_name: gateway-service
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
+    #environment:
+    #  SPRING_PROFILES_ACTIVE: "docker"
     ports:
       - "8010:8010"
     #depends_on:
