@@ -115,7 +115,7 @@ const ChatsPage = () => {
       ) : error ? (
         <p className="text-error text-sm">{error}</p>
       ) : chats.length === 0 ? (
-        <p className="text-base-content/50 text-sm">{t("noChats")}</p>
+        <p className="text-base-content/50 text-sm">{t("noChat")}</p>
       ) : (
         <ul className="flex flex-col gap-1">
           {chats.map((chat) => (
