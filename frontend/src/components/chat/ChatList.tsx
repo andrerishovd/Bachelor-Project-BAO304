@@ -32,7 +32,7 @@ const ChatList = () => {
       ) : error ? (
         <p className="text-sm text-error px-4">{error}</p>
       ) : chats.length === 0 ? (
-        <p className="text-sm text-base-content/50 px-4">{t("noChats")}</p>
+        <p className="text-sm text-base-content/50 px-4">{t("noChat")}</p>
       ) : (
         <ul className="menu w-full">
           {chats.map((chat) => (
