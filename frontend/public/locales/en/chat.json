@@ -11,5 +11,7 @@
   "copyResponse": "Copy response",
   "copied": "Copied!",
   "codeCopied": "Copied!",
-  "copyCode": "Copy code"
+  "copyCode": "Copy code",
+  "selectAll": "Select all",
+  "deleteSelected": "Delete ({{count}})"
 }

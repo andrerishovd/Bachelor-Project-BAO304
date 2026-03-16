@@ -22,29 +22,11 @@ const ChatList = () => {
   const { chatId } = useParams();
 
   if (!isExtended) {
-    return (
-      <button
-        className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-        onClick={expandSidebar}
-        aria-label={t("chatListHeader")}
-      >
-        <ChatBubbleOvalLeftEllipsisIcon
-          className="my-1.5 inline-block size-4 shrink-0"
-          aria-hidden="true"
-        />
-      </button>
-    );
+    return null;
   }
 
   return (
     <div className="w-full">
-      {/* Header - not clickable when expanded */}
-      <div className="flex items-center gap-2 px-4 py-2 text-sm text-base-content/60 font-medium">
-        <ChatBubbleOvalLeftEllipsisIcon className="size-4 shrink-0" />
-        <span>{t("chatListHeader")}</span>
-      </div>
-
-      {/* Chat list */}
       {loading ? (
         <ChatListSkeleton />
       ) : error ? (

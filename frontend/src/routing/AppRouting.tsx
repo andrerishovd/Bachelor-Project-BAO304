@@ -11,6 +11,7 @@ import {
   ChatDetailPage,
   HomePage,
   NotFoundPage,
+  ChatsPage,
 } from "../pages";
 import AppLayout from "../layouts/AppLayout";
 import { useAuth } from "../hooks/useAuth";
@@ -59,6 +60,7 @@ const AppRouting = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/chat/new" element={<ChatDetailPage isNew={true} />} />
           <Route path="/chat/:chatId" element={<ChatDetailPage />} />
+          <Route path="/chats" element={<ChatsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

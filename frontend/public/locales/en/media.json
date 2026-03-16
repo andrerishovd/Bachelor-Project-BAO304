@@ -1,0 +1,14 @@
+{
+  "expand": "Expand player",
+  "minimize": "Minimize player",
+  "skip15Back": "15 seconds back",
+  "skip15Forward": "15 seconds forward",
+  "autoPlay": "Auto-play",
+  "sleepTimer": "Sleep timer",
+  "minutes": "min",
+  "set": "Set",
+  "clearTimer": "Clear timer",
+  "queue": "Queue",
+  "upNext": "Up next",
+  "emptyQueue": "Queue is empty"
+}

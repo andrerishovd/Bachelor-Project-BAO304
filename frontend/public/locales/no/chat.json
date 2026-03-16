@@ -11,5 +11,7 @@
   "copyResponse": "Kopier svar",
   "copied": "Kopiert!",
   "codeCopied": "Kopiert!",
-  "copyCode": "Kopier kode"
+  "copyCode": "Kopier kode",
+  "selectAll": "Velg alle",
+  "deleteSelected": "Slett ({{count}})"
 }

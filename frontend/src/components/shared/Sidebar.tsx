@@ -15,6 +15,7 @@ import {
 import GeneratePodcastCard from "../podcast/GeneratePodcastCard";
 import CreateChatButton from "../chat/CreateChatButton";
 import ProfileModal from "../profile/ProfileModal";
+import ChatListButton from "../chat/ChatListButton";
 
 const Sidebar = () => {
   const { t } = useTranslation("common");
@@ -50,7 +51,7 @@ const Sidebar = () => {
 
       <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
         {/* Top items */}
-        <ul className="menu w-full grow">
+        <ul className="menu w-full ">
           {/* Search */}
 
           <li>
@@ -73,11 +74,14 @@ const Sidebar = () => {
           <li>
             <CreateChatButton />
           </li>
-
           <li>
-            <ChatList />
+            <ChatListButton />
           </li>
         </ul>
+
+        <div className="w-full grow overflow-y-auto flex flex-col justify-start">
+          <ChatList />
+        </div>
 
         {/* Bottom items */}
         <ul className="menu w-full">
