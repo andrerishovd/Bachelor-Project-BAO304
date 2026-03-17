@@ -1,4 +1,3 @@
-// src/components/chat/ChatList.tsx
 import { useTranslation } from "react-i18next";
 import { useSidebar } from "../../contexts/SidebarContext";
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";

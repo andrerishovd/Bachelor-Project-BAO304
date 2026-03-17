@@ -1,4 +1,3 @@
-// src/components/media/MiniPlayer.tsx
 import { useTranslation } from "react-i18next";
 import { useMediaContext } from "../../contexts/MediaContext";
 import {

@@ -1,4 +1,3 @@
-// src/services/chatService.ts
 import { apiClient } from "../config/axiosConfig";
 import type { IChat } from "../interfaces/chat/IChat";
 import type { IChatCreateResponse } from "../interfaces/chat/IChatCreateResponse";

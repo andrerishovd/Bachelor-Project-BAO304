@@ -1,4 +1,3 @@
-// src/components/media/FullPlayer.tsx
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMediaContext } from "../../contexts/MediaContext";

@@ -1,4 +1,3 @@
-// src/contexts/MediaContext.tsx
 import {
   createContext,
   useContext,

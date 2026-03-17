@@ -1,9 +1,7 @@
-// src/components/chat/ChatListButton.tsx
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 import { useSidebar } from "../../contexts/SidebarContext";
-
 
 /**
  * ChatListButton
@@ -26,7 +24,6 @@ const ChatListButton = () => {
     >
       <ChatBubbleOvalLeftEllipsisIcon className="my-1.5 inline-block size-4 shrink-0" />
       <span className="is-drawer-close:hidden">{t("chatListHeader")}</span>
-      
     </button>
   );
 };

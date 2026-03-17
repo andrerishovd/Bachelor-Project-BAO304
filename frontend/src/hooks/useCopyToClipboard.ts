@@ -1,4 +1,4 @@
-// src/hooks/useCopyToClipboard.ts
+
 import { useState } from "react";
 
 /**

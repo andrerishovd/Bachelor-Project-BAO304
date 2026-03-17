@@ -1,4 +1,3 @@
-// src/config/axiosConfig.ts
 import axios from "axios";
 
 const API_BASE_URL =

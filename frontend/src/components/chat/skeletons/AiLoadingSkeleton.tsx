@@ -1,4 +1,3 @@
-// src/components/chat/skeletons/AiThinkingSkeleton.tsx
 import { useTranslation } from "react-i18next";
 
 /**

@@ -1,4 +1,3 @@
-// src/components/chat/MessageThreadContainer.tsx
 import { useTranslation } from "react-i18next";
 import type { IChatMessage } from "../../interfaces/chat/IChatMessage";
 import AiChatBubble from "./AiChatBubble";

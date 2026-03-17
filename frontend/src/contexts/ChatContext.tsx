@@ -1,4 +1,3 @@
-// src/contexts/ChatContext.tsx
 import {
   createContext,
   useContext,

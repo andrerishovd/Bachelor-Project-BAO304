@@ -1,4 +1,3 @@
-// src/components/chat/ChatInputField.tsx
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Send, Paperclip } from "tabler-icons-react";

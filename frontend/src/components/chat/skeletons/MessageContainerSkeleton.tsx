@@ -1,5 +1,3 @@
-// src/components/chat/skeletons/MessageListSkeleton.tsx
-
 /**
  * MessageListSkeleton
  *
@@ -8,8 +6,8 @@
  *
  * @example
  * {loading ? <MessageListSkeleton /> : <MessageList messages={messages} />}
- * 
- * Alternates AI (left) and user (right) bubbles 
+ *
+ * Alternates AI (left) and user (right) bubbles
  */
 const MessageListSkeleton = () => {
   return (
