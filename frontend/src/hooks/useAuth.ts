@@ -1,16 +1,13 @@
-import { useState } from "react";
-
-// bare for testing...
+import { useMsal } from "@azure/msal-react";
 
 export const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const { accounts, inProgress, instance } = useMsal();
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
+  const activeAccount = instance.getActiveAccount() ?? accounts[0] ?? null;
 
   return {
-    isAuthenticated,
-    login,
-    logout,
+    isAuthenticated: !!activeAccount,
+    isLoading: inProgress !== "none",
+    user: activeAccount,
   };
 };

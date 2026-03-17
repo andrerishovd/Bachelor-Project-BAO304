@@ -32,21 +32,21 @@ services:
       - POSTGRES_PASSWORD=chatservicepassword
     volumes:
       - chat_data:/var/lib/postgresql/data
-    #networks:
-    #  - study-buddy
+    networks:
+      - study-buddy
 
   gateway:
     image: gateway:0.0.1-SNAPSHOT
     build:
       context: ./backend/gateway
     container_name: gateway-service
-    #environment:
-    #  SPRING_PROFILES_ACTIVE: "docker"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
     ports:
       - "8010:8010"
     #depends_on:
-    #networks:
-    #  - study-buddy
+    networks:
+      - study-buddy
 
   chat-service:
     image: chat:0.0.1-SNAPSHOT
@@ -54,14 +54,14 @@ services:
       context: ./backend/chat
     container_name: chat-service
     environment:
-      SPRING_PROFILES_ACTIVE: "env"
+      SPRING_PROFILES_ACTIVE: env,consul
 
     ports:
       - "8080:8080"
     depends_on:
       - chat-db
-    #networks:
-    #  - study-buddy
+    networks:
+      - study-buddy
 
   settings-service:
     image: settings:0.0.1-SNAPSHOT
@@ -79,8 +79,8 @@ services:
     #depends_on:
     #  - user-db
 
-    #networks:
-    #  - study-buddy
+    networks:
+      - study-buddy
 
   user-service:
     image: user:0.0.1-SNAPSHOT
@@ -98,13 +98,21 @@ services:
     #depends_on:
     #  - user-db
 
-    #networks:
-    #  - study-buddy
+    networks:
+      - study-buddy
 
 
-#networks:
-#  study-buddy:
-#    driver: bridge
+  consul:
+    image: hashicorp/consul:1.15
+    container_name: consul
+    ports:
+      - "8500:8500"
+    command: agent -dev -client=0.0.0.0
+    networks:
+      - study-buddy
+networks:
+  study-buddy:
+    driver: bridge
 
 volumes:
   chat_data:

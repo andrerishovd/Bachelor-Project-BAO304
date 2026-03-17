@@ -37,10 +37,14 @@ import { useAuth } from "../hooks/useAuth";
  */
 
 const ProtectedRoute = () => {
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/authentication" replace />;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -52,17 +56,19 @@ const ProtectedRoute = () => {
 
 const AppRouting = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/authentication" element={<AuthenticationPage />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/chat/new" element={<ChatDetailPage isNew={true} />} />
-          <Route path="/chat/:chatId" element={<ChatDetailPage />} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/authentication" element={<AuthenticationPage />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/chat/new" element={<ChatDetailPage isNew={true} />} />
+            <Route path="/chat/:chatId" element={<ChatDetailPage />} />
+          </Route>
+
           <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
   );
 };
 
