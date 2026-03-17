@@ -1,4 +1,4 @@
-import { useState } from "react";
+// src/components/chat/AiChatBubble.tsx
 import { useTranslation } from "react-i18next";
 import type { IChatMessage } from "../../interfaces/chat/IChatMessage";
 import Markdown from "react-markdown";
@@ -16,25 +16,19 @@ interface AiChatBubbleProps {
 /**
  * AiChatBubble
  *
- * Renders a single AI message in the chat interface.
+ * Renders a single AI message as a paper-like card.
  * Supports full Markdown rendering with syntax-highlighted code blocks.
  *
  * @property message - The AI message to display, including body and timestamp
- *
- * @example
- * <AiChatBubble message={message} />
  */
-
 const AiChatBubble = ({ message }: AiChatBubbleProps) => {
   const { t } = useTranslation("chat");
   const { copied, copyToClipboard } = useCopyToClipboard();
 
-  const handleCopyAll = () => copyToClipboard(message.body);
-
   return (
-    <div className="chat chat-start">
-      <div className="chat-bubble text-neutral-content">
-        <div className="prose prose-invert max-w-none prose-pre:p-0 prose-pre:bg-transparent prose-pre:rounded-none">
+    <div className="w-full mb-4">
+      <div className="bg-base-100 rounded-lg shadow-sm border border-base-200 px-6 py-5 w-full">
+        <div className="prose max-w-none prose-pre:p-0 prose-pre:bg-transparent prose-pre:rounded-none">
           <Markdown
             components={{
               // Render fenced code blocks with CodeBlock, inline code as-is
@@ -55,30 +49,30 @@ const AiChatBubble = ({ message }: AiChatBubbleProps) => {
             {message.body}
           </Markdown>
         </div>
-      </div>
 
-      {/* Footer: timestamp left, copy button right */}
-      <div className="chat-footer opacity-50 text-xs flex items-center justify-between w-full">
-        <span>
-          {new Date(message.localDateTime).toLocaleTimeString("nb-NO", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
-        <div
-          className={`tooltip tooltip-top ${copied ? "tooltip-success" : ""}`}
-          data-tip={copied ? t("copied") : t("copyResponse")}
-        >
-          <button
-            onClick={handleCopyAll}
-            className="btn btn-xs btn-ghost opacity-60 hover:opacity-100"
+        {/* Footer: timestamp left, copy button right */}
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-base-200 text-xs text-base-content/40">
+          <span>
+            {new Date(message.localDateTime).toLocaleTimeString("nb-NO", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+          <div
+            className={`tooltip tooltip-top ${copied ? "tooltip-success" : ""}`}
+            data-tip={copied ? t("copied") : t("copyResponse")}
           >
-            {copied ? (
-              <ClipboardDocumentCheckIcon className="w-4 h-4" />
-            ) : (
-              <ClipboardIcon className="w-4 h-4" />
-            )}
-          </button>
+            <button
+              onClick={() => copyToClipboard(message.body)}
+              className="btn btn-xs btn-ghost opacity-60 hover:opacity-100"
+            >
+              {copied ? (
+                <ClipboardDocumentCheckIcon className="w-4 h-4" />
+              ) : (
+                <ClipboardIcon className="w-4 h-4" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

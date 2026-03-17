@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import ChangeLangBtn from "../shared/ChangeLangBtn";
 import ThemeControllerToggle from "../shared/ThemeControllerToggle";
+import { BrandOffice } from "tabler-icons-react";
 
 const AuthenticationForm = () => {
   const { t, i18n } = useTranslation("auth");
@@ -46,7 +47,23 @@ const AuthenticationForm = () => {
                 {t("login")}
               </button>
 
-              <button className="btn bg-[#da222b] text-white border-[#a61a20]">
+              <button className="btn bg-[#2F2F2F] text-white border-black">
+                <svg
+                  aria-label="Microsoft logo"
+                  width="16"
+                  height="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path d="M96 96H247V247H96" fill="#f24f23"></path>
+                  <path d="M265 96V247H416V96" fill="#7eba03"></path>
+                  <path d="M96 265H247V416H96" fill="#3ca4ef"></path>
+                  <path d="M265 265H416V416H265" fill="#f9ba00"></path>
+                </svg>
+                {t("sso.microsoft")}
+              </button>
+
+              {/* <button className="btn bg-[#da222b] text-white border-[#a61a20]">
                 <img
                   src={canvasLogo}
                   alt="Canvas logo"
@@ -54,8 +71,8 @@ const AuthenticationForm = () => {
                   height="20"
                   className="inline-block brightness-0 invert"
                 />
-                {t("ssoCanvas")}
-              </button>
+                {t("sso.canvas")}
+              </button> */}
             </fieldset>
           </div>
         </div>

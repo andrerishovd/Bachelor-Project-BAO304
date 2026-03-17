@@ -13,5 +13,8 @@
   "codeCopied": "Kopiert!",
   "copyCode": "Kopier kode",
   "selectAll": "Velg alle",
-  "deleteSelected": "Slett ({{count}})"
+  "deleteSelected": "Slett ({{count}})",
+  "titleUpdated": "Tittel oppdatert",
+  "titleUpdateError": "Kunne ikke endre tittel",
+  "editTitle": "Endre tittel"
 }

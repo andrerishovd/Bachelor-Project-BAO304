@@ -5,23 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { useChatContext } from "../contexts/ChatContext";
 import { TrashIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import type { IChat } from "../interfaces/chat/IChat";
+import CreateChatButton from "../components/chat/CreateChatButton";
+import useDeleteChat from "../hooks/useDeleteChat";
 
-/**
- * ChatsPage
- *
- * Full-page overview of all chats.
- * Displays title, last message timestamp, and supports
- * multi-select deletion.
- *
- * @route /chats
- */
 const ChatsPage = () => {
   const { t } = useTranslation("chat");
-  const { chats, loading, error, refetch } = useChatContext();
+  const { chats, loading, error } = useChatContext();
   const navigate = useNavigate();
-
+  const { deleteChats, isDeleting } = useDeleteChat();
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const toggleSelect = (id: string) => {
     setSelected((prev) => {
@@ -40,15 +32,8 @@ const ChatsPage = () => {
   };
 
   const handleDelete = async () => {
-    // TODO: koble til ChatService.deleteChats(selected)
-    setIsDeleting(true);
-    try {
-      // await ChatService.deleteChats([...selected]);
-      await refetch();
-      setSelected(new Set());
-    } finally {
-      setIsDeleting(false);
-    }
+    await deleteChats([...selected]);
+    setSelected(new Set());
   };
 
   const getLastMessageTime = (chat: IChat): string => {
@@ -71,7 +56,6 @@ const ChatsPage = () => {
           <ArrowLeftIcon className="w-4 h-4" />
         </button>
         <h1 className="text-xl font-bold flex-1">{t("chatListHeader")}</h1>
-
         {selected.size > 0 && (
           <button
             onClick={handleDelete}
@@ -82,6 +66,7 @@ const ChatsPage = () => {
             {t("deleteSelected", { count: selected.size })}
           </button>
         )}
+        <CreateChatButton />
       </div>
 
       {/* Select all */}
@@ -115,7 +100,7 @@ const ChatsPage = () => {
       ) : error ? (
         <p className="text-error text-sm">{error}</p>
       ) : chats.length === 0 ? (
-        <p className="text-base-content/50 text-sm">{t("noChat")}</p>
+        <p className="text-base-content/50 text-sm">{t("noChats")}</p>
       ) : (
         <ul className="flex flex-col gap-1">
           {chats.map((chat) => (

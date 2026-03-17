@@ -1,11 +1,17 @@
 {
+  "appNameLong": "studybuddy",
+  "appNameShort": "sb",
   "search": "Søk",
   "settings": "Innstillinger",
   "homepage": "Hjem",
+  "dashboard": "Dashboard",
+  "yourChats": "Dine chatter",
   "back": "Tilbake",
   "close": "Lukk",
   "pageNotFound": "Fant ikke siden",
   "returnToHome": "Gå til hjemsiden",
   "Profile": "Profil",
-  "selectedLocale": "no"
+  "selectedLocale": "no",
+  "cancel": "Avbryt",
+  "save": "Lagre"
 }

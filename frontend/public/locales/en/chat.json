@@ -13,5 +13,8 @@
   "codeCopied": "Copied!",
   "copyCode": "Copy code",
   "selectAll": "Select all",
-  "deleteSelected": "Delete ({{count}})"
+  "deleteSelected": "Delete ({{count}})",
+  "titleUpdated": "Title updated",
+  "titleUpdateError": "Could not update title",
+  "editTitle":"Edit title"
 }

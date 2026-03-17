@@ -9,11 +9,30 @@ import {
 } from "tabler-icons-react";
 import { useSidebar } from "../../contexts/SidebarContext";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
+import { useLocation, useParams } from "react-router-dom";
+import { useChatContext } from "../../contexts/ChatContext";
 
 const Navbar = () => {
   const { t } = useTranslation(["common", "accessibility"]);
   const { isExtended, toggleSidebar } = useSidebar();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const { chatId } = useParams();
+  const { pathname } = useLocation();
+  const { getChatById } = useChatContext();
+
+  const getTitle = () => {
+    if (chatId) {
+      const chat = getChatById(chatId);
+      return chat?.title ?? t("common.chat");
+    }
+    if (pathname === "/chats") return t("common:yourChats");
+    if (pathname === "/admin") return t("common:admin");
+    if (pathname === "/chat/new") return t("chat:newChat");
+    if (pathname === "/") return t("common:homepage");
+
+    return t("common:pageNotFound");
+  };
 
   const { handleKeyDown } = useKeyboard({
     onEnter: () => setIsDropdownOpen(!isDropdownOpen),
@@ -40,7 +59,7 @@ const Navbar = () => {
         )}
       </label>
 
-      <div className="flex-1 px-4">Studdybudy</div>
+      <div className="flex-1 px-4">{getTitle()}</div>
 
       {/* UU settings for desktop screen sizes */}
       <div className="hidden  md:flex gap-2">
