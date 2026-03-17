@@ -16,5 +16,7 @@
   "deleteSelected": "Delete ({{count}})",
   "titleUpdated": "Title updated",
   "titleUpdateError": "Could not update title",
-  "editTitle":"Edit title"
+  "editTitle": "Edit title",
+  "searchResults": "{{count}} results for \"{{query}}\"",
+  "sendError": "Could not send message. Check that the backend is running."
 }

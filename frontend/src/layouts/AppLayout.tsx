@@ -22,7 +22,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
       <div className="drawer-content">
         <Navbar />
-        <main className="flex flex-col h-[calc(100vh-4rem)] p-4 overflow-y-auto">
+        <main className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden">
           {children}
         </main>
       </div>

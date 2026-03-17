@@ -9,10 +9,12 @@ import HomePage from "./HomePage";
 import AuthenticationPage from "./AuthenticationPage";
 import ChatDetailPage from "./ChatDetailPage";
 import ChatsPage from "../pages/ChatsPage";
+import SearchResultPage from "../pages/SearchResultPage"
 export {
   NotFoundPage,
   ChatDetailPage,
   HomePage,
   AuthenticationPage,
   ChatsPage,
+  SearchResultPage,
 };
