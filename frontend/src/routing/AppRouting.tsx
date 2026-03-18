@@ -41,12 +41,16 @@ import { useAuth } from "../hooks/useAuth";
 const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/authentication" replace />;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <span className="loading loading-spinner loading-lg" />
+      </div>
+    );
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (!isAuthenticated) {
+    return <Navigate to="/authentication" replace />;
   }
 
   return (

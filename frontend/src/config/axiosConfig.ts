@@ -1,5 +1,5 @@
 import { PublicClientApplication } from "@azure/msal-browser";
-import { msalConfig } from "../authConfig";
+import { msalConfig } from "./authConfig";
 import axios from "axios";
 
 const API_BASE_URL =
