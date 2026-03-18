@@ -1,20 +1,41 @@
 import { useTranslation } from "react-i18next";
 import canvasLogo from "../../assets/canvas-logo.svg";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import ChangeLangBtn from "../shared/ChangeLangBtn";
 import ThemeControllerToggle from "../shared/ThemeControllerToggle";
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../../authConfig.ts";
+import { useEffect } from "react";
 import { BrandOffice } from "tabler-icons-react";
 
 const AuthenticationForm = () => {
-  const { t, i18n } = useTranslation("auth");
-
-  const { login } = useAuth();
+  const { t } = useTranslation("auth");
   const navigate = useNavigate();
+  const { isAuthenticated, isLoading } = useAuth();
+  const { instance } = useMsal();
+  const { accounts } = useMsal();
+  const activeAccount = accounts[0];
 
-  const handleLogin = () => {
-    login();
-    navigate("/");
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, isLoading, navigate]);
+  const handleLoginRedirect = () => {
+    instance
+      .loginRedirect({
+        ...loginRequest,
+        prompt: "create",
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleLogoutRedirect = () => {
+    instance.logoutRedirect({
+      postLogoutRedirectUri: "/",
+    });
+    window.location.reload();
   };
 
   return (
@@ -29,6 +50,11 @@ const AuthenticationForm = () => {
           <h1 className="text-5xl font-bold">{t("description.header")}</h1>
           <p className="py-6">{t("description.info")}</p>
         </div>
+        {activeAccount ? (
+          <button onClick={handleLogoutRedirect}> [ Logout ]</button>
+        ) : (
+          <button onClick={handleLoginRedirect}> [Login ]</button>
+        )}
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
             <fieldset className="fieldset">
@@ -43,7 +69,10 @@ const AuthenticationForm = () => {
               <div>
                 <a className="link link-hover">{t("forgotPw")}</a>
               </div>
-              <button onClick={handleLogin} className="btn btn-neutral mt-4">
+              <button
+                onClick={handleLoginRedirect}
+                className="btn btn-neutral mt-4"
+              >
                 {t("login")}
               </button>
 
