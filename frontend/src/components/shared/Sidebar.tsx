@@ -108,7 +108,7 @@ const Sidebar = () => {
             </button>
           </li>
 
-          <li>
+          {/*  <li>
             <button
               className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
               data-tip={t("profile")}
@@ -117,7 +117,7 @@ const Sidebar = () => {
               <UserAvatar />
               <span className="is-drawer-close:hidden">{t("Profile")}</span>
             </button>
-          </li>
+          </li> */}
         </ul>
       </div>
     </>

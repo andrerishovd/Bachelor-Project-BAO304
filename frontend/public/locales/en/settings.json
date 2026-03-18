@@ -6,5 +6,7 @@
   "": "",
   "close": "Close",
   "theme": "Theme",
-  "language": "Language"
+  "language": "Language",
+  "logout": "Log out",
+  "account": "Account"
 }

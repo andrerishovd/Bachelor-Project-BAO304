@@ -5,7 +5,8 @@
   "helpText": "Her kan du gjøre endringer",
   "": "",
   "": "",
-  "close": "Lukk",
   "theme": "Tema",
-  "language": "Språk"
+  "language": "Språk",
+  "logout": "Logg ut",
+  "account": "Konto"
 }
