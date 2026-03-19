@@ -4,6 +4,8 @@ import { useAuth } from "../../hooks/useAuth";
 import ChangeLangBtn from "../shared/ChangeLangBtn";
 import ThemeControllerToggle from "../shared/ThemeControllerToggle";
 import canvasLogo from "../../assets/canvas-logo.svg";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 // Feature flags, set to true or false depending on which login method should be available.
 const allowEmailSignIn = false;
@@ -19,7 +21,14 @@ const allowCanvasSignIn = false;
 
 const AuthenticationForm = () => {
   const { t } = useTranslation("auth");
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   // Creates dynamic consent text based on the feature flags.
   const getConsentText = () => {

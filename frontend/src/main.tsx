@@ -7,7 +7,6 @@ import { AuthProvider, msalInstance } from "./contexts/AuthContext.tsx";
 
 async function bootstrap() {
   await msalInstance.initialize();
-  await msalInstance.handleRedirectPromise();
 
   createRoot(document.getElementById("root")!).render(
     <StrictMode>

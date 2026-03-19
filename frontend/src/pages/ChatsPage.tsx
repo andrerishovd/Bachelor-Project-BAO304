@@ -84,8 +84,6 @@ const ChatsPage = () => {
           </label>
         )}
 
-        <div className="divider my-1 shrink-0" />
-
         {/* Scrollable list */}
         <div className="flex-1 min-h-0 overflow-y-auto">
           {loading ? (
