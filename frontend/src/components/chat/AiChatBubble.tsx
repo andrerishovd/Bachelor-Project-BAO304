@@ -7,6 +7,7 @@ import {
   ClipboardDocumentCheckIcon,
 } from "@heroicons/react/24/outline";
 import useCopyToClipboard from "../../hooks/useCopyToClipboard";
+import { formatMessageTime } from "../../utils/formatTime";
 
 interface AiChatBubbleProps {
   message: IChatMessage;
@@ -52,10 +53,7 @@ const AiChatBubble = ({ message }: AiChatBubbleProps) => {
         {/* Footer: timestamp left, copy button right */}
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-base-200 text-xs text-base-content/40">
           <span>
-            {new Date(message.localDateTime).toLocaleTimeString("nb-NO", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {formatMessageTime(message.localDateTime)}
           </span>
           <div
             className={`tooltip tooltip-top ${copied ? "tooltip-success" : ""}`}

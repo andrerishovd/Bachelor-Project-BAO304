@@ -6,6 +6,7 @@ import { TrashIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import type { IChat } from "../interfaces/chat/IChat";
 import CreateChatButton from "../components/chat/CreateChatButton";
 import useDeleteChat from "../hooks/useDeleteChat";
+import { formatLastMessageTime } from "../utils/formatTime";
 
 const ChatsPage = () => {
   const { t } = useTranslation("chat");
@@ -33,18 +34,6 @@ const ChatsPage = () => {
   const handleDelete = async () => {
     await deleteChats([...selected]);
     setSelected(new Set());
-  };
-
-  const getLastMessageTime = (chat: IChat): string => {
-    const messages = chat.messageDtoList;
-    if (!messages || messages.length === 0) return "";
-    const last = messages[messages.length - 1];
-    return new Date(last.localDateTime).toLocaleString("nb-NO", {
-      day: "2-digit",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   return (
@@ -125,7 +114,7 @@ const ChatsPage = () => {
                   >
                     <p className="font-medium truncate">{chat.title}</p>
                     <p className="text-xs text-base-content/50">
-                      {getLastMessageTime(chat)}
+                      {formatLastMessageTime(chat.messageDtoList)}
                     </p>
                   </div>
                 </li>

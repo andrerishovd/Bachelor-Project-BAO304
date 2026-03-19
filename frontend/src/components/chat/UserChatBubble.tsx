@@ -1,4 +1,5 @@
 import type { IChatMessage } from "../../interfaces/chat/IChatMessage";
+import { formatMessageTime } from "../../utils/formatTime";
 
 interface UserChatBubbleProps {
   message: IChatMessage;
@@ -19,10 +20,7 @@ const UserChatBubble = ({ message }: UserChatBubbleProps) => {
         <p className="text-sm">{message.body}</p>
       </div>
       <span className="text-xs text-base-content/40 mt-1">
-        {new Date(message.localDateTime).toLocaleTimeString("nb-NO", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
+        {formatMessageTime(message.localDateTime)}
       </span>
     </div>
   );

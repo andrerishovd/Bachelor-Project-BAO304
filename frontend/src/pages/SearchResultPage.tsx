@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import useSearchChats from "../hooks/useSearchChats";
 import type { IChat } from "../interfaces/chat/IChat";
+import { formatLastMessageTime } from "../utils/formatTime";
 
 /**
  * SearchResultPage
@@ -33,18 +34,6 @@ const SearchResultPage = () => {
   const handleQueryChange = (value: string) => {
     setQuery(value);
     setSearchParams(value.trim() ? { search: value } : {});
-  };
-
-  const getLastMessageTime = (chat: IChat): string => {
-    const messages = chat.messageDtoList;
-    if (!messages || messages.length === 0) return "";
-    const last = messages[messages.length - 1];
-    return new Date(last.localDateTime).toLocaleString("nb-NO", {
-      day: "2-digit",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   return (
@@ -93,7 +82,7 @@ const SearchResultPage = () => {
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">{chat.title}</p>
                 <p className="text-xs text-base-content/50">
-                  {getLastMessageTime(chat)}
+                  {formatLastMessageTime(chat.messageDtoList)}
                 </p>
               </div>
             </li>
