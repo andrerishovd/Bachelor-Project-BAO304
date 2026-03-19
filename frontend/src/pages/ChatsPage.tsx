@@ -51,6 +51,7 @@ const ChatsPage = () => {
     <div className="flex flex-col h-full overflow-hidden items-center">
       <div className="flex flex-col h-full overflow-hidden w-full max-w-2xl">
         {/* Header */}
+        {/* TODO Fix header to be the same as the one in ChatDetailPage */}
         <div className="border-b border-base-300 p-4 flex items-center gap-2 shrink-0">
           <button onClick={() => navigate(-1)} className="btn btn-sm btn-ghost">
             <ArrowLeftIcon className="w-4 h-4" />
