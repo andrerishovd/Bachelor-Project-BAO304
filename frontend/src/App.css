@@ -100,3 +100,7 @@
   --depth: 1;
   --noise: 0;
 }
+
+@theme {
+  --font-kristiania: "KristianiaTransform", sans-serif;
+}

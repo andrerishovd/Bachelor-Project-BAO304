@@ -59,7 +59,9 @@ const Sidebar = () => {
           {/* TODO Should this even be here, could be above and text only */}
           <li className="">
             <button onClick={handleLogoClick}>
-              <h1 className="is-drawer-open:hidden">{t("appNameShort")}</h1>
+              <h1 className="is-drawer-open:hidden font-kristiania">
+                {t("appNameShort")}
+              </h1>
               <h1 className="is-drawer-close:hidden">{t("appNameLong")}</h1>
             </button>
           </li>
