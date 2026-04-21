@@ -49,12 +49,12 @@ services:
     image: chat:0.0.1-SNAPSHOT
     build:
       context: ./backend/chat
-    container_name: chat-service
+    #container_name: chat-service
     environment:
       SPRING_PROFILES_ACTIVE: env,consul
 
-    ports:
-      - "8080:8080"
+    #ports:
+    #  - "8080:8080"
     depends_on:
       - chat-db
     networks:
