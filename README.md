@@ -32,5 +32,16 @@ to run frontend:
 from root use the following command
 
 ```bash
-cd frontend && npm i && npm run dev
+cd frontend
+npm i
+npm run dev
+```
+
+Run the whole project from root directory
+
+```
+docker-compose up --build -d
+cd frontend
+npm i
+npm run dev
 ```

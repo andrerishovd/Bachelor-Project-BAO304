@@ -1,4 +1,3 @@
-// src/contexts/ChatContext.tsx
 import {
   createContext,
   useContext,
@@ -28,6 +27,7 @@ interface IChatContext {
   error: string | null;
   refetch: () => Promise<void>;
   getChatById: (chatId: string) => IChat | undefined;
+  updateChat: (chat: IChat) => void;
 }
 
 interface IProps {
@@ -104,6 +104,12 @@ export const ChatProvider: FC<IProps> = ({ children }) => {
     [chats],
   );
 
+  const updateChat = useCallback((updatedChat: IChat) => {
+    setChats((prev) =>
+      prev.map((c) => (c.id === updatedChat.id ? updatedChat : c)),
+    );
+  }, []);
+
   // Fetch chats on mount
   useEffect(() => {
     refetch();
@@ -111,7 +117,7 @@ export const ChatProvider: FC<IProps> = ({ children }) => {
 
   return (
     <ChatContext.Provider
-      value={{ chats, loading, error, refetch, getChatById }}
+      value={{ chats, loading, error, refetch, getChatById, updateChat  }}
     >
       {children}
     </ChatContext.Provider>

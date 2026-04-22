@@ -1,10 +1,11 @@
-// src/components/chat/ChatList.tsx
 import { useTranslation } from "react-i18next";
 import { useSidebar } from "../../contexts/SidebarContext";
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 import { Link, useParams } from "react-router-dom";
 import { useChatContext } from "../../contexts/ChatContext";
 import ChatListSkeleton from "./skeletons/ChatListSkeleton";
+import ChatOptionsDropdown from "./ChatOptionsDropdown";
+import useOpenDropdown from "../../hooks/useOpenDropdown";
 
 /**
  * ChatList
@@ -20,47 +21,50 @@ const ChatList = () => {
   const { isExtended, expandSidebar } = useSidebar();
   const { t } = useTranslation("chat");
   const { chatId } = useParams();
+  const { isOpen, toggle, close, containerRef } = useOpenDropdown();
 
   if (!isExtended) {
-    return (
-      <button
-        className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-        onClick={expandSidebar}
-        aria-label={t("chatListHeader")}
-      >
-        <ChatBubbleOvalLeftEllipsisIcon
-          className="my-1.5 inline-block size-4 shrink-0"
-          aria-hidden="true"
-        />
-      </button>
-    );
+    return null;
   }
 
   return (
     <div className="w-full">
-      {/* Header - not clickable when expanded */}
-      <div className="flex items-center gap-2 px-4 py-2 text-sm text-base-content/60 font-medium">
-        <ChatBubbleOvalLeftEllipsisIcon className="size-4 shrink-0" />
-        <span>{t("chatListHeader")}</span>
-      </div>
-
-      {/* Chat list */}
       {loading ? (
         <ChatListSkeleton />
       ) : error ? (
         <p className="text-sm text-error px-4">{error}</p>
       ) : chats.length === 0 ? (
-        <p className="text-sm text-base-content/50 px-4">{t("noChats")}</p>
+        <p className="text-sm text-base-content/50 px-4">{t("noChat")}</p>
       ) : (
-        <ul className="menu w-full">
+        <ul
+          ref={containerRef as React.RefObject<HTMLUListElement>}
+          className="menu w-full"
+        >
           {chats.map((chat) => (
             <li key={chat.id}>
-              <Link
-                to={`/chat/${chat.id}`}
-                className={chatId === chat.id ? "active" : ""}
-              >
-                <span className="truncate">{chat.title}</span>
-              </Link>
+              <div className="group flex items-center w-full pr-1">
+                <Link
+                  to={`/chat/${chat.id}`}
+                  className={`flex-1 truncate ${chatId === chat.id ? "active" : ""}`}
+                >
+                  <span className="truncate">{chat.title}</span>
+                </Link>
+                <div
+                  className={`transition-opacity shrink-0 ${
+                    isOpen(chat.id)
+                      ? "visible opacity-100"
+                      : "invisible opacity-0 group-hover:visible group-hover:opacity-100"
+                  }`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ChatOptionsDropdown
+                    chatId={chat.id}
+                    currentTitle={chat.title}
+                    isOpen={isOpen(chat.id)}
+                    onToggle={() => toggle(chat.id)}
+                  />
+                </div>
+              </div>
             </li>
           ))}
         </ul>

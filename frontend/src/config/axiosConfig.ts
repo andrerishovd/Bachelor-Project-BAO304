@@ -1,8 +1,11 @@
-// src/config/axiosConfig.ts
+import { PublicClientApplication } from "@azure/msal-browser";
+import { msalConfig } from "./authConfig";
 import axios from "axios";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
+
+const msalInstance = new PublicClientApplication(msalConfig);
 
 /**
  * Pre-configured Axios instance for API communication.
@@ -28,20 +31,27 @@ export const apiClient = axios.create({
   },
 });
 
-// Request interceptor - runs before every outgoing request
-apiClient.interceptors.request.use(
-  (config) => {
-    // TODO: Add auth token when authentication is implemented
-    // const token = localStorage.getItem("token");
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
+msalInstance.initialize().then(() => {
+  // Request interceptor - runs before every outgoing request
+  apiClient.interceptors.request.use(
+    async (config) => {
+      const account = msalInstance.getActiveAccount();
+      if (account) {
+        const tokenResponse = await msalInstance.acquireTokenSilent({
+          account: account,
+          scopes: [
+            "https://aprikoscompany.onmicrosoft.com/42d48df1-2ab8-498a-8378-bd0e003d6f14/access_as_user",
+          ],
+        });
+        config.headers.Authorization = `Bearer ${tokenResponse.accessToken}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
+});
 
 // Response interceptor (error handling) runs on every incoming response
 apiClient.interceptors.response.use(

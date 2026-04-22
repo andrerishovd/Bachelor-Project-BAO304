@@ -1,4 +1,3 @@
-// src/components/settings/FontSizeSlider.tsx
 import { useTranslation } from "react-i18next";
 import { useFontSizeContext } from "../../contexts/FontSizeContext";
 

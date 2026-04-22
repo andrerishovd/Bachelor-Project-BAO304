@@ -1,5 +1,3 @@
-// src/components/chat/skeletons/ChatListSkeleton.tsx
-
 /**
  * ChatListSkeleton
  *

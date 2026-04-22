@@ -1,4 +1,3 @@
-// src/contexts/FontSizeContext.tsx
 import {
   createContext,
   useContext,

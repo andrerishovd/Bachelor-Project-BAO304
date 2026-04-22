@@ -1,15 +1,32 @@
-import { useState } from "react";
-
-// bare for testing...
+import { useMsal } from "@azure/msal-react";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { loginRequest } from "../config/authConfig";
 
 export const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const { accounts, inProgress, instance } = useMsal();
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
+  const activeAccount = instance.getActiveAccount() ?? accounts[0] ?? null;
+
+  const login = () => {
+    instance
+      .loginRedirect({
+        ...loginRequest,
+        prompt: "create",
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const logout = () => {
+    instance.logoutRedirect({
+      postLogoutRedirectUri: "/",
+    });
+  };
 
   return {
-    isAuthenticated,
+    isAuthenticated: !!activeAccount,
+    isLoading: inProgress !== "none",
+    user: activeAccount,
     login,
     logout,
   };

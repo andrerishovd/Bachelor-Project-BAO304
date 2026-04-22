@@ -1,4 +1,3 @@
-// src/components/chat/CodeBlock.tsx
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";

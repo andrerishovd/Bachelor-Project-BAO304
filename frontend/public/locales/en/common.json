@@ -1,12 +1,18 @@
 {
+  "appNameLong": "studybuddy",
+  "appNameShort": "sb",
   "search": "Search",
   "settings": "Settings",
-  
+
   "homepage": "Home",
+  "dashboard": "Dashboard",
+  "yourChats": "Your chats",
   "back": "Back",
   "close": "Close",
   "pageNotFound": "Could not find the requested page",
   "returnToHome": "Return to homepage",
   "Profile": "Profile",
-  "selectedLocale": "enUS"
+  "selectedLocale": "enUS",
+  "cancel": "Cancel",
+  "save": "Save"
 }

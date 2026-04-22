@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useKeyboard } from "../../hooks/useKeyboard";
 import UserAvatar from "../shared/UserAvatar";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -11,9 +11,8 @@ interface ProfileModalProps {
 
 const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
   const { t } = useTranslation(["common"]);
-  const navigate = useNavigate();
   const dialogRef = useRef<HTMLDialogElement>(null);
-
+  const { logout, isLoading } = useAuth();
   useEffect(() => {
     if (isOpen) {
       dialogRef.current?.showModal();
@@ -25,10 +24,6 @@ const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
   const { handleKeyDown } = useKeyboard({
     onEscape: onClose,
   });
-
-  const handleLogoutClick = () => {
-    navigate("/authenticate");
-  };
 
   return (
     <>
@@ -48,7 +43,7 @@ const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
           <button
             className="btn btn-soft btn-error"
             data-tip={t("profile")}
-            onClick={handleLogoutClick}
+            onClick={logout}
           >
             Log out
           </button>

@@ -11,6 +11,8 @@ import {
   ChatDetailPage,
   HomePage,
   NotFoundPage,
+  ChatsPage,
+  SearchResultPage,
 } from "../pages";
 import AppLayout from "../layouts/AppLayout";
 import { useAuth } from "../hooks/useAuth";
@@ -37,7 +39,15 @@ import { useAuth } from "../hooks/useAuth";
  */
 
 const ProtectedRoute = () => {
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <span className="loading loading-spinner loading-lg" />
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/authentication" replace />;
@@ -59,8 +69,10 @@ const AppRouting = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/chat/new" element={<ChatDetailPage isNew={true} />} />
           <Route path="/chat/:chatId" element={<ChatDetailPage />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path="/chats" element={<ChatsPage />} />
+          <Route path="/search" element={<SearchResultPage />} />
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

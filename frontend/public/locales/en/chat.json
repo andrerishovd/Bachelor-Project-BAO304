@@ -11,5 +11,12 @@
   "copyResponse": "Copy response",
   "copied": "Copied!",
   "codeCopied": "Copied!",
-  "copyCode": "Copy code"
+  "copyCode": "Copy code",
+  "selectAll": "Select all",
+  "deleteSelected": "Delete ({{count}})",
+  "titleUpdated": "Title updated",
+  "titleUpdateError": "Could not update title",
+  "editTitle": "Edit title",
+  "searchResults": "{{count}} results for \"{{query}}\"",
+  "sendError": "Could not send message. Check that the backend is running."
 }
