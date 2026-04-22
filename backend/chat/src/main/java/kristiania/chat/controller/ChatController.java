@@ -28,13 +28,13 @@ public class ChatController {
 // GET
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @CrossOrigin
+    //@CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<ChatDto>> getAllChats() {
         return ResponseEntity.ok(chatService.getAllChatsDto());
     }
 
-    @CrossOrigin
+    //@CrossOrigin
     @GetMapping("/all/title")
     public ResponseEntity<List<ChatTitleDto>> getAllChatTitles() {
         return ResponseEntity.ok(chatService.getAllChatTitlesDto());
@@ -55,13 +55,13 @@ public class ChatController {
     }
      */
 
-    @CrossOrigin
+    //@CrossOrigin
     @GetMapping("/chatId/{chatId}")
     public ResponseEntity<ChatDto> getChatFromId(@PathVariable String chatId) {
         return ResponseEntity.ok(chatService.getChatDtoFromId(chatId));
     }
 
-    @CrossOrigin
+    //@CrossOrigin
     @GetMapping("/messageId/{messageId}")
     public ResponseEntity<MessageDto> getMessageFromId(@PathVariable String messageId) {
         return ResponseEntity.ok(chatService.getMessageDtoFromId(messageId));
@@ -73,7 +73,7 @@ public class ChatController {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Post new chat without user id (for testing)
-    @CrossOrigin
+    //@CrossOrigin
     @PostMapping("/new")
     public ChatResponse postMessageAndCreateNewChat(@RequestBody ChatRequest request) {
         if (request == null || request.getMessage() == null || request.getMessage().isBlank()) {
@@ -91,7 +91,7 @@ public class ChatController {
      */
 
     // Post message to existing chat without user id (for testing)
-    @CrossOrigin
+    //@CrossOrigin
     @PostMapping("/chatId/{chatId}")
     public ResponseEntity<ChatResponse> postMessage(@RequestBody ChatRequest chatRequest, @PathVariable String chatId) {
         return ResponseEntity.ok(chatService.createNewMessageToExistingChat(chatRequest, chatId));
@@ -110,13 +110,13 @@ public class ChatController {
 // PUT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @CrossOrigin
+    //@CrossOrigin
     @PutMapping("/edit/messageId/{messageId}")
     public ResponseEntity<ChatResponse> putMessageFromId(@PathVariable String messageId, @RequestBody ChatRequest chatRequest) {
         return ResponseEntity.ok(chatService.putMessageFromId(messageId, chatRequest));
     }
 
-    @CrossOrigin
+    //@CrossOrigin
     @PutMapping("/edit/chatId/{chatId}")
     public ResponseEntity<ChatTitleDto> putChatFromId(@PathVariable String chatId, @RequestBody String newTitle) {
         return ResponseEntity.ok(chatService.putChatTitleFromId(chatId, newTitle));
@@ -127,7 +127,7 @@ public class ChatController {
 // DELETE
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @CrossOrigin
+    //@CrossOrigin
     @DeleteMapping("/delete/all")
     public ResponseEntity<Void> deleteAllChats() {
         return ResponseEntity.ok(chatService.deleteAllChats());
@@ -141,13 +141,13 @@ public class ChatController {
     }
      */
 
-    @CrossOrigin
+    //@CrossOrigin
     @DeleteMapping("/delete/chatId/{chatId}")
     public ResponseEntity<Void> deleteChatFromId(@PathVariable String chatId) {
         return ResponseEntity.ok(chatService.deleteChatFromId(chatId));
     }
 
-    @CrossOrigin
+    //@CrossOrigin
     @DeleteMapping("/delete/messageId/{messageId}")
     public ResponseEntity<Void> deleteMessageFromId(@PathVariable String messageId) {
         return ResponseEntity.ok(chatService.deleteMessageFromId(messageId));

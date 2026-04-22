@@ -38,10 +38,12 @@ services:
       context: ./backend/gateway
     container_name: gateway-service
     environment:
-      SPRING_PROFILES_ACTIVE: consul
+      SPRING_PROFILES_ACTIVE: consul,env
     ports:
       - "8010:8010"
-    #depends_on:
+      - "8091:8091"
+    depends_on:
+      - consul
     networks:
       - study-buddy
 
@@ -51,7 +53,7 @@ services:
       context: ./backend/chat
     #container_name: chat-service
     environment:
-      SPRING_PROFILES_ACTIVE: env,consul
+     SPRING_PROFILES_ACTIVE: env,consul
 
     #ports:
     #  - "8080:8080"
@@ -66,7 +68,7 @@ services:
       context: ./backend/settings
     container_name: settings-service
     environment:
-      SPRING_PROFILES_ACTIVE: docker, consul
+      SPRING_PROFILES_ACTIVE: docker,consul
       #SPRING_DATASOURCE_URL: jdbc:postgresql://settings-db:5432/settingsdb
       #SPRING_DATASOURCE_USERNAME: serviceuser
       #SPRING_DATASOURCE_PASSWORD: servicepwd
@@ -85,7 +87,7 @@ services:
       context: ./backend/user
     container_name: user-service
     environment:
-      SPRING_PROFILES_ACTIVE: docker, consul
+      SPRING_PROFILES_ACTIVE: docker,consul
       #SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/userdb
       #SPRING_DATASOURCE_USERNAME: serviceuser
       #SPRING_DATASOURCE_PASSWORD: servicepwd
