@@ -6,6 +6,7 @@ spring:
       discovery:
         enabled: true
         prefer-ip-address: false
+        instance-id: ${spring.application.name}:${HOSTNAME}
 
 management:
   endpoints:
@@ -15,3 +16,5 @@ management:
   endpoint:
     health:
       show-details: always
+  server:
+    port: 8081
