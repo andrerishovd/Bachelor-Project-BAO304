@@ -163,7 +163,7 @@ public class AiService {
 
                 input.add(Map.of(
                         "role", role,
-                        "content", message.getLocalDateTime().toString()+message.getBody()
+                        "content", message.getBody()
                 ));
             }
 
