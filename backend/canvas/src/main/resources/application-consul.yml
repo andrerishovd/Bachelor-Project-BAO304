@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: canvas-service
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        enabled: true
+        prefer-ip-address: false
+        hostname: canvas-service
+        instance-id: ${spring.application.name}:${HOSTNAME}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+
+server:
+  port: 8060
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+  server:
+    port: 8061

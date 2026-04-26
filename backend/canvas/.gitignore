@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Course Material ###
+/src/main/resources/courseMaterial/**

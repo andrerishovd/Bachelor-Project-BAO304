@@ -6,7 +6,7 @@
 services:
   user-db:
     container_name: "user-db"
-    image: postgres:alpine
+    image: postgres:17-alpine
     ports:
       - '5440:5432'
     environment:
@@ -20,7 +20,7 @@ services:
 
   chat-db:
     container_name: "chat-db"
-    image: postgres:alpine
+    image: postgres:17-alpine
     ports:
       - '5430:5432'
     environment:
@@ -51,12 +51,8 @@ services:
     image: chat:0.0.1-SNAPSHOT
     build:
       context: ./backend/chat
-    #container_name: chat-service
     environment:
      SPRING_PROFILES_ACTIVE: env,consul
-
-    #ports:
-    #  - "8080:8080"
     depends_on:
       - chat-db
     networks:
@@ -72,12 +68,10 @@ services:
       #SPRING_DATASOURCE_URL: jdbc:postgresql://settings-db:5432/settingsdb
       #SPRING_DATASOURCE_USERNAME: serviceuser
       #SPRING_DATASOURCE_PASSWORD: servicepwd
-
     ports:
       - "8030:8030"
     #depends_on:
     #  - user-db
-
     networks:
       - study-buddy
 
@@ -91,12 +85,27 @@ services:
       #SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/userdb
       #SPRING_DATASOURCE_USERNAME: serviceuser
       #SPRING_DATASOURCE_PASSWORD: servicepwd
-
     ports:
       - "8040:8040"
     depends_on:
       - user-db
+    networks:
+      - study-buddy
 
+  canvas-service:
+    image: canvas:0.0.1-SNAPSHOT
+    build:
+      context: ./backend/canvas
+    container_name: canvas-service
+    environment:
+      SPRING_PROFILES_ACTIVE: consul
+      COURSE_MATERIAL_PATH: /courseMaterial
+    ports:
+      - "8060:8060"
+    volumes:
+      - ./backend/canvas/src/main/resources/courseMaterial:/courseMaterial:ro
+    depends_on:
+      - consul
     networks:
       - study-buddy
 

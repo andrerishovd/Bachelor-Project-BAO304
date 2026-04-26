@@ -52,6 +52,7 @@ public class SecurityConfig {
                                 .pathMatchers("/health").permitAll()
                                 .pathMatchers("/api/chat/**").permitAll()
                                 .pathMatchers("/api/user/**").permitAll()
+                                .pathMatchers("/api/canvas/**").permitAll()
                                 .pathMatchers("/api/v1/**").permitAll()
                                 //anything below here requires authentication
                                 .anyExchange().authenticated()
