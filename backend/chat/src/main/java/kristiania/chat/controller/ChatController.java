@@ -67,6 +67,12 @@ public class ChatController {
         return ResponseEntity.ok(chatService.getMessageDtoFromId(messageId));
     }
 
+    //@CrossOrigin
+    @GetMapping("/downloadZip")
+    public ResponseEntity<Void> getZipFromCanvasTemp() {
+        return ResponseEntity.ok(chatService.getZipFromCanvasTemp());
+    }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // POST
