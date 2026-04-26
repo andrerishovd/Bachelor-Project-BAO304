@@ -53,8 +53,13 @@ services:
       context: ./backend/chat
     environment:
      SPRING_PROFILES_ACTIVE: env,consul
+     DOWNLOAD_PATH: /downloads
+     COURSE_MATERIAL_PATH: /courseMaterial
     depends_on:
       - chat-db
+    volumes:
+      - ./backend/chat/downloads:/downloads:rw
+      - ./backend/chat/courseMaterial:/courseMaterial:rw
     networks:
       - study-buddy
 
@@ -103,7 +108,7 @@ services:
     ports:
       - "8060:8060"
     volumes:
-      - ./backend/canvas/src/main/resources/courseMaterial:/courseMaterial:ro
+      - ./backend/canvas/courseMaterial:/courseMaterial:ro
     depends_on:
       - consul
     networks:

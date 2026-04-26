@@ -23,6 +23,7 @@ public class ChatService {
     private final  MessageService messageService;
     private final AiService aiService;
     private final MessageRepository messageRepository;
+    private final FileService fileService;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INTERNAL TOOLS
@@ -112,6 +113,11 @@ public class ChatService {
         Message message = messageService.getMessageFromId(Long.valueOf(messageId));
         MessageDto messageDto = new MessageDto(message.getId().toString(), message.getBody(), message.getLocalDateTime().toString(), message.getSenderType().toString());
         return messageDto;
+    }
+
+    public Void getZipFromCanvasTemp() {
+        fileService.getZippedFiles("placeholder");
+        return null;
     }
 
     /*

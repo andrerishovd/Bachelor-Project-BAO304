@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Course Material ###
-/src/main/resources/courseMaterial/**
+/courseMaterial/**
