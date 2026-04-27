@@ -20,7 +20,7 @@ import java.util.List;
 public class ChatService {
 
     private final ChatRepository chatRepository;
-    private final  MessageService messageService;
+    private final MessageService messageService;
     private final AiService aiService;
     private final MessageRepository messageRepository;
     private final FileService fileService;

@@ -1,17 +1,32 @@
 package kristiania.chat.service;
 
+import kristiania.chat.dto.ChatFileUploadResponseDto;
 import kristiania.chat.dto.ContentItemDto;
 import kristiania.chat.dto.OpenAiResponseDto;
 import kristiania.chat.dto.OutputItemDto;
 import kristiania.chat.modules.Chat;
 import kristiania.chat.modules.ChatResponse;
+import kristiania.chat.modules.FileUploadResponse;
 import kristiania.chat.modules.Message;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+
+
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+
+import java.nio.file.Path;
+
+import com.openai.models.files.FileCreateParams;
+import com.openai.models.files.FileObject;
+import com.openai.models.files.FilePurpose;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,14 +38,15 @@ public class AiService {
     private final RestClient restClient;
     private final String model;
     private final String personality;
+    private final FileService fileService;
 
 
     public AiService (
             @Value("${OPEN_AI_API_KEY}") String apiKey,
             @Value("${BASE_URL}") String baseUrl,
             @Value("${MODEL}") String model,
-            @Value("${PERSONALITY}") String personality
-    ) {
+            @Value("${PERSONALITY}") String personality,
+            FileService fileService) {
 
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException("OPEN_AI_API_KEY is not set.");
@@ -50,7 +66,31 @@ public class AiService {
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .build();
+        this.fileService = fileService;
     }
+
+    /*
+    public FileUploadResponse sendFile(String fileName) {
+        Path path = fileService.getPath(fileName);
+
+        /*
+        ChatFileUploadResponseDto resp = restClient.post()
+                .uri("/v1")
+                .body(body)
+                .retrieve()
+                .body(OpenAiResponseDto.class);
+         */
+/*
+        MultipartBodyBuilder
+        FileCreateParams params = FileCreateParams.builder()
+                .file(path)
+                .purpose(FilePurpose.of("file-extract"))
+                .build();
+
+        FileObject fileObject = restClient.files().create(params);
+        FileObject fileObject = restClient.files().create(params);
+    }
+    */
 
     public ChatResponse sendChat(Long chatId, String userMessage) {
         Map<String, Object> body = buildRequestBodyWithoutChat(userMessage);

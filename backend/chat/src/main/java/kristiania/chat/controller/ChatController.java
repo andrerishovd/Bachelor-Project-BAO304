@@ -1,15 +1,30 @@
 package kristiania.chat.controller;
 
+//import com.openai.models.vectorstores.VectorStore;
 import kristiania.chat.dto.ChatDto;
+import kristiania.chat.dto.ChatFileUploadResponseDto;
 import kristiania.chat.dto.ChatTitleDto;
 import kristiania.chat.dto.MessageDto;
 import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
+import kristiania.chat.modules.FileUploadResponse;
 import kristiania.chat.service.ChatService;
+import org.slf4j.Logger;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.ai.vectorstore.VectorStore;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @RestController
@@ -18,10 +33,14 @@ public class ChatController {
 
     private final ChatService chatService;
     //private final MessageService messageService;
+    private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(ChatController.class);
+
+    private final VectorStore vectorStore;
 
     @Autowired
-    public ChatController(ChatService chatService) {
+    public ChatController(ChatService chatService, VectorStore vectorStore) {
         this.chatService = chatService;
+        this.vectorStore = vectorStore;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,6 +106,29 @@ public class ChatController {
         }
         return chatService.createNewChatFromChatRequest(request);
     }
+
+    // https://howtodoinjava.com/spring-ai/chatbot-example-with-rag/
+    @PostMapping("/upload")
+    public FileUploadResponse upload(@RequestParam("file") MultipartFile file) throws IOException {
+
+        Path destinationFile = Paths.get("/courseMaterial/PJ6100-1").resolve(
+                Paths.get(file.getOriginalFilename())).normalize().toAbsolutePath();
+
+        try (InputStream inputStream = file.getInputStream()) {
+            Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        TikaDocumentReader documentReader = new TikaDocumentReader(destinationFile.toUri().toString());
+        List<org.springframework.ai.document.Document> documents = documentReader.get();
+        List<Document> splitDocuments = TokenTextSplitter.builder()
+            .build()
+            .apply(documents);
+
+        vectorStore.add(splitDocuments);
+
+        return new FileUploadResponse(file.getOriginalFilename(), file.getContentType(), file.getSize());
+    }
+
 
     /*
     @CrossOrigin

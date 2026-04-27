@@ -139,6 +139,55 @@
 			<version>1.3.5</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<!-- Source: https://mvnrepository.com/artifact/com.openai/openai-java -->
+		<dependency>
+			<groupId>com.openai</groupId>
+			<artifactId>openai-java</artifactId>
+			<version>4.32.0</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- For connecting with openai chat and embed models-->
+		<!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-model-openai -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-openai</artifactId>
+			<version>2.0.0-M4</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- For reading the uploading PDF file in chunks -->
+		<!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-tika-document-reader -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-tika-document-reader</artifactId>
+			<version>2.0.0-M4</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- vector store and chat memory-->
+		<!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-advisors-vector-store -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-advisors-vector-store</artifactId>
+			<version>2.0.0-M4</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-vector-store-pgvector -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-vector-store-pgvector</artifactId>
+			<version>2.0.0-M4</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Source: https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-model-chat-memory -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-chat-memory</artifactId>
+			<version>2.0.0-M4</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
