@@ -9,6 +9,7 @@ import kristiania.chat.modules.Message;
 import kristiania.chat.repository.ChatRepository;
 import kristiania.chat.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class ChatService {
     private final AiService aiService;
     private final MessageRepository messageRepository;
     private final FileService fileService;
+    private final VectorStore vectorStore;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INTERNAL TOOLS
@@ -142,7 +144,7 @@ public class ChatService {
         ChatResponse chatResponse;
 
         try {
-            chatResponse = aiService.sendChat(newChatId, messageDto.body());
+            chatResponse = aiService.sendChat(newChatId, messageDto.body(), vectorStore);
 
             MessageDto responseMessageDto = new MessageDto(null, chatResponse.getResponse(), null, SenderType.AI.toString());
 

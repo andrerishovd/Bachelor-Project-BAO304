@@ -1,36 +1,26 @@
 package kristiania.chat.service;
 
-import kristiania.chat.dto.ChatFileUploadResponseDto;
+//import com.openai.models.vectorstores.VectorStore;
 import kristiania.chat.dto.ContentItemDto;
 import kristiania.chat.dto.OpenAiResponseDto;
 import kristiania.chat.dto.OutputItemDto;
 import kristiania.chat.modules.Chat;
 import kristiania.chat.modules.ChatResponse;
-import kristiania.chat.modules.FileUploadResponse;
 import kristiania.chat.modules.Message;
+//import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.ai.vectorstore.VectorStore;
 
 
+import org.springframework.ai.document.Document;
 
-import com.openai.client.OpenAIClient;
-import com.openai.client.okhttp.OpenAIOkHttpClient;
-
-import java.nio.file.Path;
-
-import com.openai.models.files.FileCreateParams;
-import com.openai.models.files.FileObject;
-import com.openai.models.files.FilePurpose;
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AiService {
@@ -39,14 +29,16 @@ public class AiService {
     private final String model;
     private final String personality;
     private final FileService fileService;
-
+    //private final VectorStore vectorStore;
 
     public AiService (
             @Value("${OPEN_AI_API_KEY}") String apiKey,
             @Value("${BASE_URL}") String baseUrl,
             @Value("${MODEL}") String model,
             @Value("${PERSONALITY}") String personality,
-            FileService fileService) {
+            FileService fileService
+            /*VectorStore vectorStore*/) {
+        //this.vectorStore = vectorStore;
 
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException("OPEN_AI_API_KEY is not set.");
@@ -92,14 +84,14 @@ public class AiService {
     }
     */
 
-    public ChatResponse sendChat(Long chatId, String userMessage) {
-        Map<String, Object> body = buildRequestBodyWithoutChat(userMessage);
+    public ChatResponse sendChat(Long chatId, String userMessage, VectorStore vectorStore) {
+        Map<String, Object> body = buildRequestBodyWithoutChat(userMessage, vectorStore);
 
         OpenAiResponseDto resp = restClient.post()
-                .uri("/v1/responses")
-                .body(body)
-                .retrieve()
-                .body(OpenAiResponseDto.class);
+            .uri("/v1/responses")
+            .body(body)
+            .retrieve()
+            .body(OpenAiResponseDto.class);
 
         String reply = extractOutputText(resp);
         return new ChatResponse(chatId, reply);
@@ -109,10 +101,10 @@ public class AiService {
         Map<String, Object> body = buildRequestBodyWithChat(userMessage, chat);
 
         OpenAiResponseDto resp = restClient.post()
-                .uri("/v1/responses")
-                .body(body)
-                .retrieve()
-                .body(OpenAiResponseDto.class);
+            .uri("/v1/responses")
+            .body(body)
+            .retrieve()
+            .body(OpenAiResponseDto.class);
 
         String reply = extractOutputText(resp);
         return new ChatResponse(chat.getId(), reply);
@@ -134,11 +126,30 @@ public class AiService {
     ],
 
      */
-    private Map<String, Object> buildRequestBodyWithoutChat(String userMessage) {
+    private Map<String, Object> buildRequestBodyWithoutChat(String userMessage, VectorStore vectorStore) {
         Map<String, Object> body = new HashMap<>();
+        List<Map<String, Object>> tools = new ArrayList<>();
+        Map<String, Object> webSearchTool = new HashMap<>();
+
+        webSearchTool.put("type", "web_search");
+        tools.add(webSearchTool);
 
         // model
         body.put("model", model);
+        body.put("tools", tools);
+
+        SearchRequest searchRequest = SearchRequest.builder()
+            .query(userMessage)
+            .similarityThreshold(0.1d)
+            .topK(6)
+            .build();
+
+        List<Document> documents = vectorStore.similaritySearch(searchRequest);
+
+        String retrievedContext = documents.stream()
+                .map(Document::getText)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining("\n\n---\n\n"));
 
         /*
         reasoning ( not supported for 4.0 mini )
@@ -156,19 +167,26 @@ public class AiService {
         input.add(Map.of("role", "system", "content", personality));
 
         // User message
-        input.add(Map.of("role", "user", "content", userMessage));
-
+        input.add(Map.of(
+            "role",
+            "user",
+            "content",
+            "Use this context if needed, let the user know if the answer is not within the context and try web search instead [Vector context:"
+                + retrievedContext
+                + "] [User message: "
+                + userMessage + "]"
+        ));
 
         body.put("input", input);
-
         body.put("text", Map.of("format", Map.of("type", "text")));
 
         return body;
     }
+
     private Map<String, Object> buildRequestBodyWithChat(String userMessage, Chat chat) {
         Map<String, Object> body = new HashMap<>();
 
-        // model
+
         body.put("model", model);
 
         /*
@@ -183,36 +201,35 @@ public class AiService {
         //input
         List<Map<String, Object>> input = new ArrayList<>();
 
-            // Ai role and personality
-            input.add(Map.of("role", "system", "content", personality));
+        // Ai role and personality
+        input.add(Map.of("role", "system", "content", personality));
 
-            // Message history
-            for (Message message : chat.getMessageList()) {
+        // Message history
+        for (Message message : chat.getMessageList()) {
 
-                String role;
-                switch (message.getSenderType()) {
-                    case USER:
-                        role = "user";
-                        break;
-                    case AI:
-                        role = "assistant";
-                        break;
-                    default:
-                        continue;
-                }
-
-                input.add(Map.of(
-                        "role", role,
-                        "content", message.getBody()
-                ));
+            String role;
+            switch (message.getSenderType()) {
+                case USER:
+                    role = "user";
+                    break;
+                case AI:
+                    role = "assistant";
+                    break;
+                default:
+                    continue;
             }
 
-            // User message
-            input.add(Map.of("role", "user", "content", userMessage));
+            input.add(Map.of(
+                    "role", role,
+                    "content", message.getBody()
+            ));
+        }
+
+        // User message
+        input.add(Map.of("role", "user", "content", userMessage));
 
 
         body.put("input", input);
-
         body.put("text", Map.of("format", Map.of("type", "text")));
 
         return body;

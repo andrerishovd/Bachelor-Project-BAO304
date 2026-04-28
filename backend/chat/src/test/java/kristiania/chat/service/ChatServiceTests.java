@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.ai.vectorstore.VectorStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,7 +158,7 @@ public class ChatServiceTests {
         when(chatRepository.getReferenceById(1L))
                 .thenReturn(savedChat);
 
-        when(aiService.sendChat(Mockito.eq(1L), Mockito.anyString()))
+        when(aiService.sendChat(Mockito.eq(1L), Mockito.anyString(), Mockito.any(VectorStore.class)))
                 .thenReturn(chatResponse);
 
         ChatResponse newChatResponse = chatService.createNewChatFromChatRequest(chatRequest);
