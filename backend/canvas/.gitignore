@@ -34,3 +34,6 @@ build/
 
 ### Course Material ###
 /courseMaterial/**
+
+### OLD DOWNLOAD DESTINATION ###
+/src/main/resources/courseMaterial/**
