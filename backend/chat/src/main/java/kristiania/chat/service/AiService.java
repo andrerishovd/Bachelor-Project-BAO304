@@ -4,10 +4,10 @@ package kristiania.chat.service;
 import kristiania.chat.dto.ContentItemDto;
 import kristiania.chat.dto.OpenAiResponseDto;
 import kristiania.chat.dto.OutputItemDto;
-import kristiania.chat.modules.Chat;
-import kristiania.chat.modules.ChatResponse;
-import kristiania.chat.modules.Message;
+import kristiania.chat.modules.*;
 //import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +18,14 @@ import org.springframework.ai.vectorstore.VectorStore;
 
 
 import org.springframework.ai.document.Document;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +37,8 @@ public class AiService {
     private final String personality;
     private final FileService fileService;
     private final VectorStore vectorStore;
+    @Value("${COURSE_MATERIAL_PATH:/courseMaterial}")
+    String courseMaterialDirectory;
 
     public AiService (
             @Value("${OPEN_AI_API_KEY}") String apiKey,
@@ -62,7 +71,7 @@ public class AiService {
     }
 
     /*
-    public FileUploadResponse sendFile(String fileName) {
+    public MultipartFileUploadResponse sendFile(String fileName) {
         Path path = fileService.getPath(fileName);
 
         /*
@@ -126,6 +135,7 @@ public class AiService {
     ],
 
      */
+
     private Map<String, Object> buildRequestBodyWithoutChat(String userMessage) {
         Map<String, Object> body = new HashMap<>();
         List<Map<String, Object>> tools = new ArrayList<>();
@@ -137,19 +147,6 @@ public class AiService {
         // model
         body.put("model", model);
         body.put("tools", tools);
-
-        SearchRequest searchRequest = SearchRequest.builder()
-            .query(userMessage)
-            .similarityThreshold(0.1d)
-            .topK(6)
-            .build();
-
-        List<Document> documents = vectorStore.similaritySearch(searchRequest);
-
-        String retrievedContext = documents.stream()
-                .map(Document::getText)
-                .filter(Objects::nonNull)
-                .collect(Collectors.joining("\n\n---\n\n"));
 
         /*
         reasoning ( not supported for 4.0 mini )
@@ -166,15 +163,17 @@ public class AiService {
         // Ai role and personality
         input.add(Map.of("role", "system", "content", personality));
 
+        String retrievedContext = retrieveContext(userMessage);
+
         // User message
         input.add(Map.of(
-            "role",
-            "user",
-            "content",
-            "Use this context if needed, let the user know if the answer is not within the context and try web search instead [Vector context:"
-                + retrievedContext
-                + "] [User message: "
-                + userMessage + "]"
+        "role",
+        "user",
+        "content",
+        "Use this context if needed, let the user know if the answer is not within the context and try web search instead [Vector context:"
+            + retrievedContext
+            + "] [User message: "
+            + userMessage + "]"
         ));
 
         body.put("input", input);
@@ -194,18 +193,6 @@ public class AiService {
         body.put("model", model);
         body.put("tools", tools);
 
-        SearchRequest searchRequest = SearchRequest.builder()
-                .query(userMessage)
-                .similarityThreshold(0.1d)
-                .topK(6)
-                .build();
-
-        List<Document> documents = vectorStore.similaritySearch(searchRequest);
-
-        String retrievedContext = documents.stream()
-                .map(Document::getText)
-                .filter(Objects::nonNull)
-                .collect(Collectors.joining("\n\n---\n\n"));
         /*
         reasoning ( not supported for 4.0 mini )
 
@@ -242,15 +229,17 @@ public class AiService {
             ));
         }
 
-        // User message
+        String retrievedContext = retrieveContext(userMessage);
+
+        // User message + context
         input.add(Map.of(
-                "role",
-                "user",
-                "content",
-                "Use this context if needed, let the user know if the answer is not within the context and try web search instead [Vector context:"
-                        + retrievedContext
-                        + "] [User message: "
-                        + userMessage + "]"
+        "role",
+        "user",
+        "content",
+        "Use this context if needed, let the user know if the answer is not within the context and try web search instead [Vector context:"
+            + retrievedContext
+            + "] [User message: "
+            + userMessage + "]"
         ));
 
         body.put("input", input);
@@ -278,5 +267,85 @@ public class AiService {
         }
 
         return stringBuilder.toString();
+    }
+
+    private String retrieveContext(String userMessage) {
+        // Based on https://howtodoinjava.com/spring-ai/chatbot-example-with-rag/#4-uploading-files-and-generating-embeddings
+        SearchRequest searchRequest = SearchRequest.builder()
+                .query(userMessage)
+                .similarityThreshold(0.2d)
+                .topK(10)
+                .build();
+
+        List<Document> documents = vectorStore.similaritySearch(searchRequest);
+
+        String retrievedContext = documents.stream()
+                .map(Document::getText)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining("\n\n---\n\n"));
+
+        return retrievedContext;
+    }
+
+    public MultipartFileUploadResponse uploadMultiPartFileToVectorDb(MultipartFile file) {
+        Path destinationFile = Paths.get("/courseMaterial/PJ6100-1").resolve(
+                Paths.get(file.getOriginalFilename())).normalize().toAbsolutePath();
+
+        try {
+            InputStream inputStream = file.getInputStream();
+            Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        TikaDocumentReader documentReader = new TikaDocumentReader(destinationFile.toUri().toString());
+        List<org.springframework.ai.document.Document> documents = documentReader.get();
+        List<Document> splitDocuments = TokenTextSplitter.builder()
+                .build()
+                .apply(documents);
+
+        vectorStore.add(splitDocuments);
+
+        return new MultipartFileUploadResponse(file.getOriginalFilename(), file.getContentType(), file.getSize());
+    }
+
+    public FileUploadResponse uploadFileToVectorDb(Path filePath) {
+
+        try {
+            TikaDocumentReader documentReader = new TikaDocumentReader(filePath.toUri().toString());
+            List<Document> documents = documentReader.get();
+            List<Document> splitDocuments = TokenTextSplitter.builder()
+                .build()
+                .apply(documents);
+
+            vectorStore.add(splitDocuments);
+
+            String contentType = Files.probeContentType(filePath);
+            long size = Files.size(filePath);
+
+            return new FileUploadResponse(filePath.getFileName().toString(), contentType, size);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<FileUploadResponse> uploadFolderToVectorDb(String folderPath) {
+        Path folder = Paths.get(courseMaterialDirectory + "/" + folderPath).normalize().toAbsolutePath();
+
+        if(!Files.exists(folder)) {
+            throw new IllegalArgumentException("Folder does not exist" + folder);
+        }
+
+        try {
+            List<FileUploadResponse> fileUploadResponseList = Files.walk(folder)
+                .filter(Files::isRegularFile)
+                .map(this::uploadFileToVectorDb)
+                .toList();
+
+            return fileUploadResponseList;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

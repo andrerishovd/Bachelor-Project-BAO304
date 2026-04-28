@@ -2,16 +2,16 @@ package kristiania.chat.service;
 
 import kristiania.chat.dto.*;
 import kristiania.chat.enums.SenderType;
-import kristiania.chat.modules.Chat;
-import kristiania.chat.modules.ChatRequest;
-import kristiania.chat.modules.ChatResponse;
-import kristiania.chat.modules.Message;
+import kristiania.chat.modules.*;
 import kristiania.chat.repository.ChatRepository;
 import kristiania.chat.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +122,10 @@ public class ChatService {
         return null;
     }
 
+    public List<FileUploadResponse> uploadFromCourseMaterial(String courseId) {
+        return aiService.uploadFolderToVectorDb(courseId);
+    }
+
     /*
     public List<ChatTitleDto> getAllChatsFromUser(String userId) {
         return null;
@@ -150,10 +154,10 @@ public class ChatService {
 
             messageService.saveMessageDto(messageDto, newChat);
             messageService.saveMessageDto(responseMessageDto, chatRepository.getReferenceById(newChatId));
+            return chatResponse;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return chatResponse;
     }
 
     public ChatResponse createNewMessageToExistingChat(ChatRequest chatRequest, String chatIdString) {
@@ -169,6 +173,10 @@ public class ChatService {
         ChatResponse chatResponse = new ChatResponse(chatId, responseMessageDto.body());
 
         return chatResponse;
+    }
+
+    public MultipartFileUploadResponse uploadDocument(MultipartFile file) {
+        return aiService.uploadMultiPartFileToVectorDb(file);
     }
 
     /*
@@ -241,4 +249,5 @@ public class ChatService {
         messageService.deleteMessageFromId(messageId);
         return null;
     }
+
 }
