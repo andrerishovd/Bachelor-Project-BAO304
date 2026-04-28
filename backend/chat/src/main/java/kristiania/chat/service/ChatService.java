@@ -117,8 +117,8 @@ public class ChatService {
         return messageDto;
     }
 
-    public Void getZipFromCanvasTemp() {
-        fileService.getZippedFiles("placeholder");
+    public Void getZipFromCanvasTemp(String courseId) {
+        fileService.getZippedFiles(courseId);
         return null;
     }
 

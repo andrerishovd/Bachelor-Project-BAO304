@@ -79,9 +79,9 @@ public class ChatController {
     }
 
     //@CrossOrigin
-    @GetMapping("/downloadZip")
-    public ResponseEntity<Void> getZipFromCanvasTemp() {
-        return ResponseEntity.ok(chatService.getZipFromCanvasTemp());
+    @GetMapping("/downloadZip/courseId/{courseId}")
+    public ResponseEntity<Void> getZipFromCanvasTemp(@PathVariable String courseId) {
+        return ResponseEntity.ok(chatService.getZipFromCanvasTemp(courseId));
     }
 
     @GetMapping("/uploadFromCourseMaterials/courseId/{courseId}")
