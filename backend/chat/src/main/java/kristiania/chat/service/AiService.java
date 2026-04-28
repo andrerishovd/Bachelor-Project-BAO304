@@ -29,16 +29,16 @@ public class AiService {
     private final String model;
     private final String personality;
     private final FileService fileService;
-    //private final VectorStore vectorStore;
+    private final VectorStore vectorStore;
 
     public AiService (
             @Value("${OPEN_AI_API_KEY}") String apiKey,
             @Value("${BASE_URL}") String baseUrl,
             @Value("${MODEL}") String model,
             @Value("${PERSONALITY}") String personality,
-            FileService fileService
-            /*VectorStore vectorStore*/) {
-        //this.vectorStore = vectorStore;
+            FileService fileService,
+            VectorStore vectorStore) {
+        this.vectorStore = vectorStore;
 
         if (apiKey == null || apiKey.isBlank()) {
             throw new IllegalStateException("OPEN_AI_API_KEY is not set.");
@@ -84,8 +84,8 @@ public class AiService {
     }
     */
 
-    public ChatResponse sendChat(Long chatId, String userMessage, VectorStore vectorStore) {
-        Map<String, Object> body = buildRequestBodyWithoutChat(userMessage, vectorStore);
+    public ChatResponse sendChat(Long chatId, String userMessage) {
+        Map<String, Object> body = buildRequestBodyWithoutChat(userMessage);
 
         OpenAiResponseDto resp = restClient.post()
             .uri("/v1/responses")
@@ -126,7 +126,7 @@ public class AiService {
     ],
 
      */
-    private Map<String, Object> buildRequestBodyWithoutChat(String userMessage, VectorStore vectorStore) {
+    private Map<String, Object> buildRequestBodyWithoutChat(String userMessage) {
         Map<String, Object> body = new HashMap<>();
         List<Map<String, Object>> tools = new ArrayList<>();
         Map<String, Object> webSearchTool = new HashMap<>();
@@ -185,10 +185,27 @@ public class AiService {
 
     private Map<String, Object> buildRequestBodyWithChat(String userMessage, Chat chat) {
         Map<String, Object> body = new HashMap<>();
+        List<Map<String, Object>> tools = new ArrayList<>();
+        Map<String, Object> webSearchTool = new HashMap<>();
 
+        webSearchTool.put("type", "web_search");
+        tools.add(webSearchTool);
 
         body.put("model", model);
+        body.put("tools", tools);
 
+        SearchRequest searchRequest = SearchRequest.builder()
+                .query(userMessage)
+                .similarityThreshold(0.1d)
+                .topK(6)
+                .build();
+
+        List<Document> documents = vectorStore.similaritySearch(searchRequest);
+
+        String retrievedContext = documents.stream()
+                .map(Document::getText)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining("\n\n---\n\n"));
         /*
         reasoning ( not supported for 4.0 mini )
 
@@ -226,8 +243,15 @@ public class AiService {
         }
 
         // User message
-        input.add(Map.of("role", "user", "content", userMessage));
-
+        input.add(Map.of(
+                "role",
+                "user",
+                "content",
+                "Use this context if needed, let the user know if the answer is not within the context and try web search instead [Vector context:"
+                        + retrievedContext
+                        + "] [User message: "
+                        + userMessage + "]"
+        ));
 
         body.put("input", input);
         body.put("text", Map.of("format", Map.of("type", "text")));

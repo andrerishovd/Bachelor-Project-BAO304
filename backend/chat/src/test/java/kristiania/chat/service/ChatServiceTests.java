@@ -158,7 +158,7 @@ public class ChatServiceTests {
         when(chatRepository.getReferenceById(1L))
                 .thenReturn(savedChat);
 
-        when(aiService.sendChat(Mockito.eq(1L), Mockito.anyString(), Mockito.any(VectorStore.class)))
+        when(aiService.sendChat(Mockito.eq(1L), Mockito.anyString()))
                 .thenReturn(chatResponse);
 
         ChatResponse newChatResponse = chatService.createNewChatFromChatRequest(chatRequest);
