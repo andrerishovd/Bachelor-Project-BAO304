@@ -1,13 +1,14 @@
 package kristiania.chat.service;
 
+import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -15,7 +16,11 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -126,5 +131,13 @@ public class FileService {
         //return all files in /resources/courses/{courseId} in a List
 
         return null;
+    }
+
+    public List<String> getFileNames(File folder) {
+        List<String> fileNameList = Arrays.stream(Objects.requireNonNull(folder.listFiles(File::isFile)))
+                .map(File::getName)
+                .toList();
+
+        return fileNameList;
     }
 }

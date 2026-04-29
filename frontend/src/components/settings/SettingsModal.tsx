@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useKeyboard } from "../../hooks/useKeyboard";
 import ThemeDropdown from "./ThemeDropdown";
 import FontSizeSlider from "./FontSizeSlider";
-import ChangeLangBtn from "../shared/ChangeLangBtn";
+import ChangeLangBtn from "../shared/buttons/ChangeLangBtn";
 import { useAuth } from "../../hooks/useAuth";
 
 interface SettingsModalProps {

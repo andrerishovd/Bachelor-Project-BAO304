@@ -1,14 +1,21 @@
 package kristiania.chat.controller;
 
+//import com.openai.models.vectorstores.VectorStore;
 import kristiania.chat.dto.ChatDto;
 import kristiania.chat.dto.ChatTitleDto;
 import kristiania.chat.dto.MessageDto;
 import kristiania.chat.modules.ChatRequest;
 import kristiania.chat.modules.ChatResponse;
+import kristiania.chat.modules.FileUploadResponse;
+import kristiania.chat.modules.MultipartFileUploadResponse;
 import kristiania.chat.service.ChatService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.ai.vectorstore.VectorStore;
 
 import java.util.List;
 
@@ -18,10 +25,14 @@ public class ChatController {
 
     private final ChatService chatService;
     //private final MessageService messageService;
+    private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(ChatController.class);
+
+    private final VectorStore vectorStore;
 
     @Autowired
-    public ChatController(ChatService chatService) {
+    public ChatController(ChatService chatService, VectorStore vectorStore) {
         this.chatService = chatService;
+        this.vectorStore = vectorStore;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,9 +79,14 @@ public class ChatController {
     }
 
     //@CrossOrigin
-    @GetMapping("/downloadZip")
-    public ResponseEntity<Void> getZipFromCanvasTemp() {
-        return ResponseEntity.ok(chatService.getZipFromCanvasTemp());
+    @GetMapping("/downloadZip/courseId/{courseId}")
+    public ResponseEntity<Void> getZipFromCanvasTemp(@PathVariable String courseId) {
+        return ResponseEntity.ok(chatService.getZipFromCanvasTemp(courseId));
+    }
+
+    @GetMapping("/uploadFromCourseMaterials/courseId/{courseId}")
+    public List<FileUploadResponse> uploadFromCourseMaterial(@PathVariable String courseId) {
+        return chatService.uploadFromCourseMaterial(courseId);
     }
 
 
@@ -81,11 +97,21 @@ public class ChatController {
     // Post new chat without user id (for testing)
     //@CrossOrigin
     @PostMapping("/new")
+    @Transactional(timeout = 120)
     public ChatResponse postMessageAndCreateNewChat(@RequestBody ChatRequest request) {
         if (request == null || request.getMessage() == null || request.getMessage().isBlank()) {
             return new ChatResponse(null, "Please send a non-empty message.");
         }
         return chatService.createNewChatFromChatRequest(request);
+    }
+
+    // https://howtodoinjava.com/spring-ai/chatbot-example-with-rag/
+    @PostMapping("/uploadSingleFile")
+    public MultipartFileUploadResponse uploadDocument(@RequestParam("file") MultipartFile file) {
+        if (file == null) {
+            return new MultipartFileUploadResponse("No file detected", null, null);
+        }
+        return chatService.uploadDocument(file);
     }
 
     /*
@@ -99,6 +125,7 @@ public class ChatController {
     // Post message to existing chat without user id (for testing)
     //@CrossOrigin
     @PostMapping("/chatId/{chatId}")
+    @Transactional(timeout = 120)
     public ResponseEntity<ChatResponse> postMessage(@RequestBody ChatRequest chatRequest, @PathVariable String chatId) {
         return ResponseEntity.ok(chatService.createNewMessageToExistingChat(chatRequest, chatId));
     }
