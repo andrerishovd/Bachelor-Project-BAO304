@@ -5,9 +5,10 @@ import {
   MagnifyingGlassIcon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
-import useSearchChats from "../hooks/useSearchChats";
-import type { IChat } from "../interfaces/chat/IChat";
-import { formatLastMessageTime } from "../utils/formatTime";
+import useSearchChats from "../../hooks/useSearchChats";
+import type { IChat } from "../../interfaces/chat/IChat";
+import { formatLastMessageTime } from "../../utils/formatTime";
+import ChatListItem from "../../components/chat/ChatListItem";
 
 /**
  * SearchResultPage
@@ -71,21 +72,9 @@ const SearchResultPage = () => {
           {t("common:noResults")}
         </p>
       ) : (
-        <ul className="flex flex-col gap-1">
+        <ul className="list bg-base-100 rounded-box">
           {results.map((chat) => (
-            <li
-              key={chat.id}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer hover:bg-base-200 transition-colors"
-              onClick={() => navigate(`/chat/${chat.id}`)}
-            >
-              <MagnifyingGlassIcon className="w-4 h-4 shrink-0 opacity-30" />
-              <div className="flex-1 min-w-0">
-                <p className="font-medium truncate">{chat.title}</p>
-                <p className="text-xs text-base-content/50">
-                  {formatLastMessageTime(chat.messageDtoList)}
-                </p>
-              </div>
-            </li>
+            <ChatListItem key={chat.id} chat={chat} />
           ))}
         </ul>
       )}

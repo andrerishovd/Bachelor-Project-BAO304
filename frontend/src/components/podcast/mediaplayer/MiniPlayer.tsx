@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useMediaContext } from "../../contexts/MediaContext";
+import { useMediaContext } from "../../../contexts/MediaContext";
 import {
   PlayIcon,
   PauseIcon,
@@ -7,7 +7,7 @@ import {
   BackwardIcon,
   ChevronUpIcon,
 } from "@heroicons/react/24/solid";
-import { formatTime } from "../../utils/formatTime";
+import { formatTime } from "../../../utils/formatTime";
 
 /**
  * MiniPlayer

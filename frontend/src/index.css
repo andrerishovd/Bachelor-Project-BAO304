@@ -4,3 +4,14 @@
   font-weight: normal;
   font-style: normal;
 }
+
+.tooltip::before,
+.tooltip::after {
+  transition-delay: 2000ms;
+  transition-duration: 200ms;
+}
+
+.tooltip:not(:hover)::before,
+.tooltip:not(:hover)::after {
+  transition-delay: 0ms;
+}

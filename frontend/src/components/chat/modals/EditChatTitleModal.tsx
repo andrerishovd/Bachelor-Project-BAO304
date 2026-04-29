@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { ChatService } from "../../services/ChatService";
-import { useChatContext } from "../../contexts/ChatContext";
-import { useAlertContext } from "../../contexts/AlertContext";
+import { ChatService } from "../../../services/ChatService";
+import { useChatContext } from "../../../contexts/ChatContext";
+import { useAlertContext } from "../../../contexts/AlertContext";
 import { createPortal } from "react-dom";
 
 interface EditChatTitleModalProps {

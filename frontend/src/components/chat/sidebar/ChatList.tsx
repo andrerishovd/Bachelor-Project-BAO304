@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { useSidebar } from "../../contexts/SidebarContext";
+import { useSidebar } from "../../../contexts/SidebarContext";
 import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/outline";
 import { Link, useParams } from "react-router-dom";
-import { useChatContext } from "../../contexts/ChatContext";
-import ChatListSkeleton from "./skeletons/ChatListSkeleton";
+import { useChatContext } from "../../../contexts/ChatContext";
+import ChatListSkeleton from "../skeletons/ChatListSkeleton";
 import ChatOptionsDropdown from "./ChatOptionsDropdown";
-import useOpenDropdown from "../../hooks/useOpenDropdown";
+import useOpenDropdown from "../../../hooks/useOpenDropdown";
 
 /**
  * ChatList

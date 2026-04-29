@@ -6,7 +6,7 @@ import {
   ClipboardIcon,
   ClipboardDocumentCheckIcon,
 } from "@heroicons/react/24/outline";
-import useCopyToClipboard from "../../hooks/useCopyToClipboard";
+import useCopyToClipboard from "../../../hooks/useCopyToClipboard";
 
 interface CodeBlockProps {
   language: string;
@@ -36,7 +36,7 @@ const CodeBlock = ({ language, children }: CodeBlockProps) => {
   const handleCopy = () => copyToClipboard(children);
 
   return (
-    <div className="rounded-lg overflow-hidden my-2">
+    <div className=" not-prose rounded-lg overflow-hidden my-2">
       {/* Topbar: language label left, copy button right */}
       <div className="flex justify-between items-center px-4 py-1 bg-[#282c34] text-neutral-400 text-xs border-b border-neutral-600">
         <span>{language}</span>
