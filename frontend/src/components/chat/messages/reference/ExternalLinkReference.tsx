@@ -21,7 +21,7 @@ const ExternalLinkReference = ({ url }: ExternalLinkReferenceProps) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-3 p-3 rounded-lg bg-base-200 hover:bg-base-300 transition-colors group"
+      className="flex items-center gap-3 p-3 rounded-lg bg-base-100 shadow-sm border border-base-300 hover:bg-base-300 transition-colors group"
     >
       <div className="w-10 h-10 bg-base-300 rounded-lg flex items-center justify-center shrink-0">
         <LinkIcon className="w-5 h-5 text-base-content/40" />
@@ -30,7 +30,7 @@ const ExternalLinkReference = ({ url }: ExternalLinkReferenceProps) => {
         <p className="text-sm font-medium truncate">{domain}</p>
         <p className="text-xs text-base-content/50 truncate">{url}</p>
       </div>
-      <ArrowTopRightOnSquareIcon className="w-4 h-4 shrink-0 text-base-content/30 group-hover:text-primary transition-colors" />
+      <ArrowTopRightOnSquareIcon className="w-4 h-4 shrink-0 text-base-content/40 group-hover:text-primary transition-colors" />
     </a>
   );
 };

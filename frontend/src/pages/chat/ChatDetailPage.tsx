@@ -5,7 +5,8 @@ import { useTranslation } from "react-i18next";
 import { useChatContext } from "../../contexts/ChatContext";
 import ChatOptionsDropdown from "../../components/chat/sidebar/ChatOptionsDropdown";
 import useOpenDropdown from "../../hooks/useOpenDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { IChatMessage } from "../../interfaces/chat/IChatMessage";
 
 /**
  * ChatDetailPage
@@ -25,10 +26,17 @@ const ChatDetailPage = ({ isNew = false }: ChatDetailPageProps) => {
   const { chatId } = useParams<{ chatId: string }>();
   const { getChatById, refetch } = useChatContext();
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
+  const [localMessages, setLocalMessages] = useState<IChatMessage[]>([]);
   const isNewChat = isNew;
   const chat = chatId ? getChatById(chatId) : null;
   const { isOpen, toggle, containerRef } = useOpenDropdown();
   const { t } = useTranslation("chat");
+
+  useEffect(() => {
+    if (chat?.messageDtoList && chat.messageDtoList.length > 0) {
+      setLocalMessages(chat.messageDtoList);
+    }
+  }, [chat?.messageDtoList]);
 
   return (
     <div className="flex flex-col h-full overflow-hidden items-center">
@@ -61,7 +69,7 @@ const ChatDetailPage = ({ isNew = false }: ChatDetailPageProps) => {
         {/* Chat thread */}
         <MessageThreadContainer
           isNewChat={isNewChat}
-          messages={chat?.messageDtoList || []}
+          messages={localMessages}
           isWaitingForResponse={isWaitingForResponse}
         />
 

@@ -67,7 +67,7 @@ const ChatMessageAssistantContent = ({
 
       {/* Shows information regarding litterature if the AI response contains an ISBN */}
       {isbns.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-base-200 flex flex-col gap-2">
+        <div className="mt-4 pt-3 border-t border-base-300 flex flex-col gap-2">
           <p className="text-xs text-base-content/40 font-medium">
             {t("referencedBooks")}
           </p>
@@ -79,7 +79,7 @@ const ChatMessageAssistantContent = ({
 
       {/* Shows information regarding litterature if the AI response contains an url */}
       {urls.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-base-200 flex flex-col gap-2">
+        <div className="mt-4 pt-3 border-t border-base-300 flex flex-col gap-2">
           <p className="text-xs text-base-content/40 font-medium">
             {t("referencedLinks")}
           </p>
@@ -90,7 +90,7 @@ const ChatMessageAssistantContent = ({
       )}
 
       {/* Footer: timestamp left, copy button right */}
-      <div className="flex items-center justify-between mt-4 pt-3 border-t border-base-200 text-xs text-base-content/40">
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-base-300 text-xs text-base-content/50">
         <span>{formatMessageTime(message.localDateTime)}</span>
         <div
           className={`tooltip tooltip-top ${copied ? "tooltip-success" : ""}`}
@@ -98,7 +98,7 @@ const ChatMessageAssistantContent = ({
         >
           <button
             onClick={() => copyToClipboard(message.body)}
-            className="btn btn-xs btn-ghost opacity-60 hover:opacity-100"
+            className="btn btn-xs btn-ghost opacity-80 hover:opacity-100"
           >
             {copied ? (
               <ClipboardDocumentCheckIcon className="w-4 h-4" />

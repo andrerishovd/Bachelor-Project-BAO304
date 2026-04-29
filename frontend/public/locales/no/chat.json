@@ -21,5 +21,9 @@
   "sendError": "Kunne ikke sende melding, sjekk internettkoblingen",
   "messageTooLong": "Meldingen er for lang. Maksimalt {{max}} tegn er tillatt.",
   "referencedBooks": "Refererte bøker",
-  "referencedLinks": "Refererte lenker"
+  "referencedLinks": "Refererte lenker",
+  "showDiagram": "Vis diagram",
+  "diagram": "Diagram",
+  "code": "Kode",
+  "diagramCode": "Diagramkode"
 }

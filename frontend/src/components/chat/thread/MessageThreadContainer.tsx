@@ -1,13 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import type { IChatMessage } from "../../../interfaces/chat/IChatMessage";
-import AiChatBubble from "../messages/ChatMessageAssistant";
-import UserChatBubble from "../messages/ChatMessageUser";
-import AiThinkingSkeleton from "../skeletons/ChatMessageAssistantSkeleton";
+import ChatMessageAssistant from "../messages/ChatMessageAssistant";
+import ChatMessageUser from "../messages/ChatMessageUser";
 import MessageListSkeleton from "../skeletons/MessageContainerSkeleton";
 import useDelayedBoolean from "../../../hooks/useDelayedBoolean";
-import { AnimatePresence, motion } from "motion/react";
-import ChatMessageAssistant from "../messages/ChatMessageAssistant";
 
 interface MessageThreadContainerProps {
   isNewChat?: boolean;
@@ -16,17 +13,6 @@ interface MessageThreadContainerProps {
   isWaitingForResponse?: boolean;
 }
 
-/**
- * MessageThreadContainer
- *
- * Renders the full message thread for a chat session.
- * Auto-scrolls to the bottom when new messages arrive or AI is responding.
- *
- * @property isNewChat - Shows empty state if true
- * @property messages - List of messages to render
- * @property isLoadingMessages - Shows MessageListSkeleton while fetching messages
- * @property isWaitingForResponse - Shows AiThinkingSkeleton while waiting for AI reply
- */
 const MessageThreadContainer = ({
   isNewChat,
   messages = [],
@@ -34,17 +20,19 @@ const MessageThreadContainer = ({
   isWaitingForResponse = false,
 }: MessageThreadContainerProps) => {
   const { t } = useTranslation("chat");
+  const containerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const showSkeleton = useDelayedBoolean(isWaitingForResponse, 500);
 
-  // Auto-scroll to bottom when messages change or AI starts/stops responding
+  // Scroll to bottom when new message is sent
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isWaitingForResponse, showSkeleton]);
+    if (!containerRef.current || messages.length === 0) return;
+    containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  }, [isLoadingMessages, messages, showSkeleton]);
 
   return (
-    <motion.div
-      layoutScroll
+    <div
+      ref={containerRef}
       className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-8"
     >
       {isNewChat ? (
@@ -57,18 +45,16 @@ const MessageThreadContainer = ({
         <>
           {messages.map((message) =>
             message.senderType === "AI" ? (
-              <AiChatBubble key={message.id} message={message} />
+              <ChatMessageAssistant key={message.id} message={message} />
             ) : (
-              <UserChatBubble key={message.id} message={message} />
+              <ChatMessageUser key={message.id} message={message} />
             ),
           )}
           {showSkeleton && <ChatMessageAssistant isLoading />}
-
-          {/* Invisible anchor at the bottom */}
           <div ref={bottomRef} />
         </>
       )}
-    </motion.div>
+    </div>
   );
 };
 

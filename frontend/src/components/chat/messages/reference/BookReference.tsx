@@ -28,7 +28,7 @@ const BookReference = ({ isbn }: BookReferenceProps) => {
       href={libraryUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-3 p-3 rounded-lg bg-base-200 hover:bg-base-300 transition-colors group"
+      className="flex items-center gap-3 p-3 rounded-lg bg-base-100 shadow-sm border border-base-300 hover:bg-base-300 transition-colors group"
     >
       {/* Cover image or fallback icon */}
       {isLoading ? (
@@ -62,13 +62,13 @@ const BookReference = ({ isbn }: BookReferenceProps) => {
                 {info.author}
               </p>
             )}
-            <p className="text-xs text-base-content/40">ISBN {isbn}</p>
+            <p className="text-xs text-base-content/50">ISBN {isbn}</p>
           </>
         )}
       </div>
 
       {/* External link icon */}
-      <ArrowTopRightOnSquareIcon className="w-4 h-4 shrink-0 text-base-content/30 group-hover:text-primary transition-colors" />
+      <ArrowTopRightOnSquareIcon className="w-4 h-4 shrink-0 text-base-content/40 group-hover:text-primary transition-colors" />
     </a>
   );
 };
