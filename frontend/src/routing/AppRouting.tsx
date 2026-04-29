@@ -13,6 +13,8 @@ import {
   NotFoundPage,
   ChatsPage,
   SearchResultPage,
+  PodcastGeneratorPage,
+  PodcastLibraryPage,
 } from "../pages";
 import AppLayout from "../layouts/AppLayout";
 import { useAuth } from "../hooks/useAuth";
@@ -71,6 +73,8 @@ const AppRouting = () => {
           <Route path="/chat/:chatId" element={<ChatDetailPage />} />
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/search" element={<SearchResultPage />} />
+          <Route path="/podcast/generate" element={<PodcastGeneratorPage />} />
+          <Route path="/podcast/library" element={<PodcastLibraryPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

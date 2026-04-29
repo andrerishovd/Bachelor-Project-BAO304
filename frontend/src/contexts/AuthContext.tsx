@@ -3,6 +3,7 @@ import type { AuthenticationResult } from "@azure/msal-browser";
 import { msalConfig } from "../config/authConfig";
 import { MsalProvider } from "@azure/msal-react";
 import { useState, useEffect, type ReactNode } from "react";
+import useDelayedBoolean from "../hooks/useDelayedBoolean";
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -12,6 +13,7 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isReady, setIsReady] = useState(false);
+  const showSpinner = useDelayedBoolean(!isReady, 1500);
 
   useEffect(() => {
     const init = async () => {
@@ -48,7 +50,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   if (!isReady) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <span className="loading loading-spinner loading-lg" />
+        {showSpinner && <span className="loading loading-spinner loading-lg" />}
       </div>
     );
   }

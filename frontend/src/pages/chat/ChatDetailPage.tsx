@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import ChatInputField from "../components/chat/ChatInputField";
-import MessageThreadContainer from "../components/chat/MessageThreadContainer";
+import ChatInputField from "../../components/chat/input/ChatInputField";
+import MessageThreadContainer from "../../components/chat/thread/MessageThreadContainer";
 import { useTranslation } from "react-i18next";
-import { useChatContext } from "../contexts/ChatContext";
-import ChatOptionsDropdown from "../components/chat/ChatOptionsDropdown";
-import useOpenDropdown from "../hooks/useOpenDropdown";
+import { useChatContext } from "../../contexts/ChatContext";
+import ChatOptionsDropdown from "../../components/chat/sidebar/ChatOptionsDropdown";
+import useOpenDropdown from "../../hooks/useOpenDropdown";
 import { useState } from "react";
 
 /**

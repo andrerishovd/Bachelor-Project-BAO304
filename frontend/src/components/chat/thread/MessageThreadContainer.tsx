@@ -1,10 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import type { IChatMessage } from "../../interfaces/chat/IChatMessage";
-import AiChatBubble from "./AiChatBubble";
-import UserChatBubble from "./UserChatBubble";
-import AiThinkingSkeleton from "./skeletons/AiThinkingSkeleton";
-import MessageListSkeleton from "./skeletons/MessageContainerSkeleton";
+import type { IChatMessage } from "../../../interfaces/chat/IChatMessage";
+import AiChatBubble from "../messages/ChatMessageAssistant";
+import UserChatBubble from "../messages/ChatMessageUser";
+import AiThinkingSkeleton from "../skeletons/ChatMessageAssistantSkeleton";
+import MessageListSkeleton from "../skeletons/MessageContainerSkeleton";
+import useDelayedBoolean from "../../../hooks/useDelayedBoolean";
+import { AnimatePresence, motion } from "motion/react";
+import ChatMessageAssistant from "../messages/ChatMessageAssistant";
 
 interface MessageThreadContainerProps {
   isNewChat?: boolean;
@@ -32,14 +35,18 @@ const MessageThreadContainer = ({
 }: MessageThreadContainerProps) => {
   const { t } = useTranslation("chat");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const showSkeleton = useDelayedBoolean(isWaitingForResponse, 500);
 
   // Auto-scroll to bottom when messages change or AI starts/stops responding
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isWaitingForResponse]);
+  }, [messages, isWaitingForResponse, showSkeleton]);
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-8">
+    <motion.div
+      layoutScroll
+      className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-8"
+    >
       {isNewChat ? (
         <div className="flex items-center justify-center h-full text-base-content/50">
           <p>{t("newChatDescription")}</p>
@@ -55,13 +62,13 @@ const MessageThreadContainer = ({
               <UserChatBubble key={message.id} message={message} />
             ),
           )}
-          {isWaitingForResponse && <AiThinkingSkeleton />}
+          {showSkeleton && <ChatMessageAssistant isLoading />}
 
           {/* Invisible anchor at the bottom */}
           <div ref={bottomRef} />
         </>
       )}
-    </div>
+    </motion.div>
   );
 };
 

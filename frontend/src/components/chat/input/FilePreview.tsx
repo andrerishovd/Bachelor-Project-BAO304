@@ -4,7 +4,7 @@
  */
 
 import { Paperclip, X } from "tabler-icons-react";
-import type { IFilePreviewProps } from "../../interfaces/chat/IFilePreviewProps";
+import type { IFilePreviewProps } from "../../../interfaces/chat/IFilePreviewProps";
 
 const FilePreview = ({ files, onRemove }: IFilePreviewProps) => {
   if (files.length === 0) return null;

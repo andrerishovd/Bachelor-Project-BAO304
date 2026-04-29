@@ -7,9 +7,12 @@
 import NotFoundPage from "./NotFoundPage";
 import HomePage from "./HomePage";
 import AuthenticationPage from "./AuthenticationPage";
-import ChatDetailPage from "./ChatDetailPage";
-import ChatsPage from "../pages/ChatsPage";
-import SearchResultPage from "../pages/SearchResultPage"
+import ChatDetailPage from "./chat/ChatDetailPage";
+import ChatsPage from "../pages/chat/ChatsPage";
+import SearchResultPage from "../pages/chat/SearchResultPage";
+import PodcastGeneratorPage from "./podcast/PodcastGeneratorPage";
+import PodcastLibraryPage from "./podcast/PocastLibraryPage";
+
 export {
   NotFoundPage,
   ChatDetailPage,
@@ -17,4 +20,6 @@ export {
   AuthenticationPage,
   ChatsPage,
   SearchResultPage,
+  PodcastGeneratorPage,
+  PodcastLibraryPage,
 };
