@@ -3,8 +3,8 @@ import {
   ArrowTopRightOnSquareIcon,
   BookOpenIcon,
 } from "@heroicons/react/24/outline";
-import useBookInfo from "../../../hooks/useBookInfo";
-import { buildLibraryUrl } from "../../../utils/isbn";
+import useBookInfo from "../../../../hooks/useBookInfo";
+import { buildLibraryUrl } from "../../../../utils/isbn";
 
 interface BookReferenceProps {
   isbn: string;

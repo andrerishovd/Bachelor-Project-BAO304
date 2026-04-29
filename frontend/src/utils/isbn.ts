@@ -52,10 +52,19 @@ export const extractISBNs = (text: string): string[] => {
 
 /**
  * Wraps ISBNs in italic markdown syntax.
- * Used to visually highlight ISBNs in chat messages without removing them.
+ * Used to visually highlight ISBNs in chat messages
+ *
+ * Skips ISBNs that appear inside URLs.
  */
 export const italicizeISBNs = (text: string): string => {
-  return text.replace(getISBNPattern(), (match) => `*${match}*`);
+  return text.replace(
+    /(https?:\/\/[^\s)>\]"]+)|(\b(?:ISBN[-: ]?)?(?:97[89][-\s]?)?(?:\d[-\s]?){9}[\dX]\b)/gi,
+    (match, url, isbn) => {
+      if (url) return url;
+      if (isbn) return `*${isbn}*`;
+      return match;
+    },
+  );
 };
 
 /**
