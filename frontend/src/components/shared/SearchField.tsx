@@ -39,36 +39,72 @@ const SearchField = forwardRef<HTMLInputElement>((props, ref) => {
 
   if (!isExtended) {
     return (
-      <button
-        onClick={handleSearchClick}
-        onKeyDown={handleKeyDown}
-        aria-label={t("accessibility:expandSidebarAndSearch")}
-      >
-        <MagnifyingGlassIcon className="my-1.5 inline-block size-4 shrink-0" />
-      </button>
+      <li>
+        <button
+          onClick={handleSearchClick}
+          onKeyDown={handleKeyDown}
+          aria-label={t("accessibility:expandSidebarAndSearch")}
+        >
+          <MagnifyingGlassIcon className="size-4 shrink-0" aria-hidden="true" />
+        </button>
+      </li>
     );
   }
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <label
-        className="input input-bordered flex items-center gap-2 w-full"
-        aria-label={t("accessibility:searchLabel")}
-      >
-        <MagnifyingGlassIcon className="my-1.5 inline-block size-4 shrink-0" />
-        <input
-          ref={inputRef}
-          type="search"
-          className="grow"
-          placeholder={t("search")}
+      {/* Input + søkeknapp på samme rad */}
+      <div className="flex items-center gap-2">
+        <label
+          className="input input-bordered flex items-center gap-2 flex-1"
           aria-label={t("accessibility:searchLabel")}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 150)}
-          onKeyDown={handleKeyDown}
-        />
-      </label>
+        >
+          <AnimatePresence>
+            {!isFocused && (
+              <motion.span
+                key="search-icon"
+                initial={{ opacity: 0, width: "auto" }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <MagnifyingGlassIcon
+                  className="size-4 shrink-0"
+                  aria-hidden="true"
+                />
+              </motion.span>
+            )}
+          </AnimatePresence>
+
+          <input
+            ref={inputRef}
+            type="search"
+            className="grow"
+            placeholder={t("search")}
+            aria-label={t("accessibility:searchLabel")}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+            onKeyDown={handleKeyDown}
+          />
+        </label>
+
+        {/* Søkeknapp til høyre som glir inn */}
+
+        <motion.button
+          onClick={handleSubmit}
+          className="btn btn-primary btn-sm shrink-0 overflow-hidden"
+          animate={{
+            width: isFocused ? "auto" : 0,
+            opacity: isFocused ? 1 : 0,
+            padding: isFocused ? undefined : 0,
+          }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+        >
+          <MagnifyingGlassIcon className="w-4 h-4 shrink-0" />
+        </motion.button>
+      </div>
 
       {/* Suggestions dropdown */}
       {showSuggestions && (
@@ -94,8 +130,6 @@ const SearchField = forwardRef<HTMLInputElement>((props, ref) => {
               </li>
             ))
           )}
-
-          {/* See all results */}
           <li className="border-t border-base-200">
             <button onClick={handleSubmit} className="text-sm text-primary">
               {t("seeAllResults", { query })}
@@ -103,21 +137,6 @@ const SearchField = forwardRef<HTMLInputElement>((props, ref) => {
           </li>
         </ul>
       )}
-      <AnimatePresence>
-        {isFocused && (
-          <motion.button
-            key="search-btn"
-            onClick={handleSubmit}
-            className="btn btn-primary btn-sm"
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: "auto", opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <MagnifyingGlassIcon className="w-4 h-4 shrink-0" />
-          </motion.button>
-        )}
-      </AnimatePresence>
     </div>
   );
 });

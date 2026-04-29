@@ -16,7 +16,6 @@
   prefersdark: false;
   color-scheme: light;
 
-  /* ✅ Test med HEX direkte */
   --color-base-100: #ffffff; /* HK hvit */
   --color-base-200: #f2f2f2; /* HK sort 5% */
   --color-base-300: #e6e6e6; /* HK sort 10% */
@@ -103,4 +102,5 @@
 
 @theme {
   --font-kristiania: "KristianiaTransform", sans-serif;
+  --test: lineHeight: 0.85;
 }

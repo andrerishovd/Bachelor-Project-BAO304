@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import ChangeLangBtn from "./ChangeLangBtn";
+import ChangeLangBtn from "./buttons/ChangeLangBtn";
 import ThemeControllerToggle from "./ThemeControllerToggle";
 import { useState } from "react";
 import { useKeyboard } from "../../hooks/useKeyboard";
@@ -24,12 +24,15 @@ const Navbar = () => {
   const getTitle = () => {
     if (chatId) {
       const chat = getChatById(chatId);
-      return chat?.title ?? t("common.chat");
+      return chat?.title ?? t("chat:chat");
     }
-    if (pathname === "/chats") return t("common:yourChats");
-    if (pathname === "/admin") return t("common:admin");
-    if (pathname === "/chat/new") return t("chat:newChat");
     if (pathname === "/") return t("common:homepage");
+    if (pathname === "/chat/new") return t("chat:newChat");
+    if (pathname === "/chats") return t("common:yourChats");
+    if (pathname === "/search") return t("common:search");
+    if (pathname === "/podcast/generate") return t("podcast:generatePodcast");
+    if (pathname === "/podcast/library") return t("podcast:library");
+    if (pathname === "/admin") return t("common:admin");
 
     return t("common:pageNotFound");
   };

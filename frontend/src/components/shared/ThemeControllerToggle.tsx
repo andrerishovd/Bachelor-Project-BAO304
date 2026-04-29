@@ -14,13 +14,15 @@ const ThemeControllerToggle = () => {
   return (
     <label className="flex items-center cursor-pointer gap-2">
       <Sun className="my-1.5 inline-block size-4 shrink-0" />
-      <input
-        type="checkbox"
-        className="toggle theme-controller"
-        checked={isDark}
-        onChange={toggleTheme}
-        aria-label={t("toggleDarkMode")}
-      />
+      <div className="tooltip tooltip-bottom" data-tip={t("toggleDarkMode")}>
+        <input
+          type="checkbox"
+          className="toggle theme-controller"
+          checked={isDark}
+          onChange={toggleTheme}
+          aria-label={t("toggleDarkMode")}
+        />
+      </div>
 
       <Moon className="my-1.5 inline-block size-4 shrink-0" />
     </label>

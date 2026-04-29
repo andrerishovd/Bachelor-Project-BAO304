@@ -39,3 +39,7 @@ application-env.properties
 ### DOWNLOAD DESTINATION ###
 /downloads/**
 /courseMaterial/**
+
+### OLD DOWNLOAD DESTINATION ###
+/src/main/resources/courseMaterial/**
+/src/main/resources/downloads/**

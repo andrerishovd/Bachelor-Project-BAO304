@@ -13,6 +13,8 @@
 import { useState } from "react";
 import { useDropzone, type DropzoneOptions } from "react-dropzone";
 
+export type UseFileUploadReturn = ReturnType<typeof useFileUpload>;
+
 export const useFileUpload = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 

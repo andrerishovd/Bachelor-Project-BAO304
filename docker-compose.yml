@@ -47,6 +47,20 @@ services:
     networks:
       - study-buddy
 
+  vector-db:
+    container_name: "vector-db"
+    image: pgvector/pgvector:pg16
+    ports:
+      - '5420:5432'
+    environment:
+      - "POSTGRES_USER=vectorserviceusername"
+      - "POSTGRES_PASSWORD=vectorservicepassword"
+      - "POSTGRES_DB=chat"
+    volumes:
+      - vector_data:/var/lib/postgresql/data
+    networks:
+      - study-buddy
+
   gateway:
     image: gateway:0.0.1-SNAPSHOT
     build:
@@ -72,6 +86,7 @@ services:
      COURSE_MATERIAL_PATH: /courseMaterial
     depends_on:
       - chat-db
+      - vector-db
     volumes:
       - ./backend/chat/downloads:/downloads:rw
       - ./backend/chat/courseMaterial:/courseMaterial:rw
@@ -147,3 +162,4 @@ volumes:
   chat_data:
   user_data:
   settings_data:
+  vector_data:
