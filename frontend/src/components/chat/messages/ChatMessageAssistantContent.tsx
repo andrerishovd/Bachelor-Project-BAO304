@@ -8,8 +8,11 @@ import {
 } from "@heroicons/react/24/outline";
 import useCopyToClipboard from "../../../hooks/useCopyToClipboard";
 import { formatMessageTime } from "../../../utils/formatTime";
-import BookReference from "./BookReference";
-import { extractISBNs, stripISBNs } from "../../../utils/isbn";
+import BookReference from "./reference/BookReference";
+import { extractISBNs, italicizeISBNs } from "../../../utils/isbn";
+import { extractUrls } from "../../../utils/url";
+import ExternalLinkReference from "./reference/ExternalLinkReference";
+import MermaidBlock from "./MermaidBlock";
 
 interface ChatMessageAssistantContentProps {
   message: IChatMessage;
@@ -30,8 +33,7 @@ const ChatMessageAssistantContent = ({
   const { copied, copyToClipboard } = useCopyToClipboard();
 
   const isbns = extractISBNs(message.body);
-  const cleanBody = isbns.length > 0 ? stripISBNs(message.body) : message.body;
-
+  const urls = extractUrls(message.body);
   /* console.log(message.body); */
 
   return (
@@ -41,8 +43,14 @@ const ChatMessageAssistantContent = ({
           components={{
             code({ className, children, ...props }) {
               const match = /language-(\w+)/.exec(className || "");
-              return match ? (
-                <CodeBlock language={match[1]}>
+              const language = match?.[1];
+
+              if (language === "mermaid") {
+                return <MermaidBlock chart={String(children).trim()} />;
+              }
+
+              return language ? (
+                <CodeBlock language={language}>
                   {String(children).replace(/\n$/, "")}
                 </CodeBlock>
               ) : (
@@ -53,12 +61,36 @@ const ChatMessageAssistantContent = ({
             },
           }}
         >
-          {cleanBody}
+          {italicizeISBNs(message.body)}
         </Markdown>
       </div>
 
+      {/* Shows information regarding litterature if the AI response contains an ISBN */}
+      {isbns.length > 0 && (
+        <div className="mt-4 pt-3 border-t border-base-300 flex flex-col gap-2">
+          <p className="text-xs text-base-content/40 font-medium">
+            {t("referencedBooks")}
+          </p>
+          {isbns.map((isbn) => (
+            <BookReference key={isbn} isbn={isbn} />
+          ))}
+        </div>
+      )}
+
+      {/* Shows information regarding litterature if the AI response contains an url */}
+      {urls.length > 0 && (
+        <div className="mt-4 pt-3 border-t border-base-300 flex flex-col gap-2">
+          <p className="text-xs text-base-content/40 font-medium">
+            {t("referencedLinks")}
+          </p>
+          {urls.map((url) => (
+            <ExternalLinkReference key={url} url={url} />
+          ))}
+        </div>
+      )}
+
       {/* Footer: timestamp left, copy button right */}
-      <div className="flex items-center justify-between mt-4 pt-3 border-t border-base-200 text-xs text-base-content/40">
+      <div className="flex items-center justify-between mt-4 pt-3 border-t border-base-300 text-xs text-base-content/50">
         <span>{formatMessageTime(message.localDateTime)}</span>
         <div
           className={`tooltip tooltip-top ${copied ? "tooltip-success" : ""}`}
@@ -66,7 +98,7 @@ const ChatMessageAssistantContent = ({
         >
           <button
             onClick={() => copyToClipboard(message.body)}
-            className="btn btn-xs btn-ghost opacity-60 hover:opacity-100"
+            className="btn btn-xs btn-ghost opacity-80 hover:opacity-100"
           >
             {copied ? (
               <ClipboardDocumentCheckIcon className="w-4 h-4" />
@@ -76,16 +108,6 @@ const ChatMessageAssistantContent = ({
           </button>
         </div>
       </div>
-      {isbns.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-base-200 flex flex-col gap-2">
-          <p className="text-xs text-base-content/40 font-medium">
-            {t("referencedBooks")}
-          </p>
-          {isbns.map((isbn) => (
-            <BookReference key={isbn} isbn={isbn} />
-          ))}
-        </div>
-      )}
     </div>
   );
 };

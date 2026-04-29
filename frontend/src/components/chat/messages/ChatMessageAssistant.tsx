@@ -24,7 +24,7 @@ const ChatMessageAssistant = ({
   return (
     <motion.div
       layout
-      className="w-full mb-4 bg-base-100 rounded-lg shadow-sm border border-base-200 overflow-hidden"
+      className="w-full mb-4 bg-base-200 rounded-lg shadow-sm border border-base-200 overflow-hidden"
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       <AnimatePresence mode="wait">

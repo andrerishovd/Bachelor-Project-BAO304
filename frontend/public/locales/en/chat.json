@@ -20,5 +20,10 @@
   "searchResults": "{{count}} results for \"{{query}}\"",
   "sendError": "Could not send message. Check that the backend is running.",
   "messageTooLong": "Message is too long. Maximum {{max}} characters allowed.",
-  "referencedBooks": "Referenced books"
+  "referencedBooks": "Referenced books",
+  "referencedLinks": "Referenced links",
+  "showDiagram": "Show diagram",
+  "diagram": "Diagram",
+  "code": "Code",
+  "diagramCode": "Diagram code"
 }

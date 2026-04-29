@@ -1,4 +1,9 @@
-// src/utils/isbn.ts
+/**
+ * Returns a new ISBN regex instance each time to avoid lastIndex issues with global flag.
+ * Matches ISBN-10 and ISBN-13 with or without hyphens, globally.
+ */
+const getISBNPattern = () =>
+  /\b(?:ISBN[-: ]?)?(?:97[89][-\s]?)?(?:\d[-\s]?){9}[\dX]\b/gi;
 
 /**
  * Validates an ISBN-10 number using checksum.
@@ -41,19 +46,32 @@ export const isValidISBN = (isbn: string): boolean => {
  * Supports ISBN-10 and ISBN-13 with or without hyphens.
  */
 export const extractISBNs = (text: string): string[] => {
-  const pattern = /\b(?:ISBN[-: ]?)?(?:97[89][-\s]?)?(?:\d[-\s]?){9}[\dX]\b/gi;
-  const matches = text.match(pattern) ?? [];
+  const matches = text.match(getISBNPattern()) ?? [];
   return [...new Set(matches.map(normalizeISBN).filter(isValidISBN))];
+};
+
+/**
+ * Wraps ISBNs in italic markdown syntax.
+ * Used to visually highlight ISBNs in chat messages
+ *
+ * Skips ISBNs that appear inside URLs.
+ */
+export const italicizeISBNs = (text: string): string => {
+  return text.replace(
+    /(https?:\/\/[^\s)>\]"]+)|(\b(?:ISBN[-: ]?)?(?:97[89][-\s]?)?(?:\d[-\s]?){9}[\dX]\b)/gi,
+    (match, url, isbn) => {
+      if (url) return url;
+      if (isbn) return `*${isbn}*`;
+      return match;
+    },
+  );
 };
 
 /**
  * Removes ISBNs from a text string.
  */
 export const stripISBNs = (text: string): string => {
-  return text
-    .replace(/\b(?:ISBN[-: ]?)?(?:97[89][-\s]?)?(?:\d[-\s]?){9}[\dX]\b/gi, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  return text.replace(getISBNPattern(), "").replace(/\s+/g, " ").trim();
 };
 
 /**
