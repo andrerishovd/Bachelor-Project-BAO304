@@ -6,6 +6,7 @@ import { useSidebar } from "../contexts/SidebarContext";
 import type { AppLayoutProps } from "../interfaces/shared/IAppLayoutProps";
 import { useMediaContext } from "../contexts/MediaContext";
 import FullPlayer from "../components/podcast/mediaplayer/FullPlayer";
+import useSettings from "../hooks/useSettings";
 
 // App layout acts as the viewport, showing page content between the frame of the Navbar and Sidebar.
 // Pages from pages/ are rendered inside the children prop.
@@ -13,6 +14,8 @@ import FullPlayer from "../components/podcast/mediaplayer/FullPlayer";
 const AppLayout = ({ children }: AppLayoutProps) => {
   const { isExtended, toggleSidebar } = useSidebar();
   const { episode, isExpanded } = useMediaContext();
+  useSettings();
+
   return (
     <div className="drawer lg:drawer-open">
       <input

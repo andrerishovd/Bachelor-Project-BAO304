@@ -18,12 +18,6 @@ const FontSizeSlider = () => {
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <label className="text-sm font-medium">{t("fontSize")}</label>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-base-content/60">{fontSize}px</span>
-          <button onClick={reset} className="btn btn-xs btn-ghost">
-            {t("reset")}
-          </button>
-        </div>
       </div>
 
       <div className="flex items-center gap-3">

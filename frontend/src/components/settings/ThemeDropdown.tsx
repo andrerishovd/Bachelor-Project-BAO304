@@ -1,26 +1,17 @@
 import { useTranslation } from "react-i18next";
 import { useThemeContext } from "../../contexts/ThemeContext";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { THEMES, FOLLOW_SYSTEM_KEY } from "../../config/themes";
 
 const ThemeDropdown = () => {
-  const { theme, setCustomTheme, followSystem } = useThemeContext();
-  const { t } = useTranslation("accessibility");
-  const themes = [
-    { value: "kristiania", label: "Kristiania" },
-    { value: "kristiania-dark", label: "Kristiania Mørk" },
-    /*     { value: "light", label: "Lys default" },
-    { value: "dark", label: "Mørk default" },
-    { value: "retro", label: "Retro" },
-    { value: "cyberpunk", label: "Cyberpunk" },
-    { value: "synthwave", label: "Synthwave" },
-    { value: "valentine", label: "Valentine" },
-    { value: "aqua", label: "Aqua" }, */
-  ];
+  const { theme, themeLabelKey, setCustomTheme, followSystem } =
+    useThemeContext();
+  const { t } = useTranslation("settings");
 
   return (
-    <div className="dropdown">
+    <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn m-1">
-        {t("theme")}
+        {t(themeLabelKey)}
         <ChevronDownIcon className="my-1.5 inline-block size-2 shrink-0" />
       </div>
       <ul
@@ -32,19 +23,19 @@ const ThemeDropdown = () => {
             type="radio"
             name="theme-dropdown"
             className="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Følg system"
+            aria-label={t("themeFollowSystem")}
             checked={theme === null}
             onChange={followSystem}
           />
         </li>
 
-        {themes.map(({ value, label }) => (
+        {THEMES.map(({ value, labelKey }) => (
           <li key={value}>
             <input
               type="radio"
               name="theme-dropdown"
               className="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-              aria-label={label}
+              aria-label={labelKey}
               value={value}
               checked={theme === value}
               onChange={() => setCustomTheme(value)}

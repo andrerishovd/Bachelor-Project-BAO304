@@ -4,6 +4,7 @@ import { msalConfig } from "../config/authConfig";
 import { MsalProvider } from "@azure/msal-react";
 import { useState, useEffect, type ReactNode } from "react";
 import useDelayedBoolean from "../hooks/useDelayedBoolean";
+import { UserService } from "../services/UserService";
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -31,11 +32,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     };
 
-    const callbackId = msalInstance.addEventCallback((event) => {
+    const callbackId = msalInstance.addEventCallback( async (event) => {
       if (event.eventType === EventType.LOGIN_SUCCESS) {
         const result = event.payload as AuthenticationResult;
         if (result.account) {
           msalInstance.setActiveAccount(result.account);
+
+          try {
+            const userId = await UserService.createOrGetUser(
+              result.accessToken
+            );
+            localStorage.setItem("internalUserId", userId);
+          } catch (err) {
+            console.error("Kunne ikke opprette/hente bruker:", err);
+          }
+
         }
       }
     });

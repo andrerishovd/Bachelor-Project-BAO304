@@ -1,5 +1,6 @@
 {
   "fontSize": "Font size",
+  "save": "Save",
   "reset": "Reset",
   "helpText": "You can edit settings here",
   "": "",
@@ -8,5 +9,19 @@
   "theme": "Theme",
   "language": "Language",
   "logout": "Log out",
-  "account": "Account"
+  "account": "Account",
+
+  "themeLight": "Kristiania Light",
+  "themeDark": "Kristiania Dark",
+  "themeFollowSystem": "Follow system",
+  "themeDefaultLight": "Light",
+  "themeDefaultDark": "Dark",
+  "themeRetro": "Retro",
+  "themeCyberpunk": "Cyberpunk",
+  "themeSynthwave": "Synthwave",
+  "themeValentine": "Valentine",
+  "themeAqua": "Aqua",
+
+  "languageNorwegian": "Norwegian",
+  "languageEnglish": "English"
 }
