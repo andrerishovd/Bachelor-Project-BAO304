@@ -9,7 +9,7 @@ import {
 import useCopyToClipboard from "../../../hooks/useCopyToClipboard";
 import { formatMessageTime } from "../../../utils/formatTime";
 import BookReference from "./BookReference";
-import { extractISBNs, stripISBNs } from "../../../utils/isbn";
+import { extractISBNs, italicizeISBNs } from "../../../utils/isbn";
 
 interface ChatMessageAssistantContentProps {
   message: IChatMessage;
@@ -30,7 +30,6 @@ const ChatMessageAssistantContent = ({
   const { copied, copyToClipboard } = useCopyToClipboard();
 
   const isbns = extractISBNs(message.body);
-  const cleanBody = isbns.length > 0 ? stripISBNs(message.body) : message.body;
 
   /* console.log(message.body); */
 
@@ -53,7 +52,7 @@ const ChatMessageAssistantContent = ({
             },
           }}
         >
-          {cleanBody}
+          {italicizeISBNs(message.body)}
         </Markdown>
       </div>
 

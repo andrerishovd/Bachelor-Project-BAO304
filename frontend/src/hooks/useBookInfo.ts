@@ -30,6 +30,8 @@ const useBookInfo = (isbn: string) => {
         const data = await res.json();
         const book = data[`ISBN:${isbn}`];
 
+        console.log("Open Library response:", data);
+
         if (book) {
           setInfo({
             isbn,
