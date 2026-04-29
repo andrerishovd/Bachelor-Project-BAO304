@@ -18,6 +18,21 @@ services:
     networks:
       - study-buddy
 
+  settings-db:
+    container_name: "settings-db"
+    image: postgres:17-alpine
+    ports:
+      - '5431:5432'
+    environment:
+      - "POSTGRES_USER=settingsserviceusername"
+      - "POSTGRES_PASSWORD=settingsservicepassword"
+      - "POSTGRES_DB=settings"
+    volumes:
+      - settings_data:/var/lib/postgresql/data
+    networks:
+      - study-buddy
+
+
   chat-db:
     container_name: "chat-db"
     image: postgres:17-alpine
@@ -69,7 +84,7 @@ services:
       context: ./backend/settings
     container_name: settings-service
     environment:
-      SPRING_PROFILES_ACTIVE: docker,consul
+      SPRING_PROFILES_ACTIVE: consul
       #SPRING_DATASOURCE_URL: jdbc:postgresql://settings-db:5432/settingsdb
       #SPRING_DATASOURCE_USERNAME: serviceuser
       #SPRING_DATASOURCE_PASSWORD: servicepwd
@@ -77,6 +92,8 @@ services:
       - "8030:8030"
     #depends_on:
     #  - user-db
+    depends_on:
+      - settings-db
     networks:
       - study-buddy
 
@@ -129,3 +146,4 @@ networks:
 volumes:
   chat_data:
   user_data:
+  settings_data:

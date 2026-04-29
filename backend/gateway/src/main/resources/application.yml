@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: gateway
+server:
+  port: 8010
+
+azure:
+  activedirectory:
+    host: https://login.microsoftonline.com
+    tenant-id: 6c4f8c71-3b78-4ca0-8562-d6d69c7f36d7
+    client-id: 42d48df1-2ab8-498a-8378-bd0e003d6f14
+    client-secret: QdY8Q~zgZmB73BMpc8Ve3xKvhOwvlPyDTzP2oaZI
+    issuer-uri: ${azure.activedirectory.host}/${azure.activedirectory.tenant-id}/discovery/v2.0/keys
