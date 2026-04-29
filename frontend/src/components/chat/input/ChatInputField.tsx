@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Send, Paperclip } from "tabler-icons-react";
-import { useFileUpload } from "../../hooks/useFileUpload";
+import { useFileUpload } from "../../../hooks/useFileUpload";
 import FilePreview from "./FilePreview";
-import type { IChatInputFieldProps } from "../../interfaces/chat/IChatInputFieldProps";
-import { ChatService } from "../../services/ChatService";
+import type { IChatInputFieldProps } from "../../../interfaces/chat/IChatInputFieldProps";
+import { ChatService } from "../../../services/ChatService";
 import { useNavigate } from "react-router-dom";
-import { useChatContext } from "../../contexts/ChatContext";
-import { useAlertContext } from "../../contexts/AlertContext";
+import { useChatContext } from "../../../contexts/ChatContext";
+import { useAlertContext } from "../../../contexts/AlertContext";
+import MessageLengthIndicator from "./MessageLengthIndicator";
+import { MAX_MESSAGE_LENGTH } from "../../../config/messageLimits";
 
 interface ExtendedChatInputFieldProps extends IChatInputFieldProps {
   isNewChat?: boolean;
@@ -36,7 +38,7 @@ const ChatInputField = ({
   const [message, setMessage] = useState("");
   const { t } = useTranslation("chat");
   const navigate = useNavigate();
-
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const {
     uploadedFiles,
     removeFile,
@@ -49,7 +51,7 @@ const ChatInputField = ({
 
   const handleSend = async () => {
     if (!message.trim() && uploadedFiles.length === 0) return;
-
+    if (message.length > MAX_MESSAGE_LENGTH) return;
     const trimmedMessage = message.trim();
     setMessage("");
     clearFiles();
@@ -102,11 +104,27 @@ const ChatInputField = ({
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
+  };
+
+  const handleTextareaResize = () => {
+    if (!textareaRef.current) return;
+    textareaRef.current.style.height = "auto";
+    textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+  };
+
+  // Allows only MAX_MESSAGE_LENGTH charachters in textarea
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length > MAX_MESSAGE_LENGTH) {
+      showError(t("messageTooLong", { max: MAX_MESSAGE_LENGTH }));
+      return;
+    }
+    setMessage(e.target.value);
+    handleTextareaResize();
   };
 
   return (
@@ -124,26 +142,31 @@ const ChatInputField = ({
       >
         <input {...getInputProps()} />
 
-        <input
-          type="text"
-          className="grow bg-transparent outline-none py-1"
-          placeholder={isDragActive ? t("dropFilesHere") : t("inputFieldHelpText")}
+        <textarea
+          ref={textareaRef}
+          className="grow bg-transparent outline-none py-1 resize-none overflow-y-auto min-h-[1.5rem] max-h-48"
+          placeholder={
+            isDragActive ? t("dropFilesHere") : t("inputFieldHelpText")
+          }
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={handleMessageChange}
           onKeyDown={handleKeyDown}
           disabled={isLoading}
+          rows={1}
         />
 
         {/* Attach button */}
-        <button
-          type="button"
-          className="btn btn-ghost btn-sm btn-circle"
-          onClick={openFilePicker}
-          aria-label={t("attachFile")}
-        >
-          <Paperclip className="size-5" aria-hidden="true" />
-        </button>
-
+        <div className="tooltip" data-tip={t("accessibility:attachFile")}>
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm btn-circle"
+            onClick={openFilePicker}
+            aria-label={t("attachFile")}
+          >
+            <Paperclip className="size-5" aria-hidden="true" />
+          </button>
+        </div>
+        <MessageLengthIndicator length={message.length} />
         {/* Send button */}
         {isLoading ? (
           <span className="loading loading-spinner loading-xs" />

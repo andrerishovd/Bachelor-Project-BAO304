@@ -1,19 +1,19 @@
-import type { IChatMessage } from "../../interfaces/chat/IChatMessage";
-import { formatMessageTime } from "../../utils/formatTime";
+import type { IChatMessage } from "../../../interfaces/chat/IChatMessage";
+import { formatMessageTime } from "../../../utils/formatTime";
 
-interface UserChatBubbleProps {
+interface ChatMessageUserProps {
   message: IChatMessage;
 }
 
 /**
- * UserChatBubble
+ * ChatMessageUser
  *
  * Renders a single user message aligned to the right.
  * Uses DaisyUI's primary color for the bubble.
  *
  * @property message - The user message to display
  */
-const UserChatBubble = ({ message }: UserChatBubbleProps) => {
+const ChatMessageUser = ({ message }: ChatMessageUserProps) => {
   return (
     <div className="flex flex-col items-end mb-4">
       <div className="bg-primary text-primary-content rounded-2xl rounded-tr-sm px-4 py-3 max-w-prose">
@@ -26,4 +26,4 @@ const UserChatBubble = ({ message }: UserChatBubbleProps) => {
   );
 };
 
-export default UserChatBubble;
+export default ChatMessageUser;

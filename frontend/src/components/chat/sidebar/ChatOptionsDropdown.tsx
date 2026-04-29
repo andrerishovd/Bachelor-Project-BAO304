@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
-import useDeleteChat from "../../hooks/useDeleteChat";
+import useDeleteChat from "../../../hooks/useDeleteChat";
 import { useEffect, useRef, useState } from "react";
-import EditChatTitleModal from "./EditChatTitleModal";
+import EditChatTitleModal from "../modals/EditChatTitleModal";
 
 interface ChatOptionsDropdownProps {
   chatId: string;
