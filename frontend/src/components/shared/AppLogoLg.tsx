@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 interface AppLogoProps {
   useKristianiaFont?: boolean;
-  stacked?: boolean; // om ordene skal stå over hverandre
+  stacked?: boolean;
 }
 
 /**
@@ -25,15 +25,16 @@ const AuthLogoLg = ({
   const fontClass = useKristianiaFont ? "font-kristiania" : "";
 
   /* appNameStacked = t("description.header").split(" ").map((word, i) */
-
+  // TODO Fix Logo
   return (
     <>
       {stacked ? (
         <h1
           className={`is-drawer-close:hidden text-5xl font-bold ${fontClass} flex flex-col`}
         >
-          <span>Study</span>
-          <span className="-mt-3.5">Buddy</span>
+          <span className="tracking-[-0.15em] ">Study</span>
+
+          <span className="-mt-3.5 tracking-[-0.15em]">Buddy</span>
         </h1>
       ) : (
         <h1 className={`is-drawer-close:hidden ${fontClass}`}>

@@ -6,16 +6,14 @@ import {
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 import useSearchChats from "../../hooks/useSearchChats";
-import type { IChat } from "../../interfaces/chat/IChat";
-import { formatLastMessageTime } from "../../utils/formatTime";
 import ChatListItem from "../../components/chat/ChatListItem";
 
 /**
  * SearchResultPage
  *
  * Displays search results based on the ?search= query parameter.
- * Requires an active search query to navigate here.
- * Allows refining the search directly on the page.
+ * Syncs the search query with the URL so results are shareable and bookmarkable.
+ * Allows refining the search directly on the page without navigating away.
  *
  * @route /search?search=query
  */
@@ -26,12 +24,12 @@ const SearchResultPage = () => {
   const initialQuery = searchParams.get("search") ?? "";
   const { query, setQuery, results } = useSearchChats();
 
-  // Sync query fra URL til hooken
+  // Sync URL query parameter to search hook on mount and when URL changes
   useEffect(() => {
     setQuery(initialQuery);
   }, [initialQuery]);
 
-  // Oppdater URL når man skriver uten debounce-delay
+  // Update both local state and URL when the user types
   const handleQueryChange = (value: string) => {
     setQuery(value);
     setSearchParams(value.trim() ? { search: value } : {});
@@ -39,13 +37,20 @@ const SearchResultPage = () => {
 
   return (
     <div className="flex flex-col h-full p-6 max-w-2xl mx-auto w-full">
-      {/* Header */}
+      {/* Header: back button and search input */}
       <div className="flex items-center gap-4 mb-6">
-        <button onClick={() => navigate(-1)} className="btn btn-sm btn-ghost">
+        <button
+          onClick={() => navigate(-1)}
+          className="btn btn-sm btn-ghost"
+          aria-label={t("common:back")}
+        >
           <ArrowLeftIcon className="w-4 h-4" />
         </button>
         <label className="input input-bordered flex items-center gap-2 flex-1">
-          <MagnifyingGlassIcon className="w-4 h-4 shrink-0 opacity-50" />
+          <MagnifyingGlassIcon
+            className="w-4 h-4 shrink-0 opacity-50"
+            aria-hidden="true"
+          />
           <input
             type="search"
             className="grow"
@@ -66,7 +71,7 @@ const SearchResultPage = () => {
 
       <div className="divider my-1" />
 
-      {/* Results */}
+      {/* Results list or empty state */}
       {results.length === 0 ? (
         <p className="text-base-content/50 text-sm px-4">
           {t("common:noResults")}

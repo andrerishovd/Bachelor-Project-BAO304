@@ -1,4 +1,3 @@
-// src/components/auth/AuthenticationForm.tsx
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/useAuth";
 import ChangeLangBtn from "../shared/buttons/ChangeLangBtn";

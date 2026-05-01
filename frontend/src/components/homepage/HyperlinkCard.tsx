@@ -8,11 +8,11 @@ interface HyperlinkItem {
 
 const LINKS: HyperlinkItem[] = [
   {
-    label: "Kristiania – Retningslinjer for bruk av KI i oppgaver",
+    label: "Kristiania - Retningslinjer for bruk av KI i oppgaver",
     url: "https://egms.service-now.com/csp?id=kb_article_view&sysparm_article=KB0010368",
   },
   {
-    label: "Kristiania – Kunstig intelligens og kildebruk",
+    label: "Kristiania - Kunstig intelligens og kildebruk",
     url: "https://www.kristiania.no/om-kristiania/biblioteket/skrive-og-henvise/kunstig-intelligens/",
   },
 ];
@@ -22,7 +22,7 @@ const LINKS: HyperlinkItem[] = [
  *
  * Displays a list of external links with an icon indicating
  * that the user will be redirected to another page.
- * Links are defined in the LINKS array for easy maintenance.
+ * Links are defined in the LINKS array for easier maintenance.
  */
 const HyperlinkCard = () => {
   const { t } = useTranslation("dashboard");

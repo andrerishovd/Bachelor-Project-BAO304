@@ -1,4 +1,3 @@
-// src/pages/podcast/PodcastLibraryPage.tsx
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useMediaContext } from "../../contexts/MediaContext";
@@ -6,14 +5,15 @@ import type { IPodcast } from "../../interfaces/podcast/IPodcast";
 import { PlayIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { formatTime, formatLastMessageTime } from "../../utils/formatTime";
 
-// TODO: bytt ut med ekte data fra PodcastService når API er klart
+// TODO: Replace with real data from PodcastService when API is ready
 const MOCK_PODCASTS: IPodcast[] = [];
 
 /**
  * PodcastLibraryPage
  *
- * Displays all generated podcasts.
- * Allows playback directly from the list.
+ * Displays all generated podcasts in a scrollable list.
+ * Allows the user to play any episode directly from the list.
+ * Shows an empty state with a call-to-action when no podcasts exist.
  *
  * @route /podcast/library
  */
@@ -22,6 +22,10 @@ const PodcastLibraryPage = () => {
   const navigate = useNavigate();
   const { play } = useMediaContext();
 
+  /**
+   * Starts playback of the selected podcast episode via MediaContext.
+   * @param podcast - The podcast episode to play
+   */
   const handlePlay = (podcast: IPodcast) => {
     play({
       id: podcast.id,
@@ -51,6 +55,7 @@ const PodcastLibraryPage = () => {
         {/* Content */}
         <div className="flex-1 min-h-0 overflow-y-auto">
           {MOCK_PODCASTS.length === 0 ? (
+            // Empty state
             <div className="flex flex-col items-center justify-center h-full gap-4 text-base-content/50">
               <p>{t("emptyLibrary")}</p>
               <button
@@ -61,6 +66,7 @@ const PodcastLibraryPage = () => {
               </button>
             </div>
           ) : (
+            // Podcast list
             <ul className="flex flex-col gap-1 p-4">
               {MOCK_PODCASTS.map((podcast) => (
                 <li
@@ -90,6 +96,7 @@ const PodcastLibraryPage = () => {
                   <button
                     onClick={() => handlePlay(podcast)}
                     className="btn btn-circle btn-sm btn-ghost"
+                    aria-label={`Play ${podcast.title}`}
                   >
                     <PlayIcon className="w-4 h-4" />
                   </button>

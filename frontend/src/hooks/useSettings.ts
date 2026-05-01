@@ -1,6 +1,4 @@
-// src/hooks/useSettings.ts
 import { useEffect, useCallback } from "react";
-import { useAuth } from "./useAuth";
 import {
   SettingsService,
   LANGUAGE_MAP,
@@ -13,8 +11,20 @@ import { useTranslation } from "react-i18next";
 /**
  * useSettings
  *
- * Loads settings from backend on mount and saves them when they change.
- * Syncs theme, font size and language between frontend and backend.
+ * Custom hook for loading and saving user settings via the backend API.
+ * Synchronizes theme, font size, and language between the frontend state
+ * and the backend on mount and on save.
+ *
+ * Settings are loaded automatically when the hook mounts, provided that
+ * an internal user ID exists in localStorage (set on LOGIN_SUCCESS).
+ *
+ * @returns
+ * - saveSettings: Persists current settings to the backend
+ * - resetSettings: Resets all settings to defaults and saves them
+ *
+ * @example
+ * const { saveSettings, resetSettings } = useSettings();
+ * await saveSettings(); // call on modal close with save
  */
 const useSettings = () => {
   const userId = localStorage.getItem("internalUserId");
@@ -22,7 +32,7 @@ const useSettings = () => {
   const { theme, setCustomTheme, followSystem } = useThemeContext();
   const { i18n } = useTranslation();
 
-  // Last inn innstillinger fra backend ved mount
+  // Load settings from backend on mount
   useEffect(() => {
     if (!userId) return;
 
@@ -30,7 +40,7 @@ const useSettings = () => {
       try {
         const settings = await SettingsService.getSettings(Number(userId));
 
-        // Sett tema
+        // Apply theme
         const frontendTheme = SettingsService.fromApiTheme(settings.theme);
         if (frontendTheme) {
           setCustomTheme(frontendTheme);
@@ -38,24 +48,27 @@ const useSettings = () => {
           followSystem();
         }
 
-        // Sett font size
+        // Apply font size
         setFontSize(Number(settings.fontSize));
 
-        // Sett språk
+        // Apply language
         const lang =
           LANGUAGE_MAP_REVERSE[
             settings.language as keyof typeof LANGUAGE_MAP_REVERSE
           ];
         if (lang) i18n.changeLanguage(lang);
       } catch (err) {
-        console.error("Kunne ikke laste innstillinger:", err);
+        console.error("Failed to load settings:", err);
       }
     };
 
     load();
   }, [userId]);
 
-  // Lagre innstillinger til backend
+  /**
+   * Persists the current theme, font size, and language to the backend.
+   * Should be called when the user explicitly saves their settings.
+   */
   const saveSettings = useCallback(async () => {
     if (!userId) return;
 
@@ -69,10 +82,14 @@ const useSettings = () => {
           "norwegian",
       });
     } catch (err) {
-      console.error("Kunne ikke lagre innstillinger:", err);
+      console.error("Failed to save settings:", err);
     }
   }, [userId, fontSize, theme, i18n.language]);
 
+  /**
+   * Resets all settings to their defaults and persists them to the backend.
+   * Defaults: font size 16px, follow system theme, Norwegian language.
+   */
   const resetSettings = useCallback(async () => {
     reset();
     followSystem();

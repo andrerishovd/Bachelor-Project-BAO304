@@ -1,4 +1,3 @@
-// src/components/settings/LanguageDropdown.tsx
 import { useTranslation } from "react-i18next";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { LANGUAGES } from "../../config/languages";

@@ -1,4 +1,3 @@
-// src/pages/podcast/PodcastGeneratorPage.tsx
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFileUpload } from "../../hooks/useFileUpload";
@@ -20,7 +19,10 @@ const DEFAULT_SETTINGS: PodcastSettings = {
  * PodcastGeneratorPage
  *
  * Two-panel layout for podcast generation.
- * Left: content selection, Right: settings.
+ * Left panel: content selection (notes, file uploads, chat selection).
+ * Right panel: podcast settings (length, tone, speakers, language).
+ *
+ * Plays a mock episode on generation until the backend API is ready.
  *
  * @route /podcast/generate
  */
@@ -49,27 +51,16 @@ const PodcastGeneratorPage = () => {
     });
   };
 
-  /*   const handleGenerate = async () => {
-    setIsGenerating(true);
-    try {
-      // TODO: koble til PodcastService når API er klart
-      console.log({
-        notes,
-        uploadedFiles: fileUpload.uploadedFiles,
-        selectedChatIds: [...selectedChatIds],
-        settings,
-      });
-    } finally {
-      setIsGenerating(false);
-    }
-  }; */
-
+  /**
+   * Handles podcast generation.
+   * TODO: Replace mock episode with actual PodcastService API call when ready.
+   */
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
       const mockEpisode = {
         id: `podcast-${Date.now()}`,
-        title: notes.trim() || "Min podcast",
+        title: notes.trim() || "My podcast",
         podcastName: "Study Buddy",
         audioUrl:
           "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -77,7 +68,7 @@ const PodcastGeneratorPage = () => {
       };
 
       play(mockEpisode);
-      toggleExpanded(); // Åpner FullPlayer automatisk
+      toggleExpanded();
     } catch {
       showError(t("generateError"));
     } finally {
@@ -96,7 +87,7 @@ const PodcastGeneratorPage = () => {
           </p>
         </div>
 
-        {/* Side by side */}
+        {/* Side by side panels */}
         <div className="flex-1 min-h-0">
           <div className="grid grid-cols-2 divide-x divide-base-300 h-full">
             <PodcastContentStep
