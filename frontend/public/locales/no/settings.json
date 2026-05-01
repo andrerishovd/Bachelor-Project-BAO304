@@ -1,5 +1,6 @@
 {
   "fontSize": "Skriftstørrelse",
+  "save": "Lagre",
   "reset": "tilbakestill",
 
   "helpText": "Her kan du gjøre endringer",
@@ -8,5 +9,19 @@
   "theme": "Tema",
   "language": "Språk",
   "logout": "Logg ut",
-  "account": "Konto"
+  "account": "Konto",
+
+  "themeLight": "Kristiania Lys",
+  "themeDark": "Kristiania Mørk",
+  "themeFollowSystem": "Følg system",
+  "themeDefaultLight": "Lys",
+  "themeDefaultDark": "Mørk",
+  "themeRetro": "Retro",
+  "themeCyberpunk": "Cyberpunk",
+  "themeSynthwave": "Synthwave",
+  "themeValentine": "Valentine",
+  "themeAqua": "Aqua",
+
+  "languageNorwegian": "Norsk",
+  "languageEnglish": "Engelsk"
 }

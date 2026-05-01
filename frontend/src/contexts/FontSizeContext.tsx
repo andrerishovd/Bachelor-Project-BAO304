@@ -47,15 +47,17 @@ export const FontSizeContext = createContext<IFontSizeContext | null>(null);
  * @param children - Child components that need access to font size state
  */
 export const FontSizeProvider: FC<IProps> = ({ children }) => {
-  const [fontSize, setFontSizeState] = useState<number>(() => {
+ /* const [fontSize, setFontSizeState] = useState<number>(() => {
     const stored = localStorage.getItem("fontSize");
     return stored ? Number(stored) : DEFAULT_FONT_SIZE;
-  });
+  }); */
+
+  const [fontSize, setFontSizeState] = useState<number>(DEFAULT_FONT_SIZE);
 
   // Applies font size to <html> so all rem units scale with it
   useEffect(() => {
     document.documentElement.style.fontSize = `${fontSize}px`;
-    localStorage.setItem("fontSize", String(fontSize));
+    /* localStorage.setItem("fontSize", String(fontSize)); */
   }, [fontSize]);
 
   const setFontSize = useCallback((size: number) => {

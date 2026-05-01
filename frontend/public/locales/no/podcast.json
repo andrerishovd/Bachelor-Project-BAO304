@@ -32,5 +32,6 @@
   "generateError": "Kunne ikke generere podcast. Prøv igjen.",
   "library": "Podcastbibliotek",
   "emptyLibrary": "Du har ingen genererte podcaster enda",
-  "generateFirst": "Generer din første podcast"
+  "generateFirst": "Generer din første podcast",
+  "noChats": "Ingen samtaler"
 }

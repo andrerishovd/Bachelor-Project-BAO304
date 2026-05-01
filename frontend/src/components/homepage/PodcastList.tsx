@@ -1,4 +1,4 @@
-// Må fylles med ekte data.
+// Has to be filled with real data
 
 import { PlayIcon } from "@heroicons/react/24/outline";
 

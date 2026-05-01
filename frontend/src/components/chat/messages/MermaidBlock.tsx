@@ -11,6 +11,27 @@ interface MermaidBlockProps {
 
 type ViewMode = "diagram" | "code";
 
+/**
+ * MermaidBlock
+ *
+ * Renders a Mermaid diagram from a fenced code block with ```mermaid syntax.
+ *
+ * Lazy-renders the diagram only when the user expands the collapse component.
+ * This is a workaround for a bug we experienced where SVG dimensions are
+ * calculated dynamically based on the container width, causing layout shifts
+ * and content jumping in the message thread whenever the page layout changed
+ * (e.g. sending a new message, opening the options menu). By deferring rendering
+ * until the user explicitly opens the diagram, the layout shift is avoided entirely.
+ *
+ * Supports toggling between diagram view and raw code view.
+ * Adapts the Mermaid theme to match the current DaisyUI theme.
+ *
+ * @property chart - The raw Mermaid diagram definition string
+ *
+ * @example
+ * <MermaidBlock chart="graph TD; A-->B" />
+ */
+
 const MermaidBlock = ({ chart }: MermaidBlockProps) => {
   const { theme } = useThemeContext();
   const { t } = useTranslation("chat");
@@ -75,7 +96,7 @@ const MermaidBlock = ({ chart }: MermaidBlockProps) => {
             ) : svg ? (
               <div
                 className="flex justify-center"
-                // Gjør diagrammet tilgjengelig for skjermlesere
+                // Makes the diagram accessible to screen readers
                 role="img"
                 aria-label={`Mermaid diagram: ${chart}`}
                 dangerouslySetInnerHTML={{ __html: svg }}
@@ -87,7 +108,7 @@ const MermaidBlock = ({ chart }: MermaidBlockProps) => {
         {/* Code view */}
         {viewMode === "code" && (
           <div
-            // Skjermlesere kan lese koden direkte
+            // Screen readers can read the code directly
             role="region"
             aria-label={t("diagramCode")}
           >

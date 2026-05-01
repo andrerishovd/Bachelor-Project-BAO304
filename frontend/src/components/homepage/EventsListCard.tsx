@@ -1,4 +1,10 @@
 import { useTranslation } from "react-i18next";
+import {
+  formatCalendarDate,
+  formatCalendarTime,
+  formatDaysUntil,
+  getDaysUntil,
+} from "../../utils/formatTime";
 
 interface IEvent {
   id: number;
@@ -6,71 +12,72 @@ interface IEvent {
   date: Date;
 }
 
-// ✅ Hjelpefunksjon for å beregne dager til hendelse
-const getDaysUntil = (date: Date): number => {
-  const now = new Date();
-  const diff = date.getTime() - now.getTime();
-  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+/**
+ * Returns a Tailwind color class based on urgency.
+ * - Red: today or tomorrow
+ * - Yellow: within 3 days
+ * - Green: more than 3 days away
+ *
+ * @param daysUntil - Number of days until the event
+ */
+const getUrgencyStyle = (daysUntil: number): string => {
+  if (daysUntil <= 1) return "text-error";
+  if (daysUntil <= 3) return "text-warning";
+  return "text-success";
 };
 
-// ✅ Fargekoding basert på dager til hendelse
-const getUrgencyStyle = (daysUntil: number) => {
-  if (daysUntil <= 1) return "text-error"; // I dag / i morgen
-  if (daysUntil <= 3) return "text-warning"; // Innen 3 dager
-  return "text-success"; // God tid
-};
-
-// ✅ Formatert dato og tid
-const formatDate = (date: Date): string => {
-  return date.toLocaleDateString("nb-NO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
-
-const formatTime = (date: Date): string => {
-  return date.toLocaleTimeString("nb-NO", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
-
-const formatDaysUntil = (daysUntil: number): string => {
-  if (daysUntil < 0) return "Passert";
-  if (daysUntil === 0) return "I dag";
-  if (daysUntil === 1) return "I morgen";
-  return `Om ${daysUntil} dager`;
-};
-
-// Mock data - bytt ut med Canvas API senere
+/**
+ * TODO: Replace with real data from the Canvas API when integration is ready.
+ * @see https://canvas.instructure.com/doc/api/
+ */
 const mockEvents: IEvent[] = [
   {
     id: 1,
     title: "Forelesning PS300",
-    date: new Date(Date.now() + 1000 * 60 * 60 * 2), // Om 2 timer
+    date: new Date(Date.now() + 1000 * 60 * 60 * 2),
   },
   {
     id: 2,
     title: "Innlevering BAO304",
-    date: new Date(Date.now() + 1000 * 60 * 60 * 24), // I morgen
+    date: new Date(Date.now() + 1000 * 60 * 60 * 24),
   },
   {
     id: 3,
     title: "Gruppearbeid",
-    date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 3), // Om 3 dager
+    date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 3),
   },
   {
     id: 4,
     title: "Eksamen PG5602",
-    date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14), // Om 14 dager
+    date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
   },
 ];
 
-const EventsListCard = () => {
-  const { t } = useTranslation("common");
+/**
+ * EventsListCard
+ *
+ * Displays a list of upcoming events with color-coded urgency indicators.
+ * Events are color-coded based on how soon they occur:
+ * - Red: today or tomorrow
+ * - Yellow: within 3 days
+ * - Green: more than 3 days away
+ *
+ * Shows a warning badge when one or more events are happening soon.
+ *
+ * TODO: Replace mock data with real events from the Canvas API.
+ *
+ * @example
+ * <EventsListCard />
+ *
+ * @deprecated Was deemed unesessary for the intended userbase (web based student),
+ * but has been kept if it the solution is to be further developed and opened for a wider userbase
+ * Would also need further integration with TimeEdit or Canvas Calendar to be of any use.
+ *
+ */
 
-  // ✅ Tell hendelser som skjer snart (innen 3 dager)
+const EventsListCard = () => {
+  const { t } = useTranslation(["common", "dashboard"]);
+
   const urgentCount = mockEvents.filter(
     (e) => getDaysUntil(e.date) <= 3,
   ).length;
@@ -78,15 +85,17 @@ const EventsListCard = () => {
   return (
     <div className="card card-border w-96 bg-base-100 shadow-sm">
       <div className="card-body">
-        {/* Badge showing urgent tasks. */}
+        {/* Badge showing number of urgent upcoming events */}
         {urgentCount > 0 && (
           <span className="badge badge-xs badge-warning">
-            {urgentCount} hendelse{urgentCount > 1 ? "r" : ""} snart
+            {t("dashboard:urgentEvents", { count: urgentCount })}
           </span>
         )}
 
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-bold">{t("upcomingEvents")}</h2>
+          <h2 className="text-3xl font-bold">
+            {t("dashboard:upcomingEvents")}
+          </h2>
         </div>
 
         <ul className="mt-6 flex flex-col gap-3 text-xs">
@@ -99,7 +108,7 @@ const EventsListCard = () => {
                 key={event.id}
                 className="flex items-center justify-between gap-2"
               >
-                {/* ✅ Farget ikon basert på haster */}
+                {/* Calendar icon color-coded by urgency */}
                 <div className="flex items-center gap-2 flex-1">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -119,13 +128,14 @@ const EventsListCard = () => {
                   <span className="font-medium">{event.title}</span>
                 </div>
 
-                {/* Date and time */}
+                {/* Date, time and relative urgency label */}
                 <div className="flex flex-col items-end gap-0.5 shrink-0">
                   <span className="text-base-content/70">
-                    {formatDate(event.date)} {formatTime(event.date)}
+                    {formatCalendarDate(event.date)}{" "}
+                    {formatCalendarTime(event.date)}
                   </span>
                   <span className={`font-semibold ${urgencyStyle}`}>
-                    {formatDaysUntil(daysUntil)}
+                    {formatDaysUntil(daysUntil, t)}
                   </span>
                 </div>
               </li>
@@ -134,7 +144,9 @@ const EventsListCard = () => {
         </ul>
 
         <div className="mt-6">
-          <button className="btn btn-primary btn-block">{t("seeAll")}</button>
+          <button className="btn btn-primary btn-block">
+            {t("common:seeAll")}
+          </button>
         </div>
       </div>
     </div>

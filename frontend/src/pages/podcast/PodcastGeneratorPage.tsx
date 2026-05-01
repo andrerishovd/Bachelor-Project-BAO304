@@ -1,4 +1,3 @@
-// src/pages/podcast/PodcastGeneratorPage.tsx
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useFileUpload } from "../../hooks/useFileUpload";
@@ -8,6 +7,8 @@ import PodcastSettingsStep, {
 } from "../../components/podcast/generate/PodcastSettingsStep";
 import { useMediaContext } from "../../contexts/MediaContext";
 import { useAlertContext } from "../../contexts/AlertContext";
+import PageHeader from "../../components/shared/PageHeader";
+import PageContainer from "../../components/shared/PageContainer";
 
 const DEFAULT_SETTINGS: PodcastSettings = {
   length: "medium",
@@ -20,7 +21,10 @@ const DEFAULT_SETTINGS: PodcastSettings = {
  * PodcastGeneratorPage
  *
  * Two-panel layout for podcast generation.
- * Left: content selection, Right: settings.
+ * Left panel: content selection (notes, file uploads, chat selection).
+ * Right panel: podcast settings (length, tone, speakers, language).
+ *
+ * Plays a mock episode on generation until the backend API is ready.
  *
  * @route /podcast/generate
  */
@@ -49,27 +53,16 @@ const PodcastGeneratorPage = () => {
     });
   };
 
-  /*   const handleGenerate = async () => {
-    setIsGenerating(true);
-    try {
-      // TODO: koble til PodcastService når API er klart
-      console.log({
-        notes,
-        uploadedFiles: fileUpload.uploadedFiles,
-        selectedChatIds: [...selectedChatIds],
-        settings,
-      });
-    } finally {
-      setIsGenerating(false);
-    }
-  }; */
-
+  /**
+   * Handles podcast generation.
+   * TODO: Replace mock episode with actual PodcastService API call when ready.
+   */
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
       const mockEpisode = {
         id: `podcast-${Date.now()}`,
-        title: notes.trim() || "Min podcast",
+        title: notes.trim() || "My podcast",
         podcastName: "Study Buddy",
         audioUrl:
           "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -77,7 +70,7 @@ const PodcastGeneratorPage = () => {
       };
 
       play(mockEpisode);
-      toggleExpanded(); // Åpner FullPlayer automatisk
+      toggleExpanded();
     } catch {
       showError(t("generateError"));
     } finally {
@@ -86,49 +79,45 @@ const PodcastGeneratorPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden items-center">
-      <div className="flex flex-col h-full overflow-hidden w-full max-w-5xl">
-        {/* Header */}
-        <div className="border-b border-base-300 p-4 shrink-0">
-          <h1 className="text-2xl font-bold">{t("generatePodcast")}</h1>
-          <p className="text-sm text-base-content/60 mt-1">
-            {t("generateDescription")}
-          </p>
-        </div>
+    <PageContainer maxWidth="5xl">
+      {/* Header */}
+      <PageHeader
+        title={t("generatePodcast")}
+        description={t("generateDescription")}
+      />
 
-        {/* Side by side */}
-        <div className="flex-1 min-h-0">
-          <div className="grid grid-cols-2 divide-x divide-base-300 h-full">
-            <PodcastContentStep
-              notes={notes}
-              onNotesChange={setNotes}
-              selectedChatIds={selectedChatIds}
-              onToggleChat={toggleChat}
-              fileUpload={fileUpload}
-            />
-            <PodcastSettingsStep settings={settings} onChange={setSettings} />
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-base-300 p-4 shrink-0 flex justify-end">
-          <button
-            className="btn btn-primary"
-            disabled={!hasContent || isGenerating}
-            onClick={handleGenerate}
-          >
-            {isGenerating ? (
-              <>
-                <span className="loading loading-spinner loading-xs" />
-                {t("generating")}
-              </>
-            ) : (
-              t("generate")
-            )}
-          </button>
+      {/* Side by side panels */}
+      <div className="flex-1 min-h-0">
+        <div className="grid grid-cols-2 divide-x divide-base-300 h-full">
+          <PodcastContentStep
+            notes={notes}
+            onNotesChange={setNotes}
+            selectedChatIds={selectedChatIds}
+            onToggleChat={toggleChat}
+            fileUpload={fileUpload}
+          />
+          <PodcastSettingsStep settings={settings} onChange={setSettings} />
         </div>
       </div>
-    </div>
+
+      {/* Footer */}
+      <div className="border-t border-base-300 p-4 shrink-0 flex justify-end">
+        <button
+          className="btn btn-primary"
+          disabled={!hasContent || isGenerating}
+          onClick={handleGenerate}
+        >
+          {isGenerating ? (
+            <>
+              <span className="loading loading-spinner loading-xs" />
+              {t("generating")}
+            </>
+          ) : (
+            t("generate")
+          )}
+        </button>
+      </div>
+    </PageContainer>
   );
 };
 

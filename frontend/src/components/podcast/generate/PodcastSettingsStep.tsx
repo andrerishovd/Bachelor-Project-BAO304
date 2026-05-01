@@ -1,4 +1,3 @@
-// src/pages/podcast/PodcastSettingsStep.tsx
 import { useTranslation } from "react-i18next";
 
 export type PodcastLength = "short" | "medium" | "long";

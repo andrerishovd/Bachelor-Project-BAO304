@@ -1,4 +1,3 @@
-// src/hooks/useBookInfo.ts
 import { useState, useEffect } from "react";
 
 export interface IBookInfo {
@@ -41,7 +40,7 @@ const useBookInfo = (isbn: string) => {
           });
         }
       } catch {
-        // Fallback – vis kun ISBN og lenke
+        // Fallback - only show ISBN and url
       } finally {
         setIsLoading(false);
       }

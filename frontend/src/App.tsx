@@ -35,21 +35,17 @@ import { MediaProvider } from "./contexts/MediaContext";
 
 function App() {
   return (
-    <>
-      <ThemeProvider>
-        <MediaProvider>
-          <FontSizeProvider>
-            <AlertProvider>
-              <SidebarProvider>
-                <ChatProvider>
-                  <AppRouting />
-                </ChatProvider>
-              </SidebarProvider>
-            </AlertProvider>
-          </FontSizeProvider>
-        </MediaProvider>
-      </ThemeProvider>
-    </>
+    <ThemeProvider>
+      <MediaProvider>
+        <FontSizeProvider>
+          <SidebarProvider>
+            <ChatProvider>
+              <AppRouting />
+            </ChatProvider>
+          </SidebarProvider>
+        </FontSizeProvider>
+      </MediaProvider>
+    </ThemeProvider>
   );
 }
 

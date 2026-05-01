@@ -135,7 +135,7 @@ export const AlertProvider: FC<IProps> = ({ children }) => {
     >
       {children}
 
-      {/* Global alert banner - renders at the top of the screen when active */}
+      {/* Global alert banner, renders at the top of the screen when active */}
       {alert && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 min-w-80 max-w-lg">
           <div

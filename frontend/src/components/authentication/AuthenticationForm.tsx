@@ -1,4 +1,3 @@
-// src/components/auth/AuthenticationForm.tsx
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/useAuth";
 import ChangeLangBtn from "../shared/buttons/ChangeLangBtn";
@@ -7,10 +6,10 @@ import canvasLogo from "../../assets/canvas-logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { motion } from "motion/react";
-import AppLogo from "../shared/AppLogoSm";
-import AppLogoLg from "../shared/AppLogoLg";
+
 import { useState } from "react";
 import PrivacyModal from "./PrivacyModal";
+import AppLogoLg from "../shared/AppLogoLg";
 
 // Feature flags, set to true or false depending on which login method should be available.
 const allowEmailSignIn = false;
@@ -63,7 +62,7 @@ const AuthenticationForm = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
         >
-          <AppLogoLg useKristianiaFont stacked />
+          <AppLogoLg />
           <p className="py-6">{t("description.info")}</p>
         </motion.div>
 
