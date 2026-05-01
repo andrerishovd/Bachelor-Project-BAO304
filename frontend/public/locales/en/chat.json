@@ -25,5 +25,7 @@
   "showDiagram": "Show diagram",
   "diagram": "Diagram",
   "code": "Code",
-  "diagramCode": "Diagram code"
+  "diagramCode": "Diagram code",
+  "fileUploaded": "{{name}} uploaded successfully",
+  "fileUploadError": "Failed to upload file. Please try again."
 }

@@ -174,4 +174,28 @@ export class ChatService {
       throw new Error(`Could not delete message ${messageId}.`);
     }
   }
+
+  /**
+   * Uploads a file to the backend vector database.
+   * The file content is indexed and can be referenced in subsequent messages.
+   *
+   * Note: Images are accepted but only their text content is processed.
+   * PDFs with images will only have their text content extracted.
+   *
+   * @param file - The file to upload
+   */
+  static async uploadFile(file: File): Promise<void> {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      await apiClient.post("/chat/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      throw new Error(`Could not upload file ${file.name}.`);
+    }
+  }
 }

@@ -1,3 +1,8 @@
+import { useState } from "react";
+import { useDropzone, type DropzoneOptions } from "react-dropzone";
+import { FILE_UPLOAD_CONFIG } from "../config/fileupload.config";
+export type UseFileUploadReturn = ReturnType<typeof useFileUpload>;
+
 /**
  * hook for uploading files
  * uses react-dropzone in order to give the user:
@@ -10,11 +15,6 @@
  *
  **/
 
-import { useState } from "react";
-import { useDropzone, type DropzoneOptions } from "react-dropzone";
-
-export type UseFileUploadReturn = ReturnType<typeof useFileUpload>;
-
 export const useFileUpload = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
@@ -24,13 +24,7 @@ export const useFileUpload = () => {
     },
     noClick: true,
     noKeyboard: true,
-    accept: {
-      "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"],
-      "application/pdf": [".pdf"],
-      "text/*": [".txt", ".md"],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        [".docx"],
-    },
+    accept: FILE_UPLOAD_CONFIG.acceptedTypes,
   };
 
   const { getRootProps, getInputProps, isDragActive, open } =
