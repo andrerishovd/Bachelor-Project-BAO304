@@ -12,9 +12,19 @@ import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.ai.vectorstore.VectorStore;
+
+import java.time.Duration;
+
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestClient;
 
 
 import org.springframework.ai.document.Document;
@@ -26,6 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,8 +77,18 @@ public class AiService {
             .baseUrl(baseUrl)
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .requestFactory(customRequestFactory())
             .build();
         this.fileService = fileService;
+    }
+
+    private ClientHttpRequestFactory customRequestFactory() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+
+        factory.setConnectTimeout(Duration.ofMillis(1000));
+        factory.setReadTimeout(Duration.ofMillis(120000));
+
+        return factory;
     }
 
     /*
@@ -274,7 +295,7 @@ public class AiService {
         SearchRequest searchRequest = SearchRequest.builder()
                 .query(userMessage)
                 .similarityThreshold(0.2d)
-                .topK(10)
+                .topK(30)
                 .build();
 
         List<Document> documents = vectorStore.similaritySearch(searchRequest);

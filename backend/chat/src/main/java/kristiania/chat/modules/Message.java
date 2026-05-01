@@ -18,7 +18,7 @@ public class Message {
     @Column(name = "message_id")
     private Long id;
 
-    @Column(name = "body", length = 16000)
+    @Column(name = "body", length = 100000)
     private String body;
 
     @Column(name = "local_date_time")
