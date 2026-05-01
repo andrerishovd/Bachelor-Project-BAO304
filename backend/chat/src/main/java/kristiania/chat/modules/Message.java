@@ -1,6 +1,7 @@
 package kristiania.chat.modules;
 
 import jakarta.persistence.*;
+import kristiania.chat.encryption.EncryptedStringConverter;
 import kristiania.chat.enums.SenderType;
 import lombok.*;
 
@@ -18,6 +19,7 @@ public class Message {
     @Column(name = "message_id")
     private Long id;
 
+    @Convert(converter = EncryptedStringConverter.class)
     @Column(name = "body", length = 100000)
     private String body;
 
@@ -26,6 +28,7 @@ public class Message {
 
     @Column(name = "sender_type")
     private SenderType senderType;
+
     @Column(name = "sender_id")
     private String senderId;
 
