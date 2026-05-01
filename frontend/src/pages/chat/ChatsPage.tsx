@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useChatContext } from "../../contexts/ChatContext";
 import { TrashIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import type { IChat } from "../../interfaces/chat/IChat";
-import CreateChatButton from "../../components/shared/buttons/CreateChatButton";
+import CreateChatButton from "../../components/shared/buttons/CreateChatButtonStandalone";
 import useDeleteChat from "../../hooks/useDeleteChat";
 import { formatLastMessageTime } from "../../utils/formatTime";
 import ChatListItem from "../../components/chat/ChatListItem";
@@ -55,9 +55,7 @@ const ChatsPage = () => {
           </button>
           <h1 className="text-xl font-bold flex-1">{t("chatListHeader")}</h1>
 
-          <div className=" btn btn btn-ghost">
-            <CreateChatButton />
-          </div>
+          <CreateChatButton />
         </div>
 
         {/* Select all */}

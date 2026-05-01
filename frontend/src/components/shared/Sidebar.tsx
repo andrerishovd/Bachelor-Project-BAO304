@@ -63,8 +63,6 @@ const Sidebar = () => {
           {/* TODO Should this even be here, could be above and text only */}
           <AppLogoSm />
 
-          {/* Search */}
-
           <SearchField />
 
           <li>
