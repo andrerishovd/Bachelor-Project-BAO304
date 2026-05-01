@@ -1,6 +1,7 @@
 package kristiania.chat.modules;
 
 import jakarta.persistence.*;
+import kristiania.chat.encryption.EncryptedStringConverter;
 import lombok.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class Chat {
     @Column(name = "chat_id")
     private Long id;
 
+    @Convert(converter = EncryptedStringConverter.class)
     @Column(name = "title", length = 1000)
     private String title;
 
