@@ -32,5 +32,6 @@
   "generateError": "Could not generate Podcast. Try again.",
   "library": "Podcast Library",
   "emptyLibrary": "You haven't generated any Podcast's yet",
-  "generateFirst": "Generate your first Podcast"
+  "generateFirst": "Generate your first Podcast",
+  "noChats": "no Chats"
 }

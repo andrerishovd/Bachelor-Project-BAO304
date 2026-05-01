@@ -13,5 +13,9 @@
   "Profile": "Profil",
   "selectedLocale": "no",
   "cancel": "Avbryt",
-  "save": "Lagre"
+  "save": "Lagre",
+  "noResults": "Ingen resultater",
+  "seeAllResults": "Se alle resultater",
+  "seeAll": "Vis alle",
+  "generatePodcast": "Generer podcast"
 }

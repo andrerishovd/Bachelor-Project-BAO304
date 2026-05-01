@@ -7,6 +7,8 @@ import {
 } from "@heroicons/react/24/outline";
 import useSearchChats from "../../hooks/useSearchChats";
 import ChatListItem from "../../components/chat/ChatListItem";
+import PageHeader from "../../components/shared/PageHeader";
+import PageContainer from "../../components/shared/PageContainer";
 
 /**
  * SearchResultPage
@@ -36,31 +38,27 @@ const SearchResultPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full p-6 max-w-2xl mx-auto w-full">
+    <PageContainer>
       {/* Header: back button and search input */}
-      <div className="flex items-center gap-4 mb-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="btn btn-sm btn-ghost"
-          aria-label={t("common:back")}
-        >
-          <ArrowLeftIcon className="w-4 h-4" />
-        </button>
-        <label className="input input-bordered flex items-center gap-2 flex-1">
-          <MagnifyingGlassIcon
-            className="w-4 h-4 shrink-0 opacity-50"
-            aria-hidden="true"
-          />
-          <input
-            type="search"
-            className="grow"
-            placeholder={t("common:search")}
-            value={query}
-            onChange={(e) => handleQueryChange(e.target.value)}
-            autoFocus
-          />
-        </label>
-      </div>
+      <PageHeader
+        title={
+          <label className="input input-bordered flex items-center gap-2 flex-1">
+            <MagnifyingGlassIcon
+              className="w-4 h-4 shrink-0 opacity-50"
+              aria-hidden="true"
+            />
+            <input
+              type="search"
+              className="grow"
+              placeholder={t("common:search")}
+              value={query}
+              onChange={(e) => handleQueryChange(e.target.value)}
+              autoFocus
+            />
+          </label>
+        }
+        showBack
+      />
 
       {/* Result count */}
       {query.trim() && (
@@ -83,7 +81,7 @@ const SearchResultPage = () => {
           ))}
         </ul>
       )}
-    </div>
+    </PageContainer>
   );
 };
 

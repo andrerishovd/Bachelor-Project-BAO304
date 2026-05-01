@@ -7,6 +7,8 @@ import PodcastSettingsStep, {
 } from "../../components/podcast/generate/PodcastSettingsStep";
 import { useMediaContext } from "../../contexts/MediaContext";
 import { useAlertContext } from "../../contexts/AlertContext";
+import PageHeader from "../../components/shared/PageHeader";
+import PageContainer from "../../components/shared/PageContainer";
 
 const DEFAULT_SETTINGS: PodcastSettings = {
   length: "medium",
@@ -77,49 +79,45 @@ const PodcastGeneratorPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden items-center">
-      <div className="flex flex-col h-full overflow-hidden w-full max-w-5xl">
-        {/* Header */}
-        <div className="border-b border-base-300 p-4 shrink-0">
-          <h1 className="text-2xl font-bold">{t("generatePodcast")}</h1>
-          <p className="text-sm text-base-content/60 mt-1">
-            {t("generateDescription")}
-          </p>
-        </div>
+    <PageContainer maxWidth="5xl">
+      {/* Header */}
+      <PageHeader
+        title={t("generatePodcast")}
+        description={t("generateDescription")}
+      />
 
-        {/* Side by side panels */}
-        <div className="flex-1 min-h-0">
-          <div className="grid grid-cols-2 divide-x divide-base-300 h-full">
-            <PodcastContentStep
-              notes={notes}
-              onNotesChange={setNotes}
-              selectedChatIds={selectedChatIds}
-              onToggleChat={toggleChat}
-              fileUpload={fileUpload}
-            />
-            <PodcastSettingsStep settings={settings} onChange={setSettings} />
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-base-300 p-4 shrink-0 flex justify-end">
-          <button
-            className="btn btn-primary"
-            disabled={!hasContent || isGenerating}
-            onClick={handleGenerate}
-          >
-            {isGenerating ? (
-              <>
-                <span className="loading loading-spinner loading-xs" />
-                {t("generating")}
-              </>
-            ) : (
-              t("generate")
-            )}
-          </button>
+      {/* Side by side panels */}
+      <div className="flex-1 min-h-0">
+        <div className="grid grid-cols-2 divide-x divide-base-300 h-full">
+          <PodcastContentStep
+            notes={notes}
+            onNotesChange={setNotes}
+            selectedChatIds={selectedChatIds}
+            onToggleChat={toggleChat}
+            fileUpload={fileUpload}
+          />
+          <PodcastSettingsStep settings={settings} onChange={setSettings} />
         </div>
       </div>
-    </div>
+
+      {/* Footer */}
+      <div className="border-t border-base-300 p-4 shrink-0 flex justify-end">
+        <button
+          className="btn btn-primary"
+          disabled={!hasContent || isGenerating}
+          onClick={handleGenerate}
+        >
+          {isGenerating ? (
+            <>
+              <span className="loading loading-spinner loading-xs" />
+              {t("generating")}
+            </>
+          ) : (
+            t("generate")
+          )}
+        </button>
+      </div>
+    </PageContainer>
   );
 };
 

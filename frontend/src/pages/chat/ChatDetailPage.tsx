@@ -7,6 +7,8 @@ import ChatOptionsDropdown from "../../components/chat/sidebar/ChatOptionsDropdo
 import useOpenDropdown from "../../hooks/useOpenDropdown";
 import { useEffect, useState } from "react";
 import type { IChatMessage } from "../../interfaces/chat/IChatMessage";
+import PageHeader from "../../components/shared/PageHeader";
+import PageContainer from "../../components/shared/PageContainer";
 
 /**
  * ChatDetailPage
@@ -39,50 +41,44 @@ const ChatDetailPage = ({ isNew = false }: ChatDetailPageProps) => {
   }, [chat?.messageDtoList]);
 
   return (
-    <div className="flex flex-col h-full overflow-hidden items-center">
-      <div className="flex flex-col h-full overflow-hidden w-full max-w-4xl">
-        {/* Chat header */}
-        <div
-          ref={containerRef as React.RefObject<HTMLDivElement>}
-          className="border-b border-base-300 p-4 flex items-center gap-2"
-        >
-          <h1 className="text-2xl font-bold flex-1">
-            {isNewChat ? (
-              t("newChat")
-            ) : chat?.title ? (
-              chat.title
-            ) : (
-              <span className="loading loading-dots loading-md"></span>
-            )}
-          </h1>
-
-          {!isNewChat && chatId && chat && (
+    <PageContainer maxWidth="4xl">
+      {/* Chat header */}
+      <PageHeader
+        title={
+          isNewChat
+            ? t("newChat")
+            : (chat?.title ?? (
+                <span className="loading loading-dots loading-md" />
+              ))
+        }
+        actions={
+          !isNewChat && chatId && chat ? (
             <ChatOptionsDropdown
               chatId={chatId}
               currentTitle={chat.title}
               isOpen={isOpen(chatId)}
               onToggle={() => toggle(chatId)}
             />
-          )}
-        </div>
+          ) : undefined
+        }
+      />
 
-        {/* Chat thread */}
-        <MessageThreadContainer
+      {/* Chat thread */}
+      <MessageThreadContainer
+        isNewChat={isNewChat}
+        messages={localMessages}
+        isWaitingForResponse={isWaitingForResponse}
+      />
+
+      {/* Input field */}
+      <div className="border-t border-base-300 p-4">
+        <ChatInputField
+          chatId={isNewChat ? undefined : chatId}
           isNewChat={isNewChat}
-          messages={localMessages}
-          isWaitingForResponse={isWaitingForResponse}
+          onWaitingForResponse={setIsWaitingForResponse}
         />
-
-        {/* Input field */}
-        <div className="border-t border-base-300 p-4">
-          <ChatInputField
-            chatId={isNewChat ? undefined : chatId}
-            isNewChat={isNewChat}
-            onWaitingForResponse={setIsWaitingForResponse}
-          />
-        </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

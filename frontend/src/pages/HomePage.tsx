@@ -109,7 +109,7 @@ const HomePage = () => {
     calendar: <CalendarCard />,
     events: <EventsListCard />,
     podcast: <PodcastList />,
-    podcastDetail: <PodcastDetailList />,
+    podcastDetail: <PodcastDetailList podcasts={[]} />,
     generatePodcastCard: <GeneratePodcastCard />,
     links: <HyperlinkCard />,
   };

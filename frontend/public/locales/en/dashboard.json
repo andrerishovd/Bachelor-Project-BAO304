@@ -1,3 +1,11 @@
 {
-  "createPodcast": "Create podcast"
+  "createPodcast": "Create podcast",
+  "usefulLinks": "Usefull links",
+  "urgentEvents_one": "{{count}} event soon",
+  "urgentEvents_other": "{{count}} events soon",
+  "upcomingEvents": "Upcoming events",
+  "eventPast": "Past",
+  "eventToday": "Today",
+  "eventTomorrow": "Tomorrow",
+  "eventInDays": "In {{count}} days"
 }
