@@ -12,7 +12,7 @@ import EventsListCard from "../components/homepage/EventsListCard";
 import PodcastList from "../components/homepage/PodcastList";
 import PodcastDetailList from "../components/podcast/PodcastDetailList";
 import GeneratePodcastCard from "../components/podcast/GeneratePodcastCard";
-
+import HyperlinkCard from "../components/homepage/Hyperlinkcard";
 /**
  * SortableCard Component
  *
@@ -86,6 +86,7 @@ const HomePage = () => {
     "podcast",
     /*  "podcastDetail", */
     "generatePodcastCard",
+    "links",
   ]);
 
   /**
@@ -108,8 +109,9 @@ const HomePage = () => {
     calendar: <CalendarCard />,
     events: <EventsListCard />,
     podcast: <PodcastList />,
-    podcastDetail: <PodcastDetailList />,
+    podcastDetail: <PodcastDetailList podcasts={[]} />,
     generatePodcastCard: <GeneratePodcastCard />,
+    links: <HyperlinkCard />,
   };
 
   return (

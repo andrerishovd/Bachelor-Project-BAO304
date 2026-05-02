@@ -1,5 +1,5 @@
 {
-  "appNameLong": "studybuddy",
+  "appNameLong": "Study Buddy",
   "appNameShort": "sb",
   "search": "Search",
   "settings": "Settings",
@@ -14,5 +14,9 @@
   "Profile": "Profile",
   "selectedLocale": "enUS",
   "cancel": "Cancel",
-  "save": "Save"
+  "save": "Save",
+  "noResults": "No results",
+  "seeAllResults": "See all results",
+  "seeAll": "Show all",
+  "generatePodcast": "Generer podcast"
 }

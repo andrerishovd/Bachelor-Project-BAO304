@@ -7,15 +7,22 @@ import { useNavigate } from "react-router-dom";
 import SettingsModal from "../settings/SettingsModal";
 import { useRef, useState } from "react";
 import { useSidebar } from "../../contexts/SidebarContext";
-import ChatList from "../chat/ChatList";
+import ChatList from "../chat/sidebar/ChatList";
 import {
   HomeIcon,
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import GeneratePodcastCard from "../podcast/GeneratePodcastCard";
-import CreateChatButton from "../chat/CreateChatButton";
+import CreateChatButton from "./buttons/CreateChatButton";
 import ProfileModal from "../profile/ProfileModal";
-import ChatListButton from "../chat/ChatListButton";
+import ChatListButton from "../chat/sidebar/ChatListButton";
+import AppLogo from "./AppLogoSm";
+import GeneratePodcastButton from "./buttons/GeneratePodcastButton";
+import MiniPlayer from "../podcast/mediaplayer/MiniPlayer";
+import { useMediaContext } from "../../contexts/MediaContext";
+import PodcastLibraryButton from "./buttons/PodcastLibraryButton";
+import AppLogoSm from "./AppLogoSm";
+import HomeButton from "./buttons/HomeButton";
 
 const Sidebar = () => {
   const { t } = useTranslation("common");
@@ -24,10 +31,7 @@ const Sidebar = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  const handleHomeClick = () => {
-    navigate("/");
-  };
+  const { isExpanded } = useMediaContext();
 
   const handleLogoClick = () => {
     navigate("/index");
@@ -57,34 +61,19 @@ const Sidebar = () => {
         {/* Top items */}
         <ul className="menu w-full ">
           {/* TODO Should this even be here, could be above and text only */}
-          <li className="">
-            <button onClick={handleLogoClick}>
-              <h1 className="is-drawer-open:hidden font-kristiania">
-                {t("appNameShort")}
-              </h1>
-              <h1 className="is-drawer-close:hidden">{t("appNameLong")}</h1>
-            </button>
-          </li>
+          <AppLogoSm />
 
-          {/* Search */}
+          <SearchField />
 
           <li>
-            <SearchField />
+            <HomeButton />
           </li>
-
           <li>
-            <button
-              className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-              data-tip={t("homepage")}
-              onClick={handleHomeClick}
-            >
-              {/* Home icon */}
-
-              <HomeIcon className="my-1.5 inline-block size-4 shrink-0" />
-              <span className="is-drawer-close:hidden">{t("homepage")}</span>
-            </button>
+            <GeneratePodcastButton />
           </li>
-
+          <li>
+            <PodcastLibraryButton />
+          </li>
           <li>
             <CreateChatButton />
           </li>
@@ -96,6 +85,12 @@ const Sidebar = () => {
         <div className="w-full grow overflow-y-auto flex flex-col justify-start">
           <ChatList />
         </div>
+
+        {!isExpanded && (
+          <div className="w-full px-2 pb-2">
+            <MiniPlayer />
+          </div>
+        )}
 
         {/* Bottom items */}
         <ul className="menu w-full">

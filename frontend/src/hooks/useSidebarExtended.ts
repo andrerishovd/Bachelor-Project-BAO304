@@ -1,13 +1,28 @@
 import { useState, useEffect } from "react";
 
-// Hook for å toggle sidebar extended/collapsed state
-// Lagrer brukerens preferanse i localStorage
-// Oppdaterer checkbox fra daisyUI
-
+/**
+ * useSidebarExtended
+ *
+ * Manages the sidebar's expanded/collapsed state.
+ * Persists the user's preference in localStorage so it
+ * is restored on page reload.
+ *
+ * Syncs state with the DaisyUI drawer checkbox and the
+ * `data-sidebar-extended` attribute on the document root,
+ * which is used for CSS-based sidebar styling.
+ *
+ * @returns
+ * - isExtended: Whether the sidebar is currently expanded
+ * - toggleSidebar: Toggles between expanded and collapsed
+ * - expandSidebar: Expands the sidebar if it is collapsed
+ *
+ * @example
+ * const { isExtended, toggleSidebar } = useSidebarExtended();
+ */
 export const useSidebarExtended = () => {
   const [isExtended, setIsExtended] = useState<boolean>(true);
 
-  // Når siden lastes, hent lagret state fra localStorage
+  // Restore sidebar state from localStorage on mount
   useEffect(() => {
     const savedState = localStorage.getItem("sidebar-extended");
     const extended = savedState === null ? true : savedState === "true";
@@ -15,20 +30,28 @@ export const useSidebarExtended = () => {
     updateDrawerState(extended);
   }, []);
 
+  /**
+   * Syncs sidebar state with the DaisyUI drawer checkbox
+   * and the data-sidebar-extended attribute on the document root.
+   *
+   * @param extended - Whether the sidebar should be expanded
+   */
   const updateDrawerState = (extended: boolean) => {
     document.documentElement.setAttribute(
       "data-sidebar-extended",
       String(extended),
     );
 
-    // ✅ Synkroniser checkbox
     const checkbox = document.getElementById("my-drawer-4") as HTMLInputElement;
     if (checkbox) {
       checkbox.checked = extended;
     }
   };
 
-  // Toggle sidebar state
+  /**
+   * Toggles the sidebar between expanded and collapsed,
+   * and persists the new state to localStorage.
+   */
   const toggleSidebar = () => {
     const newState = !isExtended;
     setIsExtended(newState);
@@ -36,6 +59,11 @@ export const useSidebarExtended = () => {
     updateDrawerState(newState);
   };
 
+  /**
+   * Expands the sidebar if it is currently collapsed.
+   * Used when triggering actions that require the sidebar to be visible,
+   * such as focusing the search field.
+   */
   const expandSidebar = () => {
     if (!isExtended) {
       setIsExtended(true);

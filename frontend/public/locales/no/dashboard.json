@@ -1,3 +1,11 @@
 {
-  "createPodcast": "Generer podcast"
+  "createPodcast": "Generer podcast",
+  "usefulLinks": "Nyttige linker",
+  "urgentEvents_one": "{{count}} hendelse snart",
+  "urgentEvents_other": "{{count}} hendelser snart",
+  "upcomingEvents": "Kommende hendelser",
+  "eventPast": "Passert",
+  "eventToday": "I dag",
+  "eventTomorrow": "I morgen",
+  "eventInDays": "Om {{count}} dager"
 }

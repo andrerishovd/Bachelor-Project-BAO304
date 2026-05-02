@@ -25,6 +25,10 @@ spring:
               uri: lb://canvas-service
               predicates:
                 - Path=/api/canvas/**
+            - id: settings-service
+              uri: lb://settings-service
+              predicates:
+                - Path=/api/settings/**
 server:
   port: 8010
 

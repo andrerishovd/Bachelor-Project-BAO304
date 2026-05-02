@@ -5,9 +5,11 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
+import { THEMES, FOLLOW_SYSTEM_KEY } from "../config/themes";
 
 interface ThemeContextType {
   theme: string | null;
+  themeLabelKey: string;
   toggleTheme: () => void;
   setCustomTheme: (theme: string) => void;
   followSystem: () => void;
@@ -18,37 +20,44 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<string | null>(null);
 
-  useEffect(() => {
+  const themeLabelKey = theme
+    ? (THEMES.find((t) => t.value === theme)?.labelKey ?? theme)
+    : "themeFollowSystem";
+
+  /*   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.setAttribute("data-theme", savedTheme);
     }
-  }, []);
+  }, []); */
 
   const toggleTheme = () => {
     const newTheme =
       theme === "kristiania-light" ? "kristiania-dark" : "kristiania-light";
     setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
   const setCustomTheme = (newTheme: string) => {
     setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
   const followSystem = () => {
     setTheme(null);
-    localStorage.removeItem("theme"); //
     document.documentElement.removeAttribute("data-theme");
   };
 
   return (
     <ThemeContext.Provider
-      value={{ theme, toggleTheme, setCustomTheme, followSystem }}
+      value={{
+        theme,
+        themeLabelKey,
+        toggleTheme,
+        setCustomTheme,
+        followSystem,
+      }}
     >
       {children}
     </ThemeContext.Provider>

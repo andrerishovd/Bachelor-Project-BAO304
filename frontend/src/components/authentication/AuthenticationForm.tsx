@@ -1,11 +1,15 @@
-// src/components/auth/AuthenticationForm.tsx
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../hooks/useAuth";
-import ChangeLangBtn from "../shared/ChangeLangBtn";
+import ChangeLangBtn from "../shared/buttons/ChangeLangBtn";
 import ThemeControllerToggle from "../shared/ThemeControllerToggle";
 import canvasLogo from "../../assets/canvas-logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { motion } from "motion/react";
+
+import { useState } from "react";
+import PrivacyModal from "./PrivacyModal";
+import AppLogoLg from "../shared/AppLogoLg";
 
 // Feature flags, set to true or false depending on which login method should be available.
 const allowEmailSignIn = false;
@@ -23,6 +27,7 @@ const AuthenticationForm = () => {
   const { t } = useTranslation("auth");
   const { login, isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -51,12 +56,22 @@ const AuthenticationForm = () => {
       </div>
 
       <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">{t("description.header")}</h1>
+        <motion.div
+          className="text-center lg:text-left"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
+        >
+          <AppLogoLg />
           <p className="py-6">{t("description.info")}</p>
-        </div>
+        </motion.div>
 
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+        <motion.div
+          className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.2 }}
+        >
           <div className="card-body">
             <fieldset className="fieldset flex flex-col gap-2">
               {/* Email login */}
@@ -149,9 +164,23 @@ const AuthenticationForm = () => {
                   {getConsentText()}
                 </p>
               )}
+              <p className="text-xs text-base-content/40 text-center mt-2">
+                {getConsentText()}{" "}
+                <button
+                  onClick={() => setIsPrivacyOpen(true)}
+                  className="link link-primary text-xs"
+                >
+                  {t("privacy.linkText")}
+                </button>
+              </p>
+
+              <PrivacyModal
+                isOpen={isPrivacyOpen}
+                onClose={() => setIsPrivacyOpen(false)}
+              />
             </fieldset>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

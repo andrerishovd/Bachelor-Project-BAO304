@@ -18,5 +18,12 @@
   "titleUpdateError": "Kunne ikke endre tittel",
   "editTitle": "Endre tittel",
   "searchResults": "{{count}} resultater for \"{{query}}\"",
-  "sendError": "Could not send message. Check that the backend is running."
+  "sendError": "Kunne ikke sende melding, sjekk internettkoblingen",
+  "messageTooLong": "Meldingen er for lang. Maksimalt {{max}} tegn er tillatt.",
+  "referencedBooks": "Refererte bøker",
+  "referencedLinks": "Refererte lenker",
+  "showDiagram": "Vis diagram",
+  "diagram": "Diagram",
+  "code": "Kode",
+  "diagramCode": "Diagramkode"
 }

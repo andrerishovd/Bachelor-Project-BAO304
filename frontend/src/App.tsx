@@ -8,7 +8,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { ChatProvider } from "./contexts/ChatContext";
 import { AlertProvider } from "./contexts/AlertContext";
 import { FontSizeProvider } from "./contexts/FontSizeContext";
-import FullPlayer from "./components/podcast/FullPlayer";
+
 import { MediaProvider } from "./contexts/MediaContext";
 
 /**
@@ -35,22 +35,17 @@ import { MediaProvider } from "./contexts/MediaContext";
 
 function App() {
   return (
-    <>
-      <ThemeProvider>
-        <MediaProvider>
-          <FontSizeProvider>
-            <AlertProvider>
-              <SidebarProvider>
-                <ChatProvider>
-                  <AppRouting />
-                  <FullPlayer />
-                </ChatProvider>
-              </SidebarProvider>
-            </AlertProvider>
-          </FontSizeProvider>
-        </MediaProvider>
-      </ThemeProvider>
-    </>
+    <ThemeProvider>
+      <MediaProvider>
+        <FontSizeProvider>
+          <SidebarProvider>
+            <ChatProvider>
+              <AppRouting />
+            </ChatProvider>
+          </SidebarProvider>
+        </FontSizeProvider>
+      </MediaProvider>
+    </ThemeProvider>
   );
 }
 

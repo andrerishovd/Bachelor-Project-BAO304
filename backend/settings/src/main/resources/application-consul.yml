@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        service-name: settings-service
+        enabled: true
+        prefer-ip-address: false
+        instance-id: ${spring.application.name}:${HOSTNAME}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+  server:
+    port: 8072
