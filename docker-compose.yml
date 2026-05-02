@@ -10,9 +10,9 @@ services:
     ports:
       - '5440:5432'
     environment:
-      - "POSTGRES_USER=userserviceusername"
-      - "POSTGRES_PASSWORD=userservicepassword"
-      - "POSTGRES_DB=user"
+      - POSTGRES_USER=userserviceusername
+      - POSTGRES_PASSWORD=userservicepassword
+      - POSTGRES_DB=user
     volumes:
       - user_data:/var/lib/postgresql/data
     networks:
@@ -24,9 +24,9 @@ services:
     ports:
       - '5430:5432'
     environment:
-      - "POSTGRES_USER=chatserviceusername"
-      - "POSTGRES_PASSWORD=chatservicepassword"
-      - "POSTGRES_DB=chat"
+      - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME_CHAT}
+      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD_CHAT}
+      - POSTGRES_DB=chat
     volumes:
       - chat_data:/var/lib/postgresql/data
     networks:
@@ -38,9 +38,9 @@ services:
     ports:
       - '5420:5432'
     environment:
-      - "POSTGRES_USER=vectorserviceusername"
-      - "POSTGRES_PASSWORD=vectorservicepassword"
-      - "POSTGRES_DB=chat"
+      - POSTGRES_USER=${APP_VECTOR_DATASOURCE_USERNAME}
+      - POSTGRES_PASSWORD=${APP_VECTOR_DATASOURCE_PASSWORD}
+      - POSTGRES_DB=chat
     volumes:
       - vector_data:/var/lib/postgresql/data
     networks:
