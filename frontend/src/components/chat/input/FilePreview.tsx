@@ -1,18 +1,34 @@
-/**
- *  Simple preview of files
- *
- */
-
 import { Paperclip, X } from "tabler-icons-react";
 import type { IFilePreviewProps } from "../../../interfaces/chat/IFilePreviewProps";
 
+/**
+ * FilePreview
+ *
+ * Displays a list of selected files as removable badges.
+ * Shown above the chat input field when files are attached.
+ * Returns null if no files are selected.
+ *
+ * @property files - List of files to display
+ * @property onRemove - Callback with the index of the file to remove
+ *
+ * @example
+ * <FilePreview files={uploadedFiles} onRemove={removeFile} />
+ */
 const FilePreview = ({ files, onRemove }: IFilePreviewProps) => {
   if (files.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div
+      className="flex flex-wrap gap-2"
+      role="list"
+      aria-label="Attached files"
+    >
       {files.map((file, index) => (
-        <div key={index} className="badge badge-primary gap-2 p-3">
+        <div
+          key={index}
+          className="badge badge-primary gap-2 p-3"
+          role="listitem"
+        >
           <Paperclip className="size-4" aria-hidden="true" />
           <span className="text-xs truncate max-w-[150px]">{file.name}</span>
           <button

@@ -1,3 +1,4 @@
+// src/components/chat/input/ChatInputField.tsx
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Send, Paperclip } from "tabler-icons-react";
@@ -21,10 +22,24 @@ interface ExtendedChatInputFieldProps extends IChatInputFieldProps {
  *
  * Handles message input and sending for both new and existing chats.
  * Supports file uploads via drag-and-drop or file picker.
- * Performs optimistic updates to show user messages immediately.
+ *
+ * File upload flow:
+ * 1. User selects or drops files onto the input field
+ * 2. Files are uploaded to /api/chat/upload (multipart/form-data)
+ * 3. Files are stored in the vector database on the backend
+ * 4. User sends a message referencing the uploaded content
+ *
+ * Note: Images are accepted but only their text content is processed.
+ * PDFs with images will only have their text content extracted.
+ *
+ * Message flow:
+ * 1. User types a message and presses Enter or clicks Send
+ * 2. An optimistic update immediately shows the message in the thread
+ * 3. The message is sent to the backend via ChatService
+ * 4. The chat is refreshed with the real AI response
  *
  * @property chatId - ID of the existing chat, undefined for new chats
- * @property isNewChat - Whether this is a new chat
+ * @property isNewChat - Whether this is a new chat session
  * @property onWaitingForResponse - Callback to notify parent of AI response loading state
  */
 const ChatInputField = ({
@@ -33,8 +48,9 @@ const ChatInputField = ({
   onWaitingForResponse,
 }: ExtendedChatInputFieldProps) => {
   const { refetch, getChatById, updateChat } = useChatContext();
-  const { showError } = useAlertContext();
+  const { showError, showSuccess } = useAlertContext();
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
   const { t } = useTranslation("chat");
   const navigate = useNavigate();
@@ -49,12 +65,42 @@ const ChatInputField = ({
     openFilePicker,
   } = useFileUpload();
 
+  /**
+   * Uploads all pending files to the backend vector database.
+   * Files are uploaded sequentially.
+   * Shows a success or error alert for each file.
+   */
+  const handleUploadFiles = async () => {
+    if (uploadedFiles.length === 0) return;
+    setIsUploading(true);
+    try {
+      for (const file of uploadedFiles) {
+        await ChatService.uploadFile(file);
+        showSuccess(t("fileUploaded", { name: file.name }));
+      }
+      clearFiles();
+    } catch {
+      showError(t("fileUploadError"));
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  /**
+   * Handles sending a message.
+   * Uploads any pending files before sending the message.
+   * For new chats, creates the chat first then navigates to it.
+   * For existing chats, performs an optimistic update then awaits AI response.
+   */
   const handleSend = async () => {
     if (!message.trim() && uploadedFiles.length === 0) return;
     if (message.length > MAX_MESSAGE_LENGTH) return;
+
     const trimmedMessage = message.trim();
     setMessage("");
-    clearFiles();
+
+    // Upload files first if any are pending
+    await handleUploadFiles();
 
     // New chat flow
     if (isNewChat) {
@@ -73,7 +119,7 @@ const ChatInputField = ({
 
     if (!chatId) return;
 
-    // Optimistic update - show user message immediately
+    // Optimistic update – show user message immediately before AI responds
     const currentChat = getChatById(chatId);
     if (currentChat) {
       updateChat({
@@ -90,7 +136,7 @@ const ChatInputField = ({
       });
     }
 
-    // Wait for AI response
+    // Send message and wait for AI response
     onWaitingForResponse?.(true);
     try {
       await ChatService.sendMessage(chatId, trimmedMessage);
@@ -111,13 +157,19 @@ const ChatInputField = ({
     }
   };
 
+  /**
+   * Auto-resizes the textarea to fit its content, up to max-h-48.
+   */
   const handleTextareaResize = () => {
     if (!textareaRef.current) return;
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
   };
 
-  // Allows only MAX_MESSAGE_LENGTH charachters in textarea
+  /**
+   * Handles message input changes.
+   * Enforces the MAX_MESSAGE_LENGTH character limit.
+   */
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > MAX_MESSAGE_LENGTH) {
       showError(t("messageTooLong", { max: MAX_MESSAGE_LENGTH }));
@@ -127,12 +179,14 @@ const ChatInputField = ({
     handleTextareaResize();
   };
 
+  const isBusy = isLoading || isUploading;
+
   return (
     <div className="flex flex-col gap-2">
-      {/* File preview */}
+      {/* Attached file previews */}
       <FilePreview files={uploadedFiles} onRemove={removeFile} />
 
-      {/* Input container */}
+      {/* Input container – also acts as drag-and-drop zone */}
       <div
         {...getRootProps()}
         className={`
@@ -151,24 +205,27 @@ const ChatInputField = ({
           value={message}
           onChange={handleMessageChange}
           onKeyDown={handleKeyDown}
-          disabled={isLoading}
+          disabled={isBusy}
           rows={1}
         />
 
-        {/* Attach button */}
+        {/* File picker button */}
         <div className="tooltip" data-tip={t("accessibility:attachFile")}>
           <button
             type="button"
             className="btn btn-ghost btn-sm btn-circle"
             onClick={openFilePicker}
             aria-label={t("attachFile")}
+            disabled={isBusy}
           >
             <Paperclip className="size-5" aria-hidden="true" />
           </button>
         </div>
+
         <MessageLengthIndicator length={message.length} />
-        {/* Send button */}
-        {isLoading ? (
+
+        {/* Send / loading indicator */}
+        {isBusy ? (
           <span className="loading loading-spinner loading-xs" />
         ) : (
           <button

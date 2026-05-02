@@ -25,5 +25,7 @@
   "showDiagram": "Vis diagram",
   "diagram": "Diagram",
   "code": "Kode",
-  "diagramCode": "Diagramkode"
+  "diagramCode": "Diagramkode",
+  "fileUploaded": "{{name}} uploaded successfully",
+  "fileUploadError": "Failed to upload file. Please try again."
 }
