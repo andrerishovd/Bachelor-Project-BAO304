@@ -7,7 +7,27 @@ Put material (pdf, powerpoint files) that will be used for context into a folder
 backend/canvas/courseMaterial/{name-of-your-course}
 
 ```bash
-//SECTION ABOUT .ENV FILES
+The following environment filest are required to start the application:
+  frontend/.env
+  frontend/.env.production
+
+  Add lectures and other files into a folder named after the course code and put it into:
+  backend/canvas/courseMaterial
+  
+  backend/gateway/src/main/resources
+  application-env.yml
+  
+  backend/chat/src/main/resources
+  application-env.yml
+  
+  backend/settings/src/main/resources
+  application-env.yml
+
+  backend/user/src/main/resources
+  application-env.yml
+  
+  Rootfolder of the project (same as docker-compose.yml)
+  .env
 ```
 
 For development, we used PJ100-1 lecture slides and placed them into:
@@ -21,7 +41,7 @@ Go to the root folder of the entire project in the terminal ( \Bachelor-Project-
 Run:
 
 ```bash
-docker-compose up --build -d
+docker-compose --env-file .env up --build -d
 ```
 
 This can take several minutes, especially for a first-time setup.
