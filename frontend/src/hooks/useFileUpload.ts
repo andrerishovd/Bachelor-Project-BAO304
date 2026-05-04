@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDropzone, type DropzoneOptions } from "react-dropzone";
-import { FILE_UPLOAD_CONFIG } from "../config/fileupload.config";
+import { FILE_UPLOAD_CONFIG } from "../config/fileUpload.config";
 export type UseFileUploadReturn = ReturnType<typeof useFileUpload>;
 
 /**
