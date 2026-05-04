@@ -12,7 +12,7 @@ import EventsListCard from "../components/homepage/EventsListCard";
 import PodcastList from "../components/homepage/PodcastList";
 import PodcastDetailList from "../components/podcast/PodcastDetailList";
 import GeneratePodcastCard from "../components/podcast/GeneratePodcastCard";
-import HyperlinkCard from "../components/homepage/Hyperlinkcard";
+import HyperlinkCard from "../components/homepage/HyperlinkCard";
 /**
  * SortableCard Component
  *
