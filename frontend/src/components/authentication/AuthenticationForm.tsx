@@ -159,11 +159,11 @@ const AuthenticationForm = () => {
               )}
 
               {/* Dynamic consent text */}
-              {getConsentText() && (
+              {/*  {getConsentText() && (
                 <p className="text-xs text-base-content/40 text-center mt-2">
                   {getConsentText()}
                 </p>
-              )}
+              )} */}
               <p className="text-xs text-base-content/40 text-center mt-2">
                 {getConsentText()}{" "}
                 <button
