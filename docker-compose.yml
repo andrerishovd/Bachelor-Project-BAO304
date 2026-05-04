@@ -8,7 +8,7 @@ services:
     container_name: "user-db"
     image: postgres:17-alpine
     ports:
-      - '5440:5432'
+      - "5440:5432"
     environment:
       - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME_USER}
       - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD_USER}
@@ -22,7 +22,7 @@ services:
     container_name: "settings-db"
     image: postgres:17-alpine
     ports:
-      - '5431:5432'
+      - "5431:5432"
     environment:
       - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME_SETTINGS}
       - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD_SETTINGS}
@@ -32,12 +32,11 @@ services:
     networks:
       - study-buddy
 
-
   chat-db:
     container_name: "chat-db"
     image: postgres:17-alpine
     ports:
-      - '5430:5432'
+      - "5430:5432"
     environment:
       - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME_CHAT}
       - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD_CHAT}
@@ -51,7 +50,7 @@ services:
     container_name: "vector-db"
     image: pgvector/pgvector:pg16
     ports:
-      - '5420:5432'
+      - "5420:5432"
     environment:
       - POSTGRES_USER=${APP_VECTOR_DATASOURCE_USERNAME}
       - POSTGRES_PASSWORD=${APP_VECTOR_DATASOURCE_PASSWORD}
@@ -81,9 +80,9 @@ services:
     build:
       context: ./backend/chat
     environment:
-     SPRING_PROFILES_ACTIVE: env,consul
-     DOWNLOAD_PATH: /downloads
-     COURSE_MATERIAL_PATH: /courseMaterial
+      SPRING_PROFILES_ACTIVE: env,consul
+      DOWNLOAD_PATH: /downloads
+      COURSE_MATERIAL_PATH: /courseMaterial
     depends_on:
       - chat-db
       - vector-db
@@ -137,6 +136,19 @@ services:
       - ./backend/canvas/courseMaterial:/courseMaterial:ro
     depends_on:
       - consul
+    networks:
+      - study-buddy
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     networks:
       - study-buddy
 
