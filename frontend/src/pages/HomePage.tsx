@@ -83,9 +83,9 @@ const HomePage = () => {
   const [items, setItems] = useState([
     "calendar",
     "events",
-    "podcast",
+    /*"podcast",*/
     /*  "podcastDetail", */
-    "generatePodcastCard",
+    /*"generatePodcastCard",*/
     "links",
   ]);
 

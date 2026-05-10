@@ -2,7 +2,7 @@
 
 Start up procedure
 
-Put material (pdf, powerpoint files) that will be used for context into a folder 
+Put material (pdf, powerpoint files) that will be used for context into a folder
 (you might need to create the folder yourself) under:
 backend/canvas/courseMaterial/{name-of-your-course}
 
@@ -13,19 +13,19 @@ The following environment filest are required to start the application:
 
   Add lectures and other files into a folder named after the course code and put it into:
   backend/canvas/courseMaterial
-  
+
   backend/gateway/src/main/resources
   application-env.yml
-  
+
   backend/chat/src/main/resources
   application-env.yml
-  
+
   backend/settings/src/main/resources
   application-env.yml
 
   backend/user/src/main/resources
   application-env.yml
-  
+
   Rootfolder of the project (same as docker-compose.yml)
   .env
 ```
@@ -34,6 +34,10 @@ For development, we used PJ100-1 lecture slides and placed them into:
 backend/canvas/courseMaterial/PJ100-1
 
 Install Docker Desktop from: [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
+
+**Note**!
+
+Kristiana sensors or users using IT managed computers, please note that you might need to request admin password from IT during installation of Docker Desktop in order to use virtualization in Docker. If Virtualization is not enabled the docker compose might not build resulting in an error.
 
 Any time you want to run the backend, make sure Docker Desktop is running in the background
 
@@ -45,7 +49,7 @@ docker-compose --env-file .env up --build -d
 ```
 
 This can take several minutes, especially for a first-time setup.
-Check "Containers" in the Docker Desktop application, each service should have a green box 
+Check "Containers" in the Docker Desktop application, each service should have a green box
 next to it and memory usage on any service should be above 0% when startup is complete.
 
 To stop the services run:
