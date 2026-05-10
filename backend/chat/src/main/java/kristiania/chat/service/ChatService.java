@@ -25,7 +25,6 @@ public class ChatService {
     private final AiService aiService;
     private final MessageRepository messageRepository;
     private final FileService fileService;
-    private final VectorStore vectorStore;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INTERNAL TOOLS

@@ -31,12 +31,12 @@ public class CanvasController {
     public ResponseEntity<StreamingResponseBody> getZipStream(@PathVariable String courseId) {
 
         return ResponseEntity
-                .ok()
-                .header("Content-Disposition", "attachment; filename=\""+courseId+".zip\"")
-                .body(out -> {
-                    ZipOutputStream zipOutputStream = new ZipOutputStream(out);
-                    zipOutputStream.setLevel(0);
-                    canvasService.addFilesToArchive(zipOutputStream, courseId);
-                });
+            .ok()
+            .header("Content-Disposition", "attachment; filename=\""+courseId+".zip\"")
+            .body(out -> {
+            ZipOutputStream zipOutputStream = new ZipOutputStream(out);
+            zipOutputStream.setLevel(0);
+            canvasService.addFilesToArchive(zipOutputStream, courseId);
+        });
     }
 }

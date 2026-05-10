@@ -1,11 +1,10 @@
 package kristiania.chat.service;
 
-//import com.openai.models.vectorstores.VectorStore;
 import kristiania.chat.dto.ContentItemDto;
 import kristiania.chat.dto.OpenAiResponseDto;
 import kristiania.chat.dto.OutputItemDto;
 import kristiania.chat.modules.*;
-//import org.springframework.ai.vectorstore.SearchRequest;
+
 import org.springframework.ai.reader.tika.TikaDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -16,27 +15,17 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.ai.vectorstore.VectorStore;
-
-import java.time.Duration;
-
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.web.client.RestClient;
-
-
 import org.springframework.ai.document.Document;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -91,29 +80,6 @@ public class AiService {
         return factory;
     }
 
-    /*
-    public MultipartFileUploadResponse sendFile(String fileName) {
-        Path path = fileService.getPath(fileName);
-
-        /*
-        ChatFileUploadResponseDto resp = restClient.post()
-                .uri("/v1")
-                .body(body)
-                .retrieve()
-                .body(OpenAiResponseDto.class);
-         */
-/*
-        MultipartBodyBuilder
-        FileCreateParams params = FileCreateParams.builder()
-                .file(path)
-                .purpose(FilePurpose.of("file-extract"))
-                .build();
-
-        FileObject fileObject = restClient.files().create(params);
-        FileObject fileObject = restClient.files().create(params);
-    }
-    */
-
     public ChatResponse sendChat(Long chatId, String userMessage) {
         Map<String, Object> body = buildRequestBodyWithoutChat(userMessage);
 
@@ -140,27 +106,11 @@ public class AiService {
         return new ChatResponse(chat.getId(), reply);
     }
 
-    /*
-    https://developers.openai.com/api/docs/guides/text
-    model: "gpt-5",
-    reasoning: { effort: "low" },
-    input: [
-        {
-            role: "developer",
-            content: "Talk like a pirate."
-        },
-        {
-            role: "user",
-            content: "Are semicolons optional in JavaScript?",
-        },
-    ],
-
-     */
-
     private Map<String, Object> buildRequestBodyWithoutChat(String userMessage) {
         Map<String, Object> body = new HashMap<>();
         List<Map<String, Object>> tools = new ArrayList<>();
         Map<String, Object> webSearchTool = new HashMap<>();
+        List<Map<String, Object>> input = new ArrayList<>();
 
         webSearchTool.put("type", "web_search");
         tools.add(webSearchTool);
@@ -170,16 +120,13 @@ public class AiService {
         body.put("tools", tools);
 
         /*
-        reasoning ( not supported for 4.0 mini )
+        reasoning
 
         Map<String, Object> reasoning = new HashMap<>();
             reasoning.put("effort", "low");
 
             body.put("reasoning", reasoning);
         */
-
-        //input
-        List<Map<String, Object>> input = new ArrayList<>();
 
         // Ai role and personality
         input.add(Map.of("role", "system", "content", personality));
@@ -207,24 +154,13 @@ public class AiService {
         Map<String, Object> body = new HashMap<>();
         List<Map<String, Object>> tools = new ArrayList<>();
         Map<String, Object> webSearchTool = new HashMap<>();
+        List<Map<String, Object>> input = new ArrayList<>();
 
         webSearchTool.put("type", "web_search");
         tools.add(webSearchTool);
 
         body.put("model", model);
         body.put("tools", tools);
-
-        /*
-        reasoning ( not supported for 4.0 mini )
-
-        Map<String, Object> reasoning = new HashMap<>();
-            reasoning.put("effort", "low");
-
-            body.put("reasoning", reasoning);
-        */
-
-        //input
-        List<Map<String, Object>> input = new ArrayList<>();
 
         // Ai role and personality
         input.add(Map.of("role", "system", "content", personality));
@@ -293,17 +229,17 @@ public class AiService {
     private String retrieveContext(String userMessage) {
         // Based on https://howtodoinjava.com/spring-ai/chatbot-example-with-rag/#4-uploading-files-and-generating-embeddings
         SearchRequest searchRequest = SearchRequest.builder()
-                .query(userMessage)
-                .similarityThreshold(0.2d)
-                .topK(30)
-                .build();
+            .query(userMessage)
+            .similarityThreshold(0.2d)
+            .topK(30)
+            .build();
 
         List<Document> documents = vectorStore.similaritySearch(searchRequest);
 
         String retrievedContext = documents.stream()
-                .map(Document::getText)
-                .filter(Objects::nonNull)
-                .collect(Collectors.joining("\n\n---\n\n"));
+            .map(Document::getText)
+            .filter(Objects::nonNull)
+            .collect(Collectors.joining("\n\n---\n\n"));
 
         return retrievedContext;
     }
@@ -322,8 +258,8 @@ public class AiService {
         TikaDocumentReader documentReader = new TikaDocumentReader(destinationFile.toUri().toString());
         List<org.springframework.ai.document.Document> documents = documentReader.get();
         List<Document> splitDocuments = TokenTextSplitter.builder()
-                .build()
-                .apply(documents);
+            .build()
+            .apply(documents);
 
         vectorStore.add(splitDocuments);
 

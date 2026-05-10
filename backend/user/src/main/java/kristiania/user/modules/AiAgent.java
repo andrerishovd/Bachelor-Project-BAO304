@@ -17,5 +17,4 @@ public class AiAgent extends Participant{
     private String name;
     @Column(name = "model", length = 100)
     private String model;
-    //private String personality;
 }

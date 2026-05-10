@@ -24,9 +24,9 @@ public class ApplicationConfig {
         final ServletBearerExchangeFilterFunction bearer = new ServletBearerExchangeFilterFunction();
 
         return WebClient.builder()
-                .baseUrl(this.azureActiveDirectoryProperties.getHost())
-                .filter(bearer)
-                .build();
+            .baseUrl(this.azureActiveDirectoryProperties.getHost())
+            .filter(bearer)
+            .build();
     }
 
     @Bean
