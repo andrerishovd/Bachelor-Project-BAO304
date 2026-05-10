@@ -200,6 +200,7 @@ public class ChatService {
         return chatTitleDto;
     }
 
+    // All messages sent after the original message will be deleted
     public ChatResponse putMessageFromId(String messageId, ChatRequest chatRequest) {
         Message message = messageService.getMessageFromId(Long.valueOf(messageId));
         ChatResponse chatResponse = null;
