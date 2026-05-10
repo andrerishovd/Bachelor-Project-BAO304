@@ -11,8 +11,6 @@ import java.util.UUID;
 
 import reactor.core.publisher.Mono;
 
-
-
 @Component
 public class UserHandler {
     private static final List<String> NAMES = List.of(
@@ -24,7 +22,6 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> randomUser(final ServerRequest serverRequest) {
-
         return ServerResponse.ok().bodyValue(new UserTO(UUID.randomUUID().toString(), getRandomName()));
     }
 

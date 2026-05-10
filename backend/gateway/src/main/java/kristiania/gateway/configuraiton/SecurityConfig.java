@@ -18,7 +18,8 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-// imported from https://github.com/bogdanmarculescu/2025microservices/blob/main/gateway/src/main/java/org/cards/gateway/configurations/SecurityConfig.java
+// based on:
+// https://github.com/bogdanmarculescu/2025microservices/blob/main/gateway/src/main/java/org/cards/gateway/configurations/SecurityConfig.java
 // https://gitlab.com/markozivkovic95/azure-ad-auth-demo/-/blob/main/src/main/java/com/demo/azure_ad_auth_demo/configurations/SecurityConfiguration.java?ref_type=heads
 
 @Configuration
@@ -30,15 +31,15 @@ public class SecurityConfig {
         this.azureActiveDirectoryProperties = azureActiveDirectoryProperties;
     }
 
-    /** Allow actuator/health without JWT (for Consul health checks). */
+    // Allow actuator/health without JWT (for Consul health checks).
     @Bean
     @Order(0)
     public SecurityWebFilterChain actuatorSecurity(ServerHttpSecurity http) {
         http
-                .securityMatcher(ServerWebExchangeMatchers.pathMatchers("/actuator/**", "/health"))
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .cors(Customizer.withDefaults())
-                .authorizeExchange(exchanges -> exchanges.anyExchange().permitAll());
+        .securityMatcher(ServerWebExchangeMatchers.pathMatchers("/actuator/**", "/health"))
+        .csrf(ServerHttpSecurity.CsrfSpec::disable)
+        .cors(Customizer.withDefaults())
+        .authorizeExchange(exchanges -> exchanges.anyExchange().permitAll());
         return http.build();
     }
 
@@ -47,23 +48,23 @@ public class SecurityConfig {
             ServerHttpSecurity serverHttpSecurity
     ) {
         serverHttpSecurity.csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(exchange ->
-                        exchange
-                                .pathMatchers("/health").permitAll()
-                                .pathMatchers("/api/chat/**").permitAll()
-                                .pathMatchers("/api/user/**").permitAll()
-                                .pathMatchers("/api/canvas/**").permitAll()
-                                .pathMatchers("/api/settings/**").permitAll()
-                                .pathMatchers("/api/v1/**").permitAll()
-                                //anything below here requires authentication
-                                .anyExchange().authenticated()
-                ).oauth2ResourceServer( oauth2 ->
-                        oauth2.jwt(Customizer.withDefaults()));
+            .authorizeExchange(exchange ->
+                exchange
+                    .pathMatchers("/health").permitAll()
+                    .pathMatchers("/api/chat/**").permitAll()
+                    .pathMatchers("/api/user/**").permitAll()
+                    .pathMatchers("/api/canvas/**").permitAll()
+                    .pathMatchers("/api/settings/**").permitAll()
+                    .pathMatchers("/api/v1/**").permitAll()
+                    .anyExchange().authenticated()
+            ).oauth2ResourceServer( oauth2 ->
+                oauth2.jwt(Customizer.withDefaults())
+            );
 
         return serverHttpSecurity.build();
     }
 
-    /** Global CORS configuration applied to all endpoints. */
+    // Global CORS configuration applied to all endpoints.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cors = new CorsConfiguration();

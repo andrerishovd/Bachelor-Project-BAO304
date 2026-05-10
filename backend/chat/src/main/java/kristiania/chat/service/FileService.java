@@ -1,23 +1,14 @@
 package kristiania.chat.service;
 
-import org.springframework.ai.document.Document;
-import org.springframework.ai.reader.tika.TikaDocumentReader;
-import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -31,12 +22,12 @@ public class FileService {
     String downloadDirectory;
     @Value("${COURSE_MATERIAL_PATH:/courseMaterial}")
     String courseMaterialDirectory;
-    //private final File unzipDirectory = new File(courseMaterialDirectory);
 
     String baseUri = "http://canvas-service:8060/api/canvas";
     String testCourseId = "PJ6100-1";
 
-    //Based on solution in this thread: https://stackoverflow.com/questions/34660698/download-zip-file-using-url-in-java
+    // Based on solution in this thread: https://stackoverflow.com/questions/34660698/download-zip-file-using-url-in-java
+    // Download zip folder with name {"courseId"} from canvas-service to /downloads and unzip to /courseMaterial
     private void downloadCourseZip(String courseId) {
         String downloadUri = baseUri + "/courseId/" + courseId + "/zipArchiveStream";
         URI uri = URI.create(downloadUri);
@@ -60,9 +51,6 @@ public class FileService {
         }
 
         unzipFiles(courseId);
-        //GET to http://canvas-service/api/...
-        //Store in new folder resources/downloads
-        //unzip to /resources/courses/{courseId}
     }
 
     // Based on tutorial from https://www.baeldung.com/java-compress-and-uncompress
@@ -126,17 +114,15 @@ public class FileService {
     }
 
     public Void getZippedFiles(String courseId) {
-        //Hard coded id for testing
         downloadCourseZip(testCourseId);
-        //return all files in /resources/courses/{courseId} in a List
 
         return null;
     }
 
     public List<String> getFileNames(File folder) {
         List<String> fileNameList = Arrays.stream(Objects.requireNonNull(folder.listFiles(File::isFile)))
-                .map(File::getName)
-                .toList();
+            .map(File::getName)
+            .toList();
 
         return fileNameList;
     }

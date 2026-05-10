@@ -15,9 +15,9 @@ public class AuthRouter {
     public RouterFunction<ServerResponse> authRoutes(final AuthHandler authHandler) {
 
         return RouterFunctions.route(
-                POST("/api/v1/authentication"), authHandler::authenticate
+            POST("/api/v1/authentication"), authHandler::authenticate
         ).andRoute(
-                POST("/api/v1/authentication/refresh-token"), authHandler::refreshToken
+            POST("/api/v1/authentication/refresh-token"), authHandler::refreshToken
         );
     }
 

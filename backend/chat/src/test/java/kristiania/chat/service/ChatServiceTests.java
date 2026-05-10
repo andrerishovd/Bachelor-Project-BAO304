@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ai.vectorstore.VectorStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,18 +43,18 @@ public class ChatServiceTests {
     @Test
     public void ChatService_GetAllChatsDto_ReturnsListChatDto() {
         Chat savedChat = Chat.builder()
-                .id(1L)
-                .title("what is 1+1?")
-                .userId("14")
-                .messageList(new ArrayList<>())
-                .build();
+            .id(1L)
+            .title("what is 1+1?")
+            .userId("14")
+            .messageList(new ArrayList<>())
+            .build();
 
         Chat savedChat2 = Chat.builder()
-                .id(2L)
-                .title("What are microservices?")
-                .userId("14")
-                .messageList(new ArrayList<>())
-                .build();
+            .id(2L)
+            .title("What are microservices?")
+            .userId("14")
+            .messageList(new ArrayList<>())
+            .build();
 
         List<Chat> chatList = new ArrayList<>();
         chatList.add(savedChat);
@@ -75,18 +74,18 @@ public class ChatServiceTests {
     @Test
     public void ChatService_GetAllTitlesDto_ReturnsListChatTitleDto() {
         Chat savedChat = Chat.builder()
-                .id(1L)
-                .title("what is 1+1?")
-                .userId("14")
-                .messageList(new ArrayList<>())
-                .build();
+            .id(1L)
+            .title("what is 1+1?")
+            .userId("14")
+            .messageList(new ArrayList<>())
+            .build();
 
         Chat savedChat2 = Chat.builder()
-                .id(2L)
-                .title("What are microservices?")
-                .userId("14")
-                .messageList(new ArrayList<>())
-                .build();
+            .id(2L)
+            .title("What are microservices?")
+            .userId("14")
+            .messageList(new ArrayList<>())
+            .build();
 
         List<Chat> chatList = new ArrayList<>();
         chatList.add(savedChat);
@@ -110,11 +109,11 @@ public class ChatServiceTests {
         Long id = 1L;
 
         Chat savedChat = Chat.builder()
-                .id(id)
-                .title("what is 1+1?")
-                .userId("14")
-                .messageList(new ArrayList<>())
-                .build();
+            .id(id)
+            .title("what is 1+1?")
+            .userId("14")
+            .messageList(new ArrayList<>())
+            .build();
 
         when(chatRepository.getReferenceById(Mockito.eq(id))).thenReturn(savedChat);
 
@@ -137,29 +136,29 @@ public class ChatServiceTests {
     @Test
     public void ChatService_CreateNewChatFromChatRequest_ReturnsChatResponse() {
         ChatRequest chatRequest = ChatRequest.builder()
-                .message("what is 1+1?")
-                .build();
+            .message("what is 1+1?")
+            .build();
 
         Chat savedChat = Chat.builder()
-                .id(1L)
-                .title("what is 1+1?")
-                .userId("14")
-                .messageList(new ArrayList<>())
-                .build();
+            .id(1L)
+            .title("what is 1+1?")
+            .userId("14")
+            .messageList(new ArrayList<>())
+            .build();
 
         ChatResponse chatResponse = ChatResponse.builder()
-                .chatId(1L)
-                .response("The answer is 2")
-                .build();
+            .chatId(1L)
+            .response("The answer is 2")
+            .build();
 
         when(chatRepository.save(Mockito.any(Chat.class)))
-                .thenReturn(savedChat);
+            .thenReturn(savedChat);
 
         when(chatRepository.getReferenceById(1L))
-                .thenReturn(savedChat);
+            .thenReturn(savedChat);
 
         when(aiService.sendChat(Mockito.eq(1L), Mockito.anyString()))
-                .thenReturn(chatResponse);
+            .thenReturn(chatResponse);
 
         ChatResponse newChatResponse = chatService.createNewChatFromChatRequest(chatRequest);
 
@@ -168,7 +167,7 @@ public class ChatServiceTests {
         Assertions.assertThat(newChatResponse.getResponse()).isEqualTo("The answer is 2");
 
         Mockito.verify(messageService, Mockito.times(2))
-                .saveMessageDto(Mockito.any(MessageDto.class), Mockito.eq(savedChat));
+            .saveMessageDto(Mockito.any(MessageDto.class), Mockito.eq(savedChat));
     }
 
     @Test

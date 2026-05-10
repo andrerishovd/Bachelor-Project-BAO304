@@ -42,16 +42,16 @@ public class CanvasService {
 
     private List<String> getFolderNames(File folder) {
         List<String> folderNameList = Arrays.stream(Objects.requireNonNull(folder.listFiles(File::isDirectory)))
-                .map(File::getName)
-                .toList();
+            .map(File::getName)
+            .toList();
 
         return folderNameList;
     }
 
     private List<String> getFileNames(File folder) {
         List<String> fileNameList = Arrays.stream(Objects.requireNonNull(folder.listFiles(File::isFile)))
-                .map(File::getName)
-                .toList();
+            .map(File::getName)
+            .toList();
 
         return fileNameList;
     }

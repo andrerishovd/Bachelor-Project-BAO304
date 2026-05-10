@@ -28,24 +28,16 @@ public class MessageService {
 
     public void saveMessageDto(MessageDto messageDto, Chat chat) {
 
-        // save message to that chat
         Message message = Message.builder()
-                .body(messageDto.body())
-                .localDateTime(LocalDateTime.now())
-                .senderType(SenderType.valueOf(messageDto.senderType()))
-                .senderId("22")
-                .chat(chat)
-                .build();
+            .body(messageDto.body())
+            .localDateTime(LocalDateTime.now())
+            .senderType(SenderType.valueOf(messageDto.senderType()))
+            .senderId("22")
+            .chat(chat)
+            .build();
 
         messageRepository.save(message);
     }
-
-    /*
-    // make own service?
-    public void saveMessage(Message message, Chat chat) {
-        // save message to parameter chat
-    }
-     */
 
     public Message putMessageFromId(Message newMessage) {
         Message oldMessage, savedMessage = null;

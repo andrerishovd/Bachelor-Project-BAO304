@@ -15,12 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends Participant{
-
     @Column(name = "oid", length = 255)
     private String entraId;
     @Column(name = "email", length = 100)
     private String email;
-
-    //private String program;
-    //private int term;
 }

@@ -8,6 +8,5 @@ public record SettingsDto(
         Theme theme,
         String userId,
         String fontSize
-
 ) {
 }

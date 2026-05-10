@@ -18,17 +18,14 @@ public class UserController {
         this.userService = userService;
     }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GET
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsersDto());
     }
 
-    @CrossOrigin
     @GetMapping("/id/{id}")
     public ResponseEntity<UserDto> getUserFromId(@PathVariable String id) {
         return ResponseEntity.ok(userService.getUserDtoFromId(id));
@@ -38,7 +35,6 @@ public class UserController {
 // POST
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @CrossOrigin
     @PostMapping("/new")
     public ResponseEntity<String> postNewUser(@RequestHeader("Authorization") String authorizationHeader) {
         return ResponseEntity.ok(userService.saveUser(authorizationHeader));
@@ -48,13 +44,11 @@ public class UserController {
 // DELETE
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @CrossOrigin
     @DeleteMapping("/delete/all")
     public ResponseEntity<Void> deleteAllUsers() {
         return ResponseEntity.ok(userService.deleteAllUsers());
     }
 
-    @CrossOrigin
     @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<Void> deleteUserFromId(@PathVariable String id) {
         return ResponseEntity.ok(userService.deleteUserFromId(id));

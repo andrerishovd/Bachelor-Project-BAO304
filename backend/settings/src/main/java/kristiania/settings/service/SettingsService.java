@@ -6,8 +6,6 @@ import kristiania.settings.repository.SettingsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 public class SettingsService {
@@ -27,11 +25,11 @@ public class SettingsService {
     public Settings saveSettingsDto(SettingsDto settingsDto){
 
         Settings settings = Settings.builder()
-                .theme(settingsDto.theme())
-                .fontSize(settingsDto.fontSize())
-                .language(settingsDto.language())
-                .userId(Long.valueOf(settingsDto.userId()))
-                .build();
+            .theme(settingsDto.theme())
+            .fontSize(settingsDto.fontSize())
+            .language(settingsDto.language())
+            .userId(Long.valueOf(settingsDto.userId()))
+            .build();
 
         return settingsRepository.save(settings);
     }
@@ -39,6 +37,5 @@ public class SettingsService {
         // GET THE USERS ID VIA API.
         return settingsRepository.save(settings);
         // DELETE USERS PREVIOUS SETTING.
-
     }
 }
