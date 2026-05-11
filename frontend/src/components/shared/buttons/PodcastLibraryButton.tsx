@@ -41,9 +41,10 @@ const PodcastLibraryButton = () => {
     <button
       onClick={() => navigate("/podcast/library")}
       className="w-full justify-start gap-2 is-drawer-close:tooltip"
+      aria-label={t("library")}
     >
       <NumberedListIcon className="size-4 shrink-0" aria-hidden="true" />
-      <span>{t("library")}</span>
+      <span aria-hidden="true">{t("library")}</span>
     </button>
   );
 };

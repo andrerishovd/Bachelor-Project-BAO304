@@ -74,17 +74,24 @@ const AuthenticationForm = () => {
         >
           <div className="card-body">
             <fieldset className="fieldset flex flex-col gap-2">
+              <legend className="sr-only">{t("loginOptions")}</legend>
               {/* Email login */}
               {allowEmailSignIn && (
                 <>
-                  <label className="label">{t("email")}</label>
+                  <label htmlFor="email" className="label">
+                    {t("email")}
+                  </label>
                   <input
+                    id="email"
                     type="email"
                     className="input"
                     placeholder={t("email")}
                   />
-                  <label className="label">{t("password")}</label>
+                  <label htmlFor="password" className="label">
+                    {t("password")}
+                  </label>
                   <input
+                    id="password"
                     type="password"
                     className="input"
                     placeholder={t("password")}
@@ -96,7 +103,10 @@ const AuthenticationForm = () => {
                     className="btn btn-neutral mt-2"
                   >
                     {isLoading ? (
-                      <span className="loading loading-spinner loading-xs" />
+                      <span
+                        className="loading loading-spinner loading-xs"
+                        aria-label={t("accessibility:loading")}
+                      />
                     ) : (
                       t("login")
                     )}
@@ -124,6 +134,7 @@ const AuthenticationForm = () => {
                   ) : (
                     <>
                       <svg
+                        role="img"
                         aria-label="Microsoft logo"
                         width="16"
                         height="16"
@@ -164,7 +175,7 @@ const AuthenticationForm = () => {
                   {getConsentText()}
                 </p>
               )} */}
-              <p className="text-xs text-base-content/40 text-center mt-2">
+              <p className="text-xs text-base-content/70 text-center mt-2">
                 {getConsentText()}{" "}
                 <button
                   onClick={() => setIsPrivacyOpen(true)}

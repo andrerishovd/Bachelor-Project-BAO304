@@ -1,7 +1,11 @@
 import AppLogoText from "./AppLogoText";
 
 const AuthLogoLg = () => {
-  return <AppLogoText size="lg" stacked />;
+  return (
+    <h1>
+      <AppLogoText size="lg" stacked />
+    </h1>
+  );
 };
 
 export default AuthLogoLg;

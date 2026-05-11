@@ -44,10 +44,12 @@ const Navbar = () => {
 
   return (
     <nav className="navbar w-full bg-base-300">
-      <label
-        htmlFor="my-drawer-4"
+      <button
+        onClick={toggleSidebar}
         aria-label={t("accessibility:toggleSidebar")}
         className="btn btn-square btn-ghost"
+        aria-expanded={isExtended}
+        aria-controls="my-drawer-4"
       >
         {isExtended ? (
           <LayoutSidebarLeftCollapse
@@ -60,9 +62,11 @@ const Navbar = () => {
             aria-hidden="true"
           />
         )}
-      </label>
+      </button>
 
-      <div className="flex-1 px-4">{getTitle()}</div>
+      <div className="flex-1 px-4">
+        <h1 className="text-base font-medium">{getTitle()}</h1>
+      </div>
 
       {/* UU settings for desktop screen sizes */}
       <div className="hidden  md:flex gap-2">
@@ -80,7 +84,10 @@ const Navbar = () => {
           onKeyDown={handleKeyDown}
           aria-expanded={isDropdownOpen}
         >
-          <Cog6ToothIcon className="my-1.5 inline-block size-4 shrink-0" />
+          <Cog6ToothIcon
+            className="my-1.5 inline-block size-4 shrink-0"
+            aria-hidden="true"
+          />
         </button>
 
         <ul

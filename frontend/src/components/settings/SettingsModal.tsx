@@ -89,7 +89,7 @@ const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
             {t("settings:account")}
           </h4>
           <div className="flex items-center justify-between">
-            <span className="text-sm text-base-content/60">
+            <span className="text-sm text-base-content/70">
               {user?.username}
             </span>
             <button onClick={logout} className="btn btn-sm btn-error btn-soft">

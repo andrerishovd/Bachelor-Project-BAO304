@@ -1,4 +1,4 @@
-// Has to be filled with real data
+/* Placeholder component, needs major rework and integration in order to be used  */
 
 import { PlayIcon } from "@heroicons/react/24/outline";
 

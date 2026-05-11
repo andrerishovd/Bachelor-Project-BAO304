@@ -36,7 +36,11 @@ const CodeBlock = ({ language, children }: CodeBlockProps) => {
   const handleCopy = () => copyToClipboard(children);
 
   return (
-    <div className=" not-prose rounded-lg overflow-hidden my-2">
+    <div
+      className="not-prose rounded-lg overflow-hidden my-2"
+      role="region"
+      aria-label={t("codeBlockLabel", { language })}
+    >
       {/* Topbar: language label left, copy button right */}
       <div className="flex justify-between items-center px-4 py-1 bg-[#282c34] text-neutral-400 text-xs border-b border-neutral-600">
         <span>{language}</span>
@@ -46,12 +50,16 @@ const CodeBlock = ({ language, children }: CodeBlockProps) => {
         >
           <button
             onClick={handleCopy}
+            aria-label={copied ? t("codeCopied") : t("copyCode")}
             className="btn btn-xs btn-ghost opacity-60 hover:opacity-100"
           >
             {copied ? (
-              <ClipboardDocumentCheckIcon className="w-4 h-4" />
+              <ClipboardDocumentCheckIcon
+                className="w-4 h-4"
+                aria-hidden="true"
+              />
             ) : (
-              <ClipboardIcon className="w-4 h-4" />
+              <ClipboardIcon className="w-4 h-4" aria-hidden="true" />
             )}
           </button>
         </div>

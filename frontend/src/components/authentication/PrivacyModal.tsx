@@ -29,7 +29,7 @@ const PrivacyModal = ({ isOpen, onClose }: PrivacyModalProps) => {
       <dialog ref={dialogRef} className="modal" onClose={onClose}>
         <div className="modal-box max-w-lg">
           <h3 className="font-bold text-lg mb-2">{t("privacy.title")}</h3>
-          <p className="text-sm text-base-content/60 mb-4">
+          <p className="text-sm text-base-content/70 mb-4">
             {t("privacy.intro")}
           </p>
 

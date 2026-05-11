@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useSidebar } from "../../contexts/SidebarContext";
 import AppLogoText from "./AppLogoText";
+import { useTranslation } from "react-i18next";
 /**
  * AppLogoSm
  *
@@ -11,10 +12,11 @@ import AppLogoText from "./AppLogoText";
 const AppLogoSm = () => {
   const navigate = useNavigate();
   const { isExtended } = useSidebar();
+  const { t } = useTranslation("common");
 
   return (
     <li>
-      <button onClick={() => navigate("/")}>
+      <button onClick={() => navigate("/")} aria-label={t("goToHome")}>
         <AnimatePresence mode="wait">
           {isExtended ? (
             <motion.span
@@ -24,6 +26,7 @@ const AppLogoSm = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
               className="whitespace-nowrap"
+              aria-hidden="true"
             >
               <AppLogoText size="sm" />
             </motion.span>
@@ -34,6 +37,7 @@ const AppLogoSm = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
+              aria-hidden="true"
             >
               <AppLogoText size="sm" short />
             </motion.span>

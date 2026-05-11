@@ -37,7 +37,7 @@ const PodcastDetailList = ({ podcasts }: PodcastDetailListProps) => {
 
   if (podcasts.length === 0) {
     return (
-      <p className="text-sm text-base-content/50 px-4">{t("emptyLibrary")}</p>
+      <p className="text-sm text-base-content/70 px-4">{t("emptyLibrary")}</p>
     );
   }
 

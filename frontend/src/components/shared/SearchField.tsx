@@ -127,15 +127,22 @@ const SearchField = forwardRef<HTMLInputElement>((props, ref) => {
           }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
         >
-          <MagnifyingGlassIcon className="w-4 h-4 shrink-0" />
+          <MagnifyingGlassIcon
+            className="w-4 h-4 shrink-0"
+            aria-hidden="true"
+          />
         </motion.button>
       </div>
 
       {/* Suggestions dropdown */}
       {showSuggestions && (
-        <ul className="absolute top-full left-0 right-0 mt-1 menu bg-base-100 rounded-box shadow-lg z-50 max-h-64 overflow-y-auto">
+        <ul
+          className="absolute top-full left-0 right-0 mt-1 menu bg-base-100 rounded-box shadow-lg z-50 max-h-64 overflow-y-auto"
+          role="listbox"
+          aria-label={t("accessibility:searchSuggestions")}
+        >
           {results.length === 0 ? (
-            <li className="px-4 py-2 text-sm text-base-content/50">
+            <li className="px-4 py-2 text-sm text-base-content/70">
               {t("noResults")}
             </li>
           ) : (
@@ -160,9 +167,13 @@ const SearchField = forwardRef<HTMLInputElement>((props, ref) => {
           )}
 
           {/* Link to full search results page */}
-          {/* TODO DaisyUI style button */}
+
           <li className="border-t border-base-200">
-            <button onClick={handleSubmit} className="text-sm text-primary">
+            <button
+              onClick={handleSubmit}
+              className="text-sm text-primary"
+              aria-label={t("accessibility:seeAllResults", { query })}
+            >
               {t("seeAllResults", { query })}
             </button>
           </li>

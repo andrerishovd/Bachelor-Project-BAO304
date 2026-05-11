@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MicrophoneIcon } from "@heroicons/react/24/outline";
 import { useSidebar } from "../../../contexts/SidebarContext";
 
@@ -31,9 +31,10 @@ const GeneratePodcastButton = () => {
     <button
       onClick={() => navigate("/podcast/generate")}
       className="w-full justify-start gap-2 is-drawer-close:tooltip"
+      aria-label={t("generatePodcast")}
     >
       <MicrophoneIcon className="size-4 shrink-0" aria-hidden="true" />
-      <span>{t("generatePodcast")}</span>
+      <span aria-hidden="true">{t("generatePodcast")}</span>
     </button>
   );
 };

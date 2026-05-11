@@ -7,6 +7,7 @@ import type { AppLayoutProps } from "../interfaces/shared/IAppLayoutProps";
 import { useMediaContext } from "../contexts/MediaContext";
 import FullPlayer from "../components/podcast/mediaplayer/FullPlayer";
 import useSettings from "../hooks/useSettings";
+import { useTranslation } from "react-i18next";
 
 // App layout acts as the viewport, showing page content between the frame of the Navbar and Sidebar.
 // Pages from pages/ are rendered inside the children prop.
@@ -14,6 +15,7 @@ import useSettings from "../hooks/useSettings";
 const AppLayout = ({ children }: AppLayoutProps) => {
   const { isExtended, toggleSidebar } = useSidebar();
   const { episode, isExpanded } = useMediaContext();
+  const { t } = useTranslation("accessibility");
   useSettings();
 
   return (
@@ -24,6 +26,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         className="drawer-toggle"
         checked={isExtended}
         onChange={toggleSidebar}
+        aria-label={t("toggleSidebar")}
       />
 
       <div className="drawer-content flex flex-col h-screen overflow-hidden">
@@ -33,7 +36,11 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       </div>
 
       <div className="drawer-side">
-        <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
+        <label
+          htmlFor="my-drawer-4"
+          className="drawer-overlay"
+          aria-label={t("closeSidebar")}
+        />
         <Sidebar />
       </div>
     </div>

@@ -27,5 +27,6 @@
   "code": "Kode",
   "diagramCode": "Diagramkode",
   "fileUploaded": "{{name}} uploaded successfully",
-  "fileUploadError": "Failed to upload file. Please try again."
+  "fileUploadError": "Kunne ikke laste opp fil. Prøv igjen.",
+  "deleteChat": "Slett samtale"
 }

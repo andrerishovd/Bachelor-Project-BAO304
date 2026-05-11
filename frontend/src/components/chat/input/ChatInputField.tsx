@@ -189,6 +189,8 @@ const ChatInputField = ({
       {/* Input container – also acts as drag-and-drop zone */}
       <div
         {...getRootProps()}
+        role="region"
+        aria-label={t("accessibility:dropZone")}
         className={`
           input input-bordered flex items-center gap-2 w-full h-auto min-h-12 py-2
           ${isDragActive ? "border-primary border-2 bg-primary/10" : ""}
@@ -202,6 +204,7 @@ const ChatInputField = ({
           placeholder={
             isDragActive ? t("dropFilesHere") : t("inputFieldHelpText")
           }
+          aria-label={t("inputFieldHelpText")}
           value={message}
           onChange={handleMessageChange}
           onKeyDown={handleKeyDown}
@@ -215,7 +218,7 @@ const ChatInputField = ({
             type="button"
             className="btn btn-ghost btn-sm btn-circle"
             onClick={openFilePicker}
-            aria-label={t("attachFile")}
+            aria-label={t("accessibility:attachFile")}
             disabled={isBusy}
           >
             <Paperclip className="size-5" aria-hidden="true" />
@@ -226,7 +229,11 @@ const ChatInputField = ({
 
         {/* Send / loading indicator */}
         {isBusy ? (
-          <span className="loading loading-spinner loading-xs" />
+          <span
+            className="loading loading-spinner loading-xs"
+            aria-label={t("accessibility:loading")}
+            role="status"
+          />
         ) : (
           <button
             type="button"

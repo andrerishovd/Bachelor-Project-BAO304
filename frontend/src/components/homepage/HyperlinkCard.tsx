@@ -23,6 +23,10 @@ const LINKS: HyperlinkItem[] = [
  * Displays a list of external links with an icon indicating
  * that the user will be redirected to another page.
  * Links are defined in the LINKS array for easier maintenance.
+ *
+ *  * Accessibility:
+ * - aria-label on each link includes the link text and a note that it opens in a new tab
+ * - The icon is hidden from screen readers via aria-hidden
  */
 const HyperlinkCard = () => {
   const { t } = useTranslation("dashboard");
@@ -39,8 +43,12 @@ const HyperlinkCard = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm hover:text-primary transition-colors group"
+                aria-label={`${label} (${t("accessibility:opensInNewTab")})`}
               >
-                <ArrowTopRightOnSquareIcon className="w-4 h-4 shrink-0 text-base-content/40 group-hover:text-primary transition-colors" />
+                <ArrowTopRightOnSquareIcon
+                  className="w-4 h-4 shrink-0 text-base-content/40 group-hover:text-primary transition-colors"
+                  aria-hidden="true"
+                />
                 {label}
               </a>
             </li>

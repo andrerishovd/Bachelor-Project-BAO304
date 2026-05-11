@@ -75,8 +75,8 @@ const MermaidBlock = ({ chart }: MermaidBlockProps) => {
 
       <div className="collapse-content flex flex-col gap-2">
         {/* View mode toggle */}
-        <div className="flex items-center gap-2 pt-2 text-sm text-base-content/60">
-          <ChartBarIcon className="w-4 h-4" />
+        <div className="flex items-center gap-2 pt-2 text-sm text-base-content/70">
+          <ChartBarIcon className="w-4 h-4" aria-hidden="true" />
           <span>{t("diagram")}</span>
           <input
             type="checkbox"
@@ -84,7 +84,7 @@ const MermaidBlock = ({ chart }: MermaidBlockProps) => {
             checked={viewMode === "code"}
             onChange={(e) => setViewMode(e.target.checked ? "code" : "diagram")}
           />
-          <CodeBracketIcon className="w-4 h-4" />
+          <CodeBracketIcon className="w-4 h-4" aria-hidden="true" />
           <span>{t("code")}</span>
         </div>
 
@@ -92,7 +92,11 @@ const MermaidBlock = ({ chart }: MermaidBlockProps) => {
         {viewMode === "diagram" && (
           <div>
             {isLoading ? (
-              <div className="w-full h-48 skeleton" />
+              <div
+                className="w-full h-48 skeleton"
+                role="status"
+                aria-label={t("accessibility:loading")}
+              />
             ) : svg ? (
               <div
                 className="flex justify-center"

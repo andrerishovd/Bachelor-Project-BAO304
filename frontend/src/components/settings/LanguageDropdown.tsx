@@ -17,10 +17,22 @@ const LanguageDropdown = () => {
 
   return (
     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn m-1">
-        <span className={`fi fi-${currentLanguage.flagCode}`} />
+      <div
+        tabIndex={0}
+        role="button"
+        className="btn m-1"
+        aria-label={t("selectLanguage")}
+        aria-haspopup="listbox"
+      >
+        <span
+          className={`fi fi-${currentLanguage.flagCode}`}
+          aria-hidden="true"
+        />
         {t(currentLanguage.labelKey)}
-        <ChevronDownIcon className="my-1.5 inline-block size-2 shrink-0" />
+        <ChevronDownIcon
+          className="my-1.5 inline-block size-2 shrink-0"
+          aria-hidden="true"
+        />
       </div>
       <ul
         tabIndex={-1}
