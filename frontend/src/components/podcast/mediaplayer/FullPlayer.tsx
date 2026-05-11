@@ -9,6 +9,7 @@ import {
   ChevronDownIcon,
   QueueListIcon,
   MoonIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { formatTime } from "../../../utils/formatTime";
 
@@ -21,6 +22,9 @@ import { formatTime } from "../../../utils/formatTime";
  *
  * @example
  * <FullPlayer />
+ *
+ * Needs to be modulirzed.
+ *
  */
 const FullPlayer = () => {
   const { t } = useTranslation("media");
@@ -51,8 +55,6 @@ const FullPlayer = () => {
 
   if (!episode || !isExpanded) return null;
 
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
-
   return (
     <div className="w-full bg-base-200 border-t border-base-300 p-4">
       <div className="max-w-4xl mx-auto">
@@ -67,13 +69,17 @@ const FullPlayer = () => {
           )}
           <div className="flex-1 min-w-0">
             <p className="font-semibold truncate">{episode.title}</p>
-            <p className="text-sm text-base-content/50 truncate">
+            <p className="text-sm text-base-content/70 truncate">
               {episode.podcastName}
             </p>
           </div>
           <div className="tooltip tooltip-left" data-tip={t("minimize")}>
-            <button onClick={toggleExpanded} className="btn btn-sm btn-ghost">
-              <ChevronDownIcon className="w-5 h-5" />
+            <button
+              onClick={toggleExpanded}
+              className="btn btn-sm btn-ghost"
+              aria-label={t("minimize")}
+            >
+              <ChevronDownIcon className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -86,6 +92,7 @@ const FullPlayer = () => {
           value={currentTime}
           onChange={(e) => seek(Number(e.target.value))}
           className="range range-sm w-full mb-1"
+          aria-label={t("seekBar")}
         />
         <div className="flex justify-between text-xs text-base-content/50 mb-4">
           <span>{formatTime(currentTime)}</span>
@@ -95,23 +102,32 @@ const FullPlayer = () => {
         {/* Main controls */}
         <div className="flex justify-center items-center gap-4 mb-4">
           <div className="tooltip tooltip-top" data-tip={t("skip15Back")}>
-            <button onClick={skipBackward} className="btn btn-sm btn-ghost">
-              <BackwardIcon className="w-5 h-5" />
+            <button
+              onClick={skipBackward}
+              className="btn btn-sm btn-ghost"
+              aria-label={t("skip15Back")}
+            >
+              <BackwardIcon className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
           <button
             onClick={togglePlayPause}
             className="btn btn-circle btn-primary"
+            aria-label={isPlaying ? t("pause") : t("play")}
           >
             {isPlaying ? (
-              <PauseIcon className="w-6 h-6" />
+              <PauseIcon className="w-6 h-6" aria-hidden="true" />
             ) : (
-              <PlayIcon className="w-6 h-6" />
+              <PlayIcon className="w-6 h-6" aria-hidden="true" />
             )}
           </button>
           <div className="tooltip tooltip-top" data-tip={t("skip15Forward")}>
-            <button onClick={skipForward} className="btn btn-sm btn-ghost">
-              <ForwardIcon className="w-5 h-5" />
+            <button
+              onClick={skipForward}
+              className="btn btn-sm btn-ghost"
+              aria-label={t("skip15Forward")}
+            >
+              <ForwardIcon className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -126,6 +142,7 @@ const FullPlayer = () => {
                 className="toggle toggle-sm toggle-primary"
                 checked={autoPlay}
                 onChange={toggleAutoPlay}
+                aria-label={t("autoPlay")}
               />
               <span className="text-xs text-base-content/60">
                 {t("autoPlay")}
@@ -148,8 +165,10 @@ const FullPlayer = () => {
                   onClick={() => setShowSleepTimer((p) => !p)}
                   tabIndex={0}
                   className={`btn btn-sm btn-ghost ${sleepTimer ? "text-primary" : ""}`}
+                  aria-label={t("sleepTimer")}
+                  aria-expanded={showSleepTimer}
                 >
-                  <MoonIcon className="w-4 h-4" />
+                  <MoonIcon className="w-4 h-4" aria-hidden="true" />
                   {sleepTimerRemaining && (
                     <span className="text-xs">
                       {formatTime(sleepTimerRemaining)}
@@ -182,6 +201,7 @@ const FullPlayer = () => {
                         min={1}
                         max={120}
                         value={customMinutes}
+                        aria-label={t("customMinutes")}
                         onChange={(e) =>
                           setCustomMinutes(Number(e.target.value))
                         }
@@ -212,10 +232,12 @@ const FullPlayer = () => {
             {/* Queue */}
             <div className="tooltip tooltip-top" data-tip={t("queue")}>
               <button
+                aria-label={t("queue")}
+                aria-expanded={showQueue}
                 onClick={() => setShowQueue((p) => !p)}
                 className={`btn btn-sm btn-ghost ${showQueue ? "btn-active" : ""}`}
               >
-                <QueueListIcon className="w-4 h-4" />
+                <QueueListIcon className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -226,7 +248,7 @@ const FullPlayer = () => {
           <div className="mt-4 border-t border-base-300 pt-4">
             <p className="text-sm font-medium mb-2">{t("upNext")}</p>
             {queue.length === 0 ? (
-              <p className="text-sm text-base-content/50">{t("emptyQueue")}</p>
+              <p className="text-sm text-base-content/70">{t("emptyQueue")}</p>
             ) : (
               <ul className="flex flex-col gap-2">
                 {queue.map((ep) => (
@@ -247,8 +269,11 @@ const FullPlayer = () => {
                     <button
                       onClick={() => removeFromQueue(ep.id)}
                       className="btn btn-xs btn-ghost text-error"
+                      aria-label={t("accessibility:removeFromQueue", {
+                        title: ep.title,
+                      })}
                     >
-                      ✕
+                      <XMarkIcon className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </li>
                 ))}

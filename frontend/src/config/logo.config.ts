@@ -1,5 +1,5 @@
 /**
- * Logo configuration for StudyBuddy.
+ * Logo configuration for Study Buddy.
  * Change useKristianiaFont to false to use the default sans-serif font.
  */
 export const LOGO_CONFIG = {

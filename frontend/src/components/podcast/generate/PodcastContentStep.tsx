@@ -74,7 +74,7 @@ const PodcastContentStep = ({
           }`}
         >
           <input {...getInputProps()} />
-          <p className="text-sm text-base-content/60">
+          <p className="text-sm text-base-content/70">
             {isDragActive ? t("dropFilesHere") : t("dragOrClick")}
           </p>
         </div>
@@ -92,7 +92,7 @@ const PodcastContentStep = ({
           {t("selectChats")}
         </label>
         {chats.length === 0 ? (
-          <p className="text-sm text-base-content/50">{t("noChats")}</p>
+          <p className="text-sm text-base-content/70">{t("noChats")}</p>
         ) : (
           <ul className="flex flex-col gap-1">
             {chats.map((chat) => (

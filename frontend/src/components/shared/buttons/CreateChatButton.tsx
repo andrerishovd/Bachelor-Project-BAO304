@@ -38,9 +38,10 @@ const CreateChatButton = () => {
     <button
       onClick={() => navigate("/chat/new")}
       className="w-full justify-start gap-2 is-drawer-close:tooltip"
+      aria-label={t("newChat")}
     >
       <PlusIcon className="size-4 shrink-0" aria-hidden="true" />
-      <span>{t("newChat")}</span>
+      <span aria-hidden="true">{t("newChat")}</span>
     </button>
   );
 };

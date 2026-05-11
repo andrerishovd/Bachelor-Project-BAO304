@@ -34,7 +34,7 @@ const ChatList = () => {
       ) : error ? (
         <p className="text-sm text-error px-4">{error}</p>
       ) : chats.length === 0 ? (
-        <p className="text-sm text-base-content/50 px-4">{t("noChat")}</p>
+        <p className="text-sm text-base-content/70 px-4">{t("noChat")}</p>
       ) : (
         <ul
           ref={containerRef as React.RefObject<HTMLUListElement>}

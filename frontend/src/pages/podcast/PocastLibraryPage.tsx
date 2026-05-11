@@ -48,9 +48,10 @@ const PodcastLibraryPage = () => {
           <button
             onClick={() => navigate("/podcast/generate")}
             className="btn btn-primary btn-sm gap-2"
+            aria-label={t("generatePodcast")}
           >
-            <PlusIcon className="w-4 h-4" />
-            {t("generatePodcast")}
+            <PlusIcon className="w-4 h-4" aria-hidden="true" />
+            <span aria-hidden="true">{t("generatePodcast")}</span>
           </button>
         }
       />
@@ -70,7 +71,7 @@ const PodcastLibraryPage = () => {
           </div>
         ) : (
           // Podcast list
-          <ul className="flex flex-col gap-1 p-4">
+          <ul className="flex flex-col gap-1 p-4" aria-label={t("podcastList")}>
             {MOCK_PODCASTS.map((podcast) => (
               <li
                 key={podcast.id}
@@ -99,9 +100,9 @@ const PodcastLibraryPage = () => {
                 <button
                   onClick={() => handlePlay(podcast)}
                   className="btn btn-circle btn-sm btn-ghost"
-                  aria-label={`Play ${podcast.title}`}
+                  aria-label={t("playEpisode", { title: podcast.title })}
                 >
-                  <PlayIcon className="w-4 h-4" />
+                  <PlayIcon className="w-4 h-4" aria-hidden="true" />
                 </button>
               </li>
             ))}

@@ -5,6 +5,7 @@
   "settings": "Settings",
 
   "homepage": "Home",
+  "goToHome": "Go to home",
   "dashboard": "Dashboard",
   "yourChats": "Your chats",
   "back": "Back",
@@ -18,5 +19,5 @@
   "noResults": "No results",
   "seeAllResults": "See all results",
   "seeAll": "Show all",
-  "generatePodcast": "Generer podcast"
+  "generatePodcast": "Generate podcast"
 }

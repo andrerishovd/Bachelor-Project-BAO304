@@ -17,22 +17,31 @@ const FontSizeSlider = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <label className="text-sm font-medium">{t("fontSize")}</label>
+        <label htmlFor="font-size-slider" className="text-sm font-medium">
+          {t("fontSize")}
+        </label>
       </div>
 
       <div className="flex items-center gap-3">
         {/* Small A indicator */}
-        <span className="text-xs text-base-content/50">A</span>
+        <span className="text-xs text-base-content/50" aria-hidden="true">
+          A
+        </span>
         <input
+          id="font-size-slider"
           type="range"
           min={min}
           max={max}
           value={fontSize}
           onChange={(e) => setFontSize(Number(e.target.value))}
           className="range range-sm flex-1"
+          aria-label={t("fontSize")}
+          aria-valuetext={`${fontSize}px`}
         />
         {/* Large A indicator */}
-        <span className="text-lg text-base-content/50">A</span>
+        <span className="text-lg text-base-content/50" aria-hidden="true">
+          A
+        </span>
       </div>
     </div>
   );

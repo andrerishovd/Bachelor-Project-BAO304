@@ -7,7 +7,7 @@ const ChangeLangBtn = () => {
   const { t, i18n } = useTranslation();
 
   return (
-    <div>
+    <div role="group" aria-label={t("accessibility:selectLanguage")}>
       <div
         className="tooltip tooltip-bottom"
         data-tip={t("accessibility:changeLangAriaNO")}
@@ -18,7 +18,7 @@ const ChangeLangBtn = () => {
           onClick={() => i18n.changeLanguage("no")}
           aria-label={t("accessibility:changeLangAriaNO")}
         >
-          <span className="fi fi-no"></span>
+          <span aria-hidden="true" className="fi fi-no"></span>
         </button>
       </div>
       <div
@@ -31,7 +31,7 @@ const ChangeLangBtn = () => {
           onClick={() => i18n.changeLanguage("en")}
           aria-label={t("accessibility:changeLangAriaEN")}
         >
-          <span className="fi fi-gb"></span>
+          <span aria-hidden="true" className="fi fi-gb"></span>
         </button>
       </div>
     </div>

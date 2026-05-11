@@ -60,12 +60,17 @@ const ChatsPage = () => {
 
       <div className="border-b border-base-300 p-4 flex items-center gap-2 shrink-0">
         {chats.length > 0 && (
-          <label className="flex items-center gap-3 px-4 py-2 text-sm text-base-content/60 cursor-pointer shrink-0">
+          <label
+            htmlFor="select-all"
+            className="flex items-center gap-3 px-4 py-2 text-sm text-base-content/70 cursor-pointer shrink-0"
+          >
             <input
+              id="select-all"
               type="checkbox"
               className="checkbox checkbox-sm rounded-md"
               checked={selected.size === chats.length}
               onChange={toggleSelectAll}
+              aria-label={t("selectAll")}
             />
             {t("selectAll")}
           </label>
@@ -76,15 +81,19 @@ const ChatsPage = () => {
             onClick={handleDelete}
             disabled={isDeleting}
             className="btn btn-secondary"
+            aria-label={t("deleteSelectedLabel", { count: selected.size })}
           >
-            <TrashIcon className="w-4 h-4" />
+            <TrashIcon className="w-4 h-4" aria-hidden="true" />
             {t("deleteSelected", { count: selected.size })}
           </button>
         )}
       </div>
 
       {/* Scrollable list */}
-      <ul className="list bg-base-100 rounded-box p-4">
+      <ul
+        className="list bg-base-100 rounded-box p-4"
+        aria-label={t("chatList")}
+      >
         {chats.map((chat) => (
           <ChatListItem
             key={chat.id}

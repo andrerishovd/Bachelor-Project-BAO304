@@ -19,15 +19,15 @@ const ChatListButton = () => {
   if (!isExtended) {
     return (
       <button
-        className=" is-drawer-close:tooltip-right"
+        className="is-drawer-close:tooltip-right"
         data-tip={t("chatListHeader")}
         onClick={() => navigate("/chats")}
+        aria-label={t("chatListHeader")}
       >
         <ChatBubbleOvalLeftEllipsisIcon
           className="size-4 shrink-0"
           aria-hidden="true"
         />
-        <span className="is-drawer-close:hidden">{t("chatListHeader")}</span>
       </button>
     );
   }
@@ -37,12 +37,13 @@ const ChatListButton = () => {
       onClick={() => navigate("/chats")}
       className="w-full justify-start gap-2 is-drawer-close:tooltip"
       data-tip={t("chatListHeader")}
+      aria-label={t("chatListHeader")}
     >
       <ChatBubbleOvalLeftEllipsisIcon
         className="size-4 shrink-0"
         aria-hidden="true"
       />
-      <span className="is-drawer-close:hidden">{t("chatListHeader")}</span>
+      <span aria-hidden="true">{t("chatListHeader")}</span>
     </button>
   );
 };

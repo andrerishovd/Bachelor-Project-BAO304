@@ -12,8 +12,11 @@ const ThemeControllerToggle = () => {
       : window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   return (
-    <label className="flex items-center cursor-pointer gap-2">
-      <Sun className="my-1.5 inline-block size-4 shrink-0" />
+    <label
+      className="flex items-center cursor-pointer gap-2"
+      aria-label={t("toggleDarkMode")}
+    >
+      <Sun className="my-1.5 inline-block size-4 shrink-0" aria-hidden="true" />
       <div className="tooltip tooltip-bottom" data-tip={t("toggleDarkMode")}>
         <input
           type="checkbox"
@@ -24,7 +27,10 @@ const ThemeControllerToggle = () => {
         />
       </div>
 
-      <Moon className="my-1.5 inline-block size-4 shrink-0" />
+      <Moon
+        className="my-1.5 inline-block size-4 shrink-0"
+        aria-hidden="true"
+      />
     </label>
   );
 };

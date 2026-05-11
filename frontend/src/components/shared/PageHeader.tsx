@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 interface PageHeaderProps {
   title: ReactNode;
@@ -34,22 +35,22 @@ const PageHeader = ({
   actions,
 }: PageHeaderProps) => {
   const navigate = useNavigate();
-
+  const { t } = useTranslation("common");
   return (
     <div className="border-b border-base-300 p-4 flex items-center gap-2 shrink-0">
       {showBack && (
         <button
           onClick={() => navigate(-1)}
           className="btn btn-sm btn-ghost shrink-0"
-          aria-label="Go back"
+          aria-label={t("goBack")}
         >
-          <ArrowLeftIcon className="w-4 h-4" />
+          <ArrowLeftIcon className="w-4 h-4" aria-hidden="true" />
         </button>
       )}
       <div className="flex-1 min-w-0">
         <h1 className="text-2xl font-bold truncate">{title}</h1>
         {description && (
-          <p className="text-sm text-base-content/60 mt-1">{description}</p>
+          <p className="text-sm text-base-content/70 mt-1">{description}</p>
         )}
       </div>
       {actions && (

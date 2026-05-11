@@ -32,10 +32,10 @@ const AppLogoText = ({
 
   if (stacked) {
     return (
-      <h1 className={`${sizeClass} font-bold ${fontClass} flex flex-col`}>
+      <span className={`${sizeClass} font-bold ${fontClass} flex flex-col`}>
         <span className={trackingClass}>Study</span>
         <span className={`-mt-3.5 ${trackingClass}`}>Buddy</span>
-      </h1>
+      </span>
     );
   }
 

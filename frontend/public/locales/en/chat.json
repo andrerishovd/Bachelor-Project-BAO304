@@ -27,5 +27,6 @@
   "code": "Code",
   "diagramCode": "Diagram code",
   "fileUploaded": "{{name}} uploaded successfully",
-  "fileUploadError": "Failed to upload file. Please try again."
+  "fileUploadError": "Failed to upload file. Please try again.",
+  "deleteChat": "Delete chat"
 }

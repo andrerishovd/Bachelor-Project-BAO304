@@ -51,14 +51,11 @@ const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
           <UserAvatar />
           <h3 className="font-bold text-lg">{t("common:profile")}</h3>
         </div>
-        <p className="py-4 text-sm text-base-content/60">
+        <p className="py-4 text-sm text-base-content/70">
           {t("common:profileDescription")}
         </p>
         <div className="flex justify-between items-center">
-          <button
-            className="btn btn-soft btn-error"
-            onClick={logout}
-          >
+          <button className="btn btn-soft btn-error" onClick={logout}>
             {t("settings:logout")}
           </button>
           <form method="dialog">

@@ -1,5 +1,6 @@
 import { Paperclip, X } from "tabler-icons-react";
 import type { IFilePreviewProps } from "../../../interfaces/chat/IFilePreviewProps";
+import { useTranslation } from "react-i18next";
 
 /**
  * FilePreview
@@ -14,14 +15,15 @@ import type { IFilePreviewProps } from "../../../interfaces/chat/IFilePreviewPro
  * @example
  * <FilePreview files={uploadedFiles} onRemove={removeFile} />
  */
-const FilePreview = ({ files, onRemove }: IFilePreviewProps) => {
-  if (files.length === 0) return null;
 
+const FilePreview = ({ files, onRemove }: IFilePreviewProps) => {
+  const { t } = useTranslation("accessibility");
+  if (files.length === 0) return null;
   return (
     <div
       className="flex flex-wrap gap-2"
       role="list"
-      aria-label="Attached files"
+      aria-label={t("attachedFiles")}
     >
       {files.map((file, index) => (
         <div
@@ -35,9 +37,9 @@ const FilePreview = ({ files, onRemove }: IFilePreviewProps) => {
             type="button"
             onClick={() => onRemove(index)}
             className="hover:text-error transition-colors"
-            aria-label={`Remove ${file.name}`}
+            aria-label={t("removeFile", { name: file.name })}
           >
-            <X className="size-3" />
+            <X aria-hidden="true" className="size-3" />
           </button>
         </div>
       ))}

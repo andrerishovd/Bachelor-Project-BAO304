@@ -38,12 +38,15 @@ const PodcastSettingsStep = ({
       <h2 className="font-semibold">{t("stepSettings")}</h2>
 
       <section className="flex flex-col gap-2">
-        <label className="font-medium text-sm">{t("length")}</label>
-        <div className="flex gap-2">
+        <label className="font-medium text-sm" id="length-label">
+          {t("length")}
+        </label>
+        <div className="flex gap-2" role="group" aria-labelledby="length-label">
           {(["short", "medium", "long"] as const).map((option) => (
             <button
               key={option}
               onClick={() => update("length", option)}
+              aria-pressed={settings.length === option}
               className={`btn flex-1 btn-sm ${settings.length === option ? "btn-primary" : "btn-outline"}`}
             >
               {t(`length_${option}`)}
@@ -58,11 +61,14 @@ const PodcastSettingsStep = ({
       <div className="divider my-0" />
 
       <section className="flex flex-col gap-2">
-        <label className="font-medium text-sm">{t("tone")}</label>
-        <div className="flex gap-2">
+        <label className="font-medium text-sm" id="tone-label">
+          {t("tone")}
+        </label>
+        <div className="flex gap-2" role="group" aria-labelledby="tone-label">
           {(["formal", "casual"] as const).map((option) => (
             <button
               key={option}
+              aria-pressed={settings.tone === option}
               onClick={() => update("tone", option)}
               className={`btn flex-1 btn-sm ${settings.tone === option ? "btn-primary" : "btn-outline"}`}
             >
@@ -75,11 +81,18 @@ const PodcastSettingsStep = ({
       <div className="divider my-0" />
 
       <section className="flex flex-col gap-2">
-        <label className="font-medium text-sm">{t("speakers")}</label>
-        <div className="flex gap-2">
+        <label className="font-medium text-sm" id="speakers-label">
+          {t("speakers")}
+        </label>
+        <div
+          className="flex gap-2 "
+          role="group"
+          aria-labelledby="speakers-label"
+        >
           {([1, 2] as const).map((option) => (
             <button
               key={option}
+              aria-pressed={settings.speakers === option}
               onClick={() => update("speakers", option)}
               className={`btn flex-1 btn-sm ${settings.speakers === option ? "btn-primary" : "btn-outline"}`}
             >
@@ -92,11 +105,14 @@ const PodcastSettingsStep = ({
       <div className="divider my-0" />
 
       <section className="flex flex-col gap-2">
-        <label className="font-medium text-sm">{t("language")}</label>
+        <label className="font-medium text-sm" htmlFor="podcast-language">
+          {t("language")}
+        </label>
         <select
           className="select select-bordered w-full"
           value={settings.language}
           onChange={(e) => update("language", e.target.value)}
+          id="podcast-language"
         >
           <option value="no">Norsk</option>
           <option value="en">English</option>

@@ -42,18 +42,23 @@ const SearchResultPage = () => {
       {/* Header: back button and search input */}
       <PageHeader
         title={
-          <label className="input input-bordered flex items-center gap-2 flex-1">
+          <label
+            htmlFor="search-input"
+            className="input input-bordered flex items-center gap-2 flex-1"
+          >
             <MagnifyingGlassIcon
               className="w-4 h-4 shrink-0 opacity-50"
               aria-hidden="true"
             />
             <input
+              id="search-input"
               type="search"
               className="grow"
               placeholder={t("common:search")}
               value={query}
               onChange={(e) => handleQueryChange(e.target.value)}
               autoFocus
+              aria-label={t("common:search")}
             />
           </label>
         }
@@ -62,7 +67,7 @@ const SearchResultPage = () => {
 
       {/* Result count */}
       {query.trim() && (
-        <p className="text-sm text-base-content/50 px-4 mb-2">
+        <p className="text-sm text-base-content/70 px-4 mb-2">
           {t("chat:searchResults", { count: results.length, query })}
         </p>
       )}
@@ -75,7 +80,11 @@ const SearchResultPage = () => {
           {t("common:noResults")}
         </p>
       ) : (
-        <ul className="list bg-base-100 rounded-box">
+        <ul
+          className="list bg-base-100 rounded-box"
+          aria-label={t("chat:searchResults", { count: results.length, query })}
+          aria-live="polite"
+        >
           {results.map((chat) => (
             <ChatListItem key={chat.id} chat={chat} />
           ))}
