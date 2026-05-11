@@ -41,32 +41,44 @@ const ChatOptionsDropdown = ({
   return (
     <div>
       <div className={`dropdown dropdown-end ${isOpen ? "dropdown-open" : ""}`}>
-        <button className="btn btn-xs btn-ghost" onClick={onToggle}>
-          <EllipsisHorizontalIcon className="w-4 h-4" />
+        <button
+          className="btn btn-xs btn-ghost"
+          onClick={onToggle}
+          aria-label={t("chatOptions")}
+          aria-haspopup="menu"
+          aria-expanded={isOpen}
+        >
+          <EllipsisHorizontalIcon className="w-4 h-4" aria-hidden="true" />
         </button>
 
         {isOpen && (
-          <ul className="dropdown-content menu w-48 rounded-box bg-base-100 shadow-sm z-50">
-            <li>
+          <ul
+            className="dropdown-content menu w-48 rounded-box bg-base-100 shadow-sm z-50"
+            role="menu"
+            aria-label={t("chatOptions")}
+          >
+            <li role="none">
               <a
+                role="menuitem"
                 onClick={() => {
                   onToggle();
                   setIsEditModalOpen(true);
                 }}
               >
-                <PencilIcon className="w-4 h-4" />
+                <PencilIcon className="w-4 h-4" aria-hidden="true" />
                 {t("editTitle")}
               </a>
             </li>
-            <li>
+            <li role="none">
               <a
+                role="menuitem"
                 onClick={() => {
                   onToggle();
                   deleteChat(chatId);
                 }}
                 className="text-error"
               >
-                <TrashIcon className="w-4 h-4" />
+                <TrashIcon className="w-4 h-4" aria-hidden="true" />
                 {t("deleteChat")}
               </a>
             </li>

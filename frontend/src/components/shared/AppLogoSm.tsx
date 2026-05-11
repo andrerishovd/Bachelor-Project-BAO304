@@ -16,7 +16,7 @@ const AppLogoSm = () => {
 
   return (
     <li>
-      <button onClick={() => navigate("/")} aria-label={t("goToHome")}>
+      <button onClick={() => navigate("/")} aria-label={t("appNameLong")}>
         <AnimatePresence mode="wait">
           {isExtended ? (
             <motion.span

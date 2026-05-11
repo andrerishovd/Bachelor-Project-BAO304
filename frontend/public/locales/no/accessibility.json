@@ -33,5 +33,6 @@
   "chatList": "Samtaler",
   "playEpisode": "Spill av {{title}}",
   "podcastList": "Podcastepisoder",
-  "closeSidebar": "Lukk sidepanel"
+  "closeSidebar": "Lukk sidepanel",
+  "chatOptions": "Chatalternativer"
 }

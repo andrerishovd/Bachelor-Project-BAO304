@@ -99,11 +99,15 @@ const ChatMessageAssistantContent = ({
           <button
             onClick={() => copyToClipboard(message.body)}
             className="btn btn-xs btn-ghost opacity-80 hover:opacity-100"
+            aria-label={copied ? t("copied") : t("copyResponse")}
           >
             {copied ? (
-              <ClipboardDocumentCheckIcon className="w-4 h-4" />
+              <ClipboardDocumentCheckIcon
+                className="w-4 h-4"
+                aria-hidden="true"
+              />
             ) : (
-              <ClipboardIcon className="w-4 h-4" />
+              <ClipboardIcon className="w-4 h-4" aria-hidden="true" />
             )}
           </button>
         </div>

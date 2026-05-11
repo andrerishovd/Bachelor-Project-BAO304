@@ -31,5 +31,6 @@
   "chatList": "Chats",
   "playEpisode": "Play {{title}}",
   "podcastList": "Podcast episodes",
-  "closeSidebar": "Close sidebar"
+  "closeSidebar": "Close sidebar",
+  "chatOptions": "Chat options"
 }
